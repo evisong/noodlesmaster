@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent" android:gravity="top|center_horizontal">
 
+	<LinearLayout android:id="@+id/LinearLayout02"
+		android:layout_width="fill_parent" android:layout_height="150dp">
+		<RelativeLayout android:layout_centerHorizontal="true"
+			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+			android:id="@+id/Step1" android:layout_width="fill_parent"
+			android:layout_weight="0.9" android:layout_height="fill_parent"></RelativeLayout>
+		<RelativeLayout android:id="@+id/Step2"
+			android:layout_width="fill_parent" android:layout_weight="0.9"
+			android:layout_height="fill_parent"></RelativeLayout>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout03"
+		android:layout_width="fill_parent" android:layout_height="150dp">
+		<RelativeLayout android:id="@+id/Step3"
+			android:layout_weight="1" android:layout_width="fill_parent"
+			android:layout_height="fill_parent"></RelativeLayout>
+		<RelativeLayout android:id="@+id/Step4"
+			android:layout_weight="1" android:layout_width="fill_parent"
+			android:layout_height="fill_parent"></RelativeLayout>
+	</LinearLayout>
+	
+	<FrameLayout android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<ProgressBar android:id="@+id/ProgressBar01"
+		android:max="1" android:progress="0"
+		style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"></ProgressBar>
+		<LinearLayout android:id="@+id/LinearLayout01"
+		android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/TimerHour" style="@style/TimerFont" android:typeface="normal"></TextView>
+			<TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TimerMinute" style="@style/TimerFont" android:text="00"></TextView>
+			<TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="00" android:id="@+id/TimerSecond" style="@style/TimerFont"></TextView>
+		</LinearLayout>
+	</FrameLayout>
 
-<ProgressBar android:id="@+id/ProgressBar01" android:layout_height="wrap_content" android:max="1" android:progress="0" style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent"></ProgressBar>
-<RelativeLayout android:id="@+id/RelativeLayout02" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:text="@+id/TextView01" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-</RelativeLayout><RelativeLayout android:id="@+id/RelativeLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<Button android:text="@+id/Button01" android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Button02" android:text="@+id/Button02" android:layout_toRightOf="@+id/Button01"></Button>
-</RelativeLayout>
-
-
+	<LinearLayout android:id="@+id/LinearLayout04" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="bottom|center_horizontal">
+		<Button android:text="@+id/Button01" android:id="@+id/Button01"
+			android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1"></Button>
+		<Button android:layout_height="wrap_content" android:id="@+id/Button02"
+			android:text="@+id/Button02" android:layout_toRightOf="@+id/Button01" android:layout_width="fill_parent" android:layout_weight="1"></Button>
+	</LinearLayout>
 </LinearLayout>
