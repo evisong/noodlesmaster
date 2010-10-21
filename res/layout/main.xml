@@ -8,39 +8,58 @@
 		<RelativeLayout android:layout_centerHorizontal="true"
 			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
 			android:id="@+id/Step1" android:layout_width="fill_parent"
-			android:layout_weight="0.9" android:layout_height="fill_parent"></RelativeLayout>
+			android:layout_weight="0.9" android:layout_height="fill_parent" android:layout_marginLeft="4dp" android:layout_marginTop="4dp" android:layout_marginRight="2dp" android:layout_marginBottom="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 		<RelativeLayout android:id="@+id/Step2"
 			android:layout_width="fill_parent" android:layout_weight="0.9"
-			android:layout_height="fill_parent"></RelativeLayout>
+			android:layout_height="fill_parent" android:layout_marginRight="4dp" android:layout_marginTop="4dp" android:layout_marginLeft="2dp" android:layout_marginBottom="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/LinearLayout03"
 		android:layout_width="fill_parent" android:layout_height="150dp">
 		<RelativeLayout android:id="@+id/Step3"
 			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="fill_parent"></RelativeLayout>
+			android:layout_height="fill_parent" android:layout_marginTop="2dp" android:layout_marginRight="2dp" android:layout_marginBottom="4dp" android:layout_marginLeft="4dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 		<RelativeLayout android:id="@+id/Step4"
 			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="fill_parent"></RelativeLayout>
+			android:layout_height="fill_parent" android:layout_marginBottom="4dp" android:layout_marginRight="4dp" android:layout_marginTop="2dp" android:layout_marginLeft="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 	</LinearLayout>
 	
-	<FrameLayout android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
-		<ProgressBar android:id="@+id/ProgressBar01"
-		android:max="1" android:progress="0"
-		style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"></ProgressBar>
-		<LinearLayout android:id="@+id/LinearLayout01"
-		android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
-			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/TimerHour" style="@style/TimerFont" android:typeface="normal"></TextView>
-			<TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-			<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TimerMinute" style="@style/TimerFont" android:text="00"></TextView>
-			<TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-			<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="00" android:id="@+id/TimerSecond" style="@style/TimerFont"></TextView>
+	<ViewSwitcher android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/TimerView">
+		<LinearLayout android:id="@+id/LinearLayout05" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
+			<com.android.internal.widget.NumberPicker android:id="@+id/TimerHourPicker"
+        android:layout_width="70dip"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+        <TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+        <com.android.internal.widget.NumberPicker android:id="@+id/TimerMinutePicker"
+        android:layout_width="70dip"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+        <TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+        <com.android.internal.widget.NumberPicker android:id="@+id/TimerSecondPicker"
+        android:layout_width="70dip"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 		</LinearLayout>
-	</FrameLayout>
-
+		<FrameLayout android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
+			<ProgressBar android:id="@+id/ProgressBar01"
+			android:max="1" android:progress="0"
+			style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"></ProgressBar>
+			<LinearLayout android:id="@+id/LinearLayout01"
+			android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
+				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/TimerHour" style="@style/TimerFont" android:typeface="normal"></TextView>
+				<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+				<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TimerMinute" style="@style/TimerFont" android:text="00"></TextView>
+				<TextView android:id="@+id/Semicolon2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
+				<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="00" android:id="@+id/TimerSecond" style="@style/TimerFont"></TextView>
+			</LinearLayout>
+		</FrameLayout>
+	</ViewSwitcher>
 	<LinearLayout android:id="@+id/LinearLayout04" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="bottom|center_horizontal">
-		<Button android:text="@+id/Button01" android:id="@+id/Button01"
-			android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1"></Button>
-		<Button android:layout_height="wrap_content" android:id="@+id/Button02"
-			android:text="@+id/Button02" android:layout_toRightOf="@+id/Button01" android:layout_width="fill_parent" android:layout_weight="1"></Button>
+		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/StartTimer" android:text="Start"></Button>
+		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="Stop" android:id="@+id/StopTimer"></Button>
 	</LinearLayout>
+
 </LinearLayout>

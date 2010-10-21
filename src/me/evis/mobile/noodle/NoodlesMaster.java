@@ -1,5 +1,7 @@
 package me.evis.mobile.noodle;
 
+import com.android.internal.widget.NumberPicker;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 public class NoodlesMaster extends Activity {
 	
@@ -24,10 +27,18 @@ public class NoodlesMaster extends Activity {
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
 	
+	// Keep the track so that scheduled work can be 
+	// stopped by user.
+	protected Handler counterHandler;
+	protected Runnable alarmRunner;
+	// According to user input.
+	protected int totalSecs;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
         
         // If no data was given in the intent (because we were started
         // as a MAIN activity), then use our default content provider.
@@ -37,18 +48,62 @@ public class NoodlesMaster extends Activity {
             intent.putExtra(KEY_NOODLE_TIME, 15);
         }
         
-        setContentView(R.layout.main);
-        Button button = (Button) findViewById(R.id.Button01);
-		button.setOnClickListener(new View.OnClickListener() {
+        totalSecs = 15;
+        
+        getStartTimerButton().setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				setAlarm(5);
+				startTimer(totalSecs);
 			}
 		});
 		
-		Button button2 = (Button) findViewById(R.id.Button02);
-		button2.setOnClickListener(new View.OnClickListener() {
+		getStopTimerButton().setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				setAlarm(10);
+				stopTimer();
+			}
+		});
+		
+		NumberPicker timerHourPicker = getTimerHourPicker();
+		timerHourPicker.setRange(0, Integer.MAX_VALUE);
+		timerHourPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+			@Override
+			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+				calculateTotalSecs();
+			}
+		});
+		
+		NumberPicker timerMinutePicker = getTimerMinutePicker();
+		//TODO
+//		timerMinutePicker.setFormatter(new NumberPicker.Formatter() {
+//			@Override
+//			public String toString(int value) {
+//				// TODO Auto-generated method stub
+//				return "";
+//			}
+//		});
+		timerMinutePicker.setRange(0, 60);
+		timerMinutePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+			@Override
+			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+				if (newVal == 60) {
+					picker.setCurrent(0);
+					NumberPicker timerHourPicker = getTimerHourPicker();
+					timerHourPicker.setCurrent(timerHourPicker.getCurrent() + 1);
+				}
+				calculateTotalSecs();
+			}
+		});
+		
+		NumberPicker timerSecondPicker = getTimerSecondPicker();
+		timerSecondPicker.setRange(0, 60);
+		timerSecondPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+			@Override
+			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+				if (newVal == 60) {
+					picker.setCurrent(0);
+					NumberPicker timerMinutePicker = getTimerMinutePicker();
+					timerMinutePicker.setCurrent(timerMinutePicker.getCurrent() + 1);
+				}
+				calculateTotalSecs();
 			}
 		});
     }
@@ -59,29 +114,65 @@ public class NoodlesMaster extends Activity {
 //    		PendingIntent.getBroadcast(this, 0, intent, 0);
 //    	
 //    }
-	
-	private Handler counterHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			int currentSec = msg.arg1;
-			int totalSec = msg.arg2;
-			setTimingProgress(currentSec, totalSec);
-			
-			if (currentSec < totalSec) {
-				Message newMsg = Message.obtain(msg);
-				newMsg.arg1 += COUNTER_INTERVAL_SECS;
-				sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
-			}
-		}
-	};
     
-	private void setAlarm(int secs) {
-		// Set up counter.
+	protected void startTimer(int secs) {
+		// Hide timer editor and show timer.
+		getTimerView().showNext();
+		// Disable to avoid multiple timers in one time.
+		getStartTimerButton().setEnabled(false);
+		// Setup counter.
+		counterHandler = new Handler() {
+			public void handleMessage(Message msg) {
+				int currentSec = msg.arg1;
+				int totalSec = msg.arg2;
+				setTimingProgress(currentSec, totalSec);
+				
+				if (currentSec < totalSec) {
+					Message newMsg = Message.obtain(msg);
+					newMsg.arg1 += COUNTER_INTERVAL_SECS;
+					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
+				}
+			}
+		};
 		Message msg = counterHandler.obtainMessage();
 		msg.arg1 = 0;
 		msg.arg2 = secs;
+		msg.obj = this;
 		counterHandler.sendMessage(msg);
-		
-		new Handler().postDelayed(new AlarmRunner(this), secs * 1000);
+		// Setup alarm.
+		alarmRunner = new AlarmRunner(this);
+		counterHandler.postDelayed(alarmRunner, secs * 1000);
+	}
+	
+	protected void stopTimer() {
+		counterHandler.removeCallbacksAndMessages(this);
+		getTimerView().showNext();
+	}
+	
+	protected void calculateTotalSecs() {
+		int hour = getTimerHourPicker().getCurrent();
+		int minute = getTimerMinutePicker().getCurrent();
+		int second = getTimerSecondPicker().getCurrent();
+		totalSecs = hour * 3600 + minute * 60 + second;
+	}
+	
+	private Button getStartTimerButton() {
+		return (Button) findViewById(R.id.StartTimer);
+	}
+	private Button getStopTimerButton() {
+		return (Button) findViewById(R.id.StopTimer);
+	}
+	private NumberPicker getTimerHourPicker() {
+		return (NumberPicker) findViewById(R.id.TimerHourPicker);
+	}
+	private NumberPicker getTimerMinutePicker() {
+		return (NumberPicker) findViewById(R.id.TimerMinutePicker);
+	}
+	private NumberPicker getTimerSecondPicker() {
+		return (NumberPicker) findViewById(R.id.TimerSecondPicker);
+	}
+	private ViewSwitcher getTimerView() {
+		return (ViewSwitcher) findViewById(R.id.TimerView);
 	}
 	
 	private void setTimingProgress(int currentSec, int totalSec) {
@@ -118,6 +209,9 @@ public class NoodlesMaster extends Activity {
 						});
 			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
+			getStartTimerButton().setEnabled(true);
+			// TODO verify necessary of this.
+//			stopTimer();
 		}
 	}
 }
