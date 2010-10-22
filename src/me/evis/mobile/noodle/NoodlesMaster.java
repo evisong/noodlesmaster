@@ -1,5 +1,8 @@
 package me.evis.mobile.noodle;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +10,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,6 +21,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +29,7 @@ import com.android.internal.widget.NumberPicker;
 
 public class NoodlesMaster extends Activity {
 	
+    private static final int MESSAGE_WHAT_CODE = 0;
 	private static final String KEY_NOODLE_NAME = "noodleName";
 	private static final String KEY_NOODLE_TIME = "noodleTime";
 	
@@ -56,6 +63,7 @@ public class NoodlesMaster extends Activity {
         totalSecs = 15;
         updateTimer();
         
+        // StartTimer button behavior.
         getStartTimerButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +71,7 @@ public class NoodlesMaster extends Activity {
 			}
 		});
 		
+        // StopTimer button behavior.
 		getStopTimerButton().setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
@@ -70,12 +79,24 @@ public class NoodlesMaster extends Activity {
 			}
 		});
 		
+        // AdjustTimer button behavior.
 		getAdjustTimerButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(DIALOG_TIME_PICKER);
             }
         });
+		
+        // Initialize noodle's logo.
+		ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
+		InputStream is = null;
+        try {
+            is = getAssets().open("logos/masterkong.png");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		Bitmap bitmap = BitmapFactory.decodeStream(is);
+		noodleLogo.setImageBitmap(bitmap);
     }
     
     @Override
@@ -175,12 +196,13 @@ public class NoodlesMaster extends Activity {
 	protected void startTimer(int secs) {
 		// Disable to avoid multiple timers in one time.
 		getStartTimerButton().setEnabled(false);
+		getTimerProgress().setMax(totalSecs);
 		// Setup counter.
 		counterHandler = new Handler() {
 			public void handleMessage(Message msg) {
 				int currentSec = msg.arg1;
 				int totalSec = msg.arg2;
-				setTimingProgress(currentSec, totalSec);
+				updateTimerCurrent(currentSec);
 				
 				if (currentSec < totalSec) {
 					Message newMsg = Message.obtain(msg);
@@ -190,6 +212,7 @@ public class NoodlesMaster extends Activity {
 			}
 		};
 		Message msg = counterHandler.obtainMessage();
+		msg.what = MESSAGE_WHAT_CODE;
 		msg.arg1 = 0;
 		msg.arg2 = secs;
 		msg.obj = this;
@@ -202,32 +225,32 @@ public class NoodlesMaster extends Activity {
 	}
 	
 	protected void stopTimer() {
-		counterHandler.removeCallbacksAndMessages(this);
+		counterHandler.removeMessages(MESSAGE_WHAT_CODE);
+		counterHandler.removeCallbacks(alarmRunner);
 //		alarmHandler.removeCallbacksAndMessages(this);
-	}
-	
-	private void setTimingProgress(int currentSec, int totalSec) {
-		final ProgressBar progressBar = 
-			(ProgressBar) this.findViewById(R.id.TimerProgress);
-		progressBar.setProgress(currentSec);
-		progressBar.setMax(totalSec);
 		
-		updateTimerCurrent(currentSec);
+		updateTimerCurrent(0);
+		getStartTimerButton().setEnabled(true);
 	}
 	
 	private void updateTimerCurrent(int currentSec) {
 	    final int[] currentDhms = DateTimeUtil.calculateDhms(currentSec);
 	    ((TextView) findViewById(R.id.TimerCurrentHour)).setText(String.valueOf(currentDhms[1]));
-	    ((TextView) findViewById(R.id.TimerCurrentMinute)).setText(String.valueOf(currentDhms[2]));
-	    ((TextView) findViewById(R.id.TimerCurrentSecond)).setText(String.valueOf(currentDhms[3]));
+	    ((TextView) findViewById(R.id.TimerCurrentMinute)).setText(formatNumber(currentDhms[2]));
+	    ((TextView) findViewById(R.id.TimerCurrentSecond)).setText(formatNumber(currentDhms[3]));
+	    getTimerProgress().setProgress(currentSec);
 	}
 	
 	private void updateTimer() {
         final int[] dhms = DateTimeUtil.calculateDhms(totalSecs);
         ((TextView) findViewById(R.id.TimerHour)).setText(String.valueOf(dhms[1]));
-        ((TextView) findViewById(R.id.TimerMinute)).setText(String.valueOf(dhms[2]));
-        ((TextView) findViewById(R.id.TimerSecond)).setText(String.valueOf(dhms[3]));
+        ((TextView) findViewById(R.id.TimerMinute)).setText(formatNumber(dhms[2]));
+        ((TextView) findViewById(R.id.TimerSecond)).setText(formatNumber(dhms[3]));
     }
+	
+	private String formatNumber(int value) {
+	    return NumberPicker.TWO_DIGIT_FORMATTER.toString(value);
+	}
 	
     private Button getStartTimerButton() {
         return (Button) findViewById(R.id.StartTimerButton);
@@ -237,6 +260,9 @@ public class NoodlesMaster extends Activity {
     }
     private ImageButton getAdjustTimerButton() {
         return (ImageButton) findViewById(R.id.AdjustTimerButton);
+    }
+    private ProgressBar getTimerProgress() {
+        return (ProgressBar) this.findViewById(R.id.TimerProgress);
     }
 	
 	private class AlarmRunner implements Runnable {
