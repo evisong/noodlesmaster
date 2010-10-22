@@ -3,8 +3,7 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:gravity="top|center_horizontal">
 
-	<LinearLayout android:id="@+id/LinearLayout02"
-		android:layout_width="fill_parent" android:layout_height="150dp">
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="150dp" android:id="@+id/Step12Area">
 		<RelativeLayout android:layout_centerHorizontal="true"
 			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
 			android:id="@+id/Step1" android:layout_width="fill_parent"
@@ -13,8 +12,7 @@
 			android:layout_width="fill_parent" android:layout_weight="0.9"
 			android:layout_height="fill_parent" android:layout_marginRight="4dp" android:layout_marginTop="4dp" android:layout_marginLeft="2dp" android:layout_marginBottom="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 	</LinearLayout>
-	<LinearLayout android:id="@+id/LinearLayout03"
-		android:layout_width="fill_parent" android:layout_height="150dp">
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="150dp" android:id="@+id/Step34Area">
 		<RelativeLayout android:id="@+id/Step3"
 			android:layout_weight="1" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:layout_marginTop="2dp" android:layout_marginRight="2dp" android:layout_marginBottom="4dp" android:layout_marginLeft="4dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
@@ -22,44 +20,59 @@
 			android:layout_weight="1" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:layout_marginBottom="4dp" android:layout_marginRight="4dp" android:layout_marginTop="2dp" android:layout_marginLeft="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
 	</LinearLayout>
-	
-	<ViewSwitcher android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/TimerView">
-		<LinearLayout android:id="@+id/LinearLayout05" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
-			<com.android.internal.widget.NumberPicker android:id="@+id/TimerHourPicker"
-        android:layout_width="70dip"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
-        <TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-        <com.android.internal.widget.NumberPicker android:id="@+id/TimerMinutePicker"
-        android:layout_width="70dip"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
-        <TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-        <com.android.internal.widget.NumberPicker android:id="@+id/TimerSecondPicker"
-        android:layout_width="70dip"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
+
+	<RelativeLayout android:id="@+id/RelativeLayout01"
+		android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<LinearLayout android:gravity="center"
+			android:layout_height="wrap_content" android:id="@+id/TimerArea" android:layout_width="wrap_content" android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton" android:layout_marginLeft="3dp">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
+				android:typeface="normal" android:id="@+id/TimerCurrentHour"></TextView>
+			<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" style="@style/TimerFont"
+				android:text="00" android:id="@+id/TimerCurrentMinute"></TextView>
+			<TextView android:id="@+id/Semicolon2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
+				android:id="@+id/TimerCurrentSecond"></TextView>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="/" android:id="@+id/Slash1 "
+				style="@style/TimerSeparatorFont" android:layout_marginLeft="4dp"
+				android:layout_marginRight="4dp"></TextView>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
+				android:typeface="normal" android:id="@+id/TimerHour"></TextView>
+			<TextView android:id="@+id/Semicolon3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" style="@style/TimerFont"
+				android:text="00" android:id="@+id/TimerMinute"></TextView>
+			<TextView android:id="@+id/Semicolon4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont"></TextView>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
+				android:id="@+id/TimerSecond"></TextView>
 		</LinearLayout>
-		<FrameLayout android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
-			<ProgressBar android:id="@+id/ProgressBar01"
-			android:max="1" android:progress="0"
-			style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"></ProgressBar>
-			<LinearLayout android:id="@+id/LinearLayout01"
-			android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center">
-				<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:id="@+id/TimerHour" style="@style/TimerFont" android:typeface="normal"></TextView>
-				<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-				<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TimerMinute" style="@style/TimerFont" android:text="00"></TextView>
-				<TextView android:id="@+id/Semicolon2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" android:layout_marginLeft="3dp" android:layout_marginRight="3dp" style="@style/TimerSeparatorFont"></TextView>
-				<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="00" android:id="@+id/TimerSecond" style="@style/TimerFont"></TextView>
-			</LinearLayout>
-		</FrameLayout>
-	</ViewSwitcher>
-	<LinearLayout android:id="@+id/LinearLayout04" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="bottom|center_horizontal">
-		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/StartTimer" android:text="Start"></Button>
-		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="Stop" android:id="@+id/StopTimer"></Button>
+		<ProgressBar android:id="@+id/TimerProgress" android:max="1"
+			android:progress="0" style="?android:attr/progressBarStyleHorizontal"
+			android:progressDrawable="@drawable/progress_bar_horizontal"
+			android:layout_below="@+id/TimerArea" android:layout_width="250dp" android:layout_height="10dp" android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton" android:layout_marginLeft="3dp"></ProgressBar>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/ic_dialog_time"
+			android:id="@+id/AdjustTimerButton" android:layout_alignParentRight="true" android:layout_height="wrap_content" android:layout_centerVertical="true"></ImageButton>
+	</RelativeLayout>
+	
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="bottom|center_horizontal" android:id="@+id/ButtonArea">
+		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="Start" android:id="@+id/StartTimerButton" android:drawableTop="@drawable/ic_menu_play_clip"></Button>
+		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="Stop" android:id="@+id/StopTimerButton" android:drawableTop="@drawable/ic_menu_stop"></Button>
 	</LinearLayout>
+
 
 </LinearLayout>

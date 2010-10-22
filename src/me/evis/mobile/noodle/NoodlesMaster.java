@@ -1,9 +1,9 @@
 package me.evis.mobile.noodle;
 
-import com.android.internal.widget.NumberPicker;
-
+import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,14 +15,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
+
+import com.android.internal.widget.NumberPicker;
 
 public class NoodlesMaster extends Activity {
 	
 	private static final String KEY_NOODLE_NAME = "noodleName";
 	private static final String KEY_NOODLE_TIME = "noodleTime";
+	
+	private static final int DIALOG_TIME_PICKER = 1;
 	
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
@@ -30,6 +34,7 @@ public class NoodlesMaster extends Activity {
 	// Keep the track so that scheduled work can be 
 	// stopped by user.
 	protected Handler counterHandler;
+//	protected Handler alarmHandler;
 	protected Runnable alarmRunner;
 	// According to user input.
 	protected int totalSecs;
@@ -49,63 +54,115 @@ public class NoodlesMaster extends Activity {
         }
         
         totalSecs = 15;
+        updateTimer();
         
         getStartTimerButton().setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 				startTimer(totalSecs);
 			}
 		});
 		
 		getStopTimerButton().setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+		    @Override
+		    public void onClick(View v) {
 				stopTimer();
 			}
 		});
 		
-		NumberPicker timerHourPicker = getTimerHourPicker();
-		timerHourPicker.setRange(0, Integer.MAX_VALUE);
-		timerHourPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
-			@Override
-			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-				calculateTotalSecs();
-			}
-		});
-		
-		NumberPicker timerMinutePicker = getTimerMinutePicker();
-		//TODO
-//		timerMinutePicker.setFormatter(new NumberPicker.Formatter() {
-//			@Override
-//			public String toString(int value) {
-//				// TODO Auto-generated method stub
-//				return "";
-//			}
-//		});
-		timerMinutePicker.setRange(0, 60);
-		timerMinutePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
-			@Override
-			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-				if (newVal == 60) {
-					picker.setCurrent(0);
-					NumberPicker timerHourPicker = getTimerHourPicker();
-					timerHourPicker.setCurrent(timerHourPicker.getCurrent() + 1);
-				}
-				calculateTotalSecs();
-			}
-		});
-		
-		NumberPicker timerSecondPicker = getTimerSecondPicker();
-		timerSecondPicker.setRange(0, 60);
-		timerSecondPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
-			@Override
-			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-				if (newVal == 60) {
-					picker.setCurrent(0);
-					NumberPicker timerMinutePicker = getTimerMinutePicker();
-					timerMinutePicker.setCurrent(timerMinutePicker.getCurrent() + 1);
-				}
-				calculateTotalSecs();
-			}
-		});
+		getAdjustTimerButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_TIME_PICKER);
+            }
+        });
+    }
+    
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case DIALOG_TIME_PICKER:
+            return new Dialog(this) {
+                @Override
+                protected void onCreate(Bundle savedInstanceState) {
+                    setTitle(R.string.adjust_timer);
+                    setContentView(R.layout.time_picker);
+                    
+                    final int[] totalDhms = DateTimeUtil.calculateDhms(totalSecs);
+                    NumberPicker timerHourPicker = getTimerHourPicker();
+                    timerHourPicker.setRange(0, Integer.MAX_VALUE);
+                    timerHourPicker.setCurrent(totalDhms[1]);
+                    timerHourPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+                        @Override
+                        public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+                            calculateTotalSecs();
+                        }
+                    });
+                    
+                    NumberPicker timerMinutePicker = getTimerMinutePicker();
+                    timerMinutePicker.setRange(0, 60);
+                    timerMinutePicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+                    timerMinutePicker.setCurrent(totalDhms[2]);
+                    timerMinutePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+                        @Override
+                        public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+                            if (newVal == 60) {
+                                picker.setCurrent(0);
+                                NumberPicker timerHourPicker = getTimerHourPicker();
+                                timerHourPicker.setCurrent(timerHourPicker.getCurrent() + 1);
+                            }
+                            calculateTotalSecs();
+                        }
+                    });
+                    
+                    NumberPicker timerSecondPicker = getTimerSecondPicker();
+                    timerSecondPicker.setRange(0, 60);
+                    timerSecondPicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+                    timerSecondPicker.setCurrent(totalDhms[3]);
+                    timerSecondPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
+                        @Override
+                        public void onChanged(NumberPicker picker, int oldVal, int newVal) {
+                            if (newVal == 60) {
+                                picker.setCurrent(0);
+                                NumberPicker timerMinutePicker = getTimerMinutePicker();
+                                timerMinutePicker.setCurrent(timerMinutePicker.getCurrent() + 1);
+                            }
+                            calculateTotalSecs();
+                        }
+                    });
+                    
+                    Button okButton = (Button) findViewById(R.id.TimePickerOk);
+                    okButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismiss();
+                        }
+                    });
+                }
+                
+                private void calculateTotalSecs() {
+                    totalSecs = DateTimeUtil.calculateSeconds(new int[] {
+                            0,
+                            getTimerHourPicker().getCurrent(),
+                            getTimerMinutePicker().getCurrent(),
+                            getTimerSecondPicker().getCurrent()
+                    });
+                    updateTimer();
+                }
+                private NumberPicker getTimerHourPicker() {
+                    return (NumberPicker) findViewById(R.id.TimerHourPicker);
+                }
+                private NumberPicker getTimerMinutePicker() {
+                    return (NumberPicker) findViewById(R.id.TimerMinutePicker);
+                }
+                private NumberPicker getTimerSecondPicker() {
+                    return (NumberPicker) findViewById(R.id.TimerSecondPicker);
+                }
+            };
+
+        default:
+            return super.onCreateDialog(id);
+        }
     }
     
 //    private void setAlarm(int secs) {
@@ -116,8 +173,6 @@ public class NoodlesMaster extends Activity {
 //    }
     
 	protected void startTimer(int secs) {
-		// Hide timer editor and show timer.
-		getTimerView().showNext();
 		// Disable to avoid multiple timers in one time.
 		getStartTimerButton().setEnabled(false);
 		// Setup counter.
@@ -140,51 +195,49 @@ public class NoodlesMaster extends Activity {
 		msg.obj = this;
 		counterHandler.sendMessage(msg);
 		// Setup alarm.
+//		alarmHandler = new Handler();
 		alarmRunner = new AlarmRunner(this);
+//		alarmHandler.postDelayed(alarmRunner, secs * 1000);
 		counterHandler.postDelayed(alarmRunner, secs * 1000);
 	}
 	
 	protected void stopTimer() {
 		counterHandler.removeCallbacksAndMessages(this);
-		getTimerView().showNext();
-	}
-	
-	protected void calculateTotalSecs() {
-		int hour = getTimerHourPicker().getCurrent();
-		int minute = getTimerMinutePicker().getCurrent();
-		int second = getTimerSecondPicker().getCurrent();
-		totalSecs = hour * 3600 + minute * 60 + second;
-	}
-	
-	private Button getStartTimerButton() {
-		return (Button) findViewById(R.id.StartTimer);
-	}
-	private Button getStopTimerButton() {
-		return (Button) findViewById(R.id.StopTimer);
-	}
-	private NumberPicker getTimerHourPicker() {
-		return (NumberPicker) findViewById(R.id.TimerHourPicker);
-	}
-	private NumberPicker getTimerMinutePicker() {
-		return (NumberPicker) findViewById(R.id.TimerMinutePicker);
-	}
-	private NumberPicker getTimerSecondPicker() {
-		return (NumberPicker) findViewById(R.id.TimerSecondPicker);
-	}
-	private ViewSwitcher getTimerView() {
-		return (ViewSwitcher) findViewById(R.id.TimerView);
+//		alarmHandler.removeCallbacksAndMessages(this);
 	}
 	
 	private void setTimingProgress(int currentSec, int totalSec) {
 		final ProgressBar progressBar = 
-			(ProgressBar)this.findViewById(R.id.ProgressBar01);
+			(ProgressBar) this.findViewById(R.id.TimerProgress);
 		progressBar.setProgress(currentSec);
 		progressBar.setMax(totalSec);
 		
-		final TextView textView = 
-			(TextView)this.findViewById(R.id.TimerSecond);
-		textView.setText(currentSec + "/" + totalSec);
+		updateTimerCurrent(currentSec);
 	}
+	
+	private void updateTimerCurrent(int currentSec) {
+	    final int[] currentDhms = DateTimeUtil.calculateDhms(currentSec);
+	    ((TextView) findViewById(R.id.TimerCurrentHour)).setText(String.valueOf(currentDhms[1]));
+	    ((TextView) findViewById(R.id.TimerCurrentMinute)).setText(String.valueOf(currentDhms[2]));
+	    ((TextView) findViewById(R.id.TimerCurrentSecond)).setText(String.valueOf(currentDhms[3]));
+	}
+	
+	private void updateTimer() {
+        final int[] dhms = DateTimeUtil.calculateDhms(totalSecs);
+        ((TextView) findViewById(R.id.TimerHour)).setText(String.valueOf(dhms[1]));
+        ((TextView) findViewById(R.id.TimerMinute)).setText(String.valueOf(dhms[2]));
+        ((TextView) findViewById(R.id.TimerSecond)).setText(String.valueOf(dhms[3]));
+    }
+	
+    private Button getStartTimerButton() {
+        return (Button) findViewById(R.id.StartTimerButton);
+    }
+    private Button getStopTimerButton() {
+        return (Button) findViewById(R.id.StopTimerButton);
+    }
+    private ImageButton getAdjustTimerButton() {
+        return (ImageButton) findViewById(R.id.AdjustTimerButton);
+    }
 	
 	private class AlarmRunner implements Runnable {
 		private Context context;

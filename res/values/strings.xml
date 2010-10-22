@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="ok">OK</string>
     <string name="noodle_ready">Noodle is ready.</string>
     <string name="hello">Hello World</string>
     <string name="app_name">InstantNoodlesMaster</string>
+<string name="adjust_timer">Adjust Total Time</string>
 </resources>
