@@ -9,7 +9,7 @@
 		<ImageView android:id="@+id/NoodleLogo"
 			android:layout_marginBottom="3dp" android:layout_marginLeft="3dp"
 			android:layout_marginRight="5dp" android:layout_marginTop="3dp"
-			android:layout_height="31dp" android:layout_width="88dp" android:background="@drawable/picture_frame"></ImageView>
+			android:background="@drawable/picture_frame" android:layout_height="51dp" android:layout_width="108dp"></ImageView>
 		<TextView android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:id="@+id/NoodleName"
 			android:text="Name of Instant Noodles" android:layout_toRightOf="@+id/NoodleLogo"
@@ -62,12 +62,11 @@
 			android:progressDrawable="@drawable/progress_bar_horizontal"
 			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
 			android:layout_width="wrap_content"
-			android:layout_centerVertical="true" android:layout_height="42dp" android:layout_marginBottom="2dp"/>
+			android:layout_marginBottom="2dp" android:layout_alignParentTop="true" android:layout_height="46dp" android:layout_marginLeft="5dp"/>
 		<LinearLayout android:gravity="center"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
-			android:layout_marginLeft="3dp" android:id="@+id/TimerLabelArea"
-			android:layout_centerVertical="true">
+			android:layout_marginLeft="3dp" android:id="@+id/TimerLabelArea" android:layout_alignParentTop="true">
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
 				android:typeface="normal" android:id="@+id/TimerCurrentHour" />
@@ -106,7 +105,7 @@
 		<ImageButton android:layout_width="wrap_content"
 			android:src="@drawable/ic_dialog_time" android:id="@+id/AdjustTimerButton"
 			android:layout_alignParentRight="true" android:layout_height="wrap_content"
-			android:layout_centerVertical="true" android:layout_marginTop="2dp"/>
+			android:layout_alignParentTop="true"/>
 	</RelativeLayout>
 
 	<LinearLayout android:layout_width="fill_parent"
