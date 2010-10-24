@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.internal.widget.NumberPicker;
@@ -87,16 +88,8 @@ public class NoodlesMaster extends Activity {
             }
         });
 		
-        // Initialize noodle's logo.
-		ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-		InputStream is = null;
-        try {
-            is = getAssets().open("logos/masterkong.png");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-		Bitmap bitmap = BitmapFactory.decodeStream(is);
-		noodleLogo.setImageBitmap(bitmap);
+		prepareLogo();
+		prepareSteps();
     }
     
     @Override
@@ -184,6 +177,55 @@ public class NoodlesMaster extends Activity {
         default:
             return super.onCreateDialog(id);
         }
+    }
+    
+    /**
+     * Initialize noodle's logo.
+     */
+    private void prepareLogo() {
+        ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
+        InputStream is = null;
+        try {
+            is = getAssets().open("logos/masterkong.png");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+        noodleLogo.setImageBitmap(bitmap);
+    }
+    
+    /**
+     * Initialize noodle's steps, icons and description.
+     */
+    private void prepareSteps() {
+        prepareStep(new int[] {R.id.Step1, R.id.Step2, R.id.Step3, R.id.Step4});
+    }
+    
+    private void prepareStep(int[] stepIds) {
+        for (int i = 0; i < 4; i++ ) {
+            prepareStep(i + 1, stepIds[i]);
+        }
+    }
+    
+    private void prepareStep(int stepNumber, int stepId) {
+        // Step container.
+        RelativeLayout step = (RelativeLayout) findViewById(stepId);
+        // Set step number.
+        TextView stepNumberText = (TextView) step.findViewById(R.id.StepNumber);
+        stepNumberText.setText(String.valueOf(stepNumber));
+        // Set step icon.
+        ImageView stepIcon = (ImageView) step.findViewById(R.id.StepIcon);
+        InputStream is = null;
+        try {
+            is = getAssets().open("step_icons/step" + stepNumber + "_icon.png");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+        stepIcon.setImageBitmap(bitmap);
+        // Set step description.
+        TextView stepDesc= (TextView) step.findViewById(R.id.StepDesc);
+        stepDesc.setText("这是泡面第" + stepNumber + "步");
     }
     
 //    private void setAlarm(int secs) {

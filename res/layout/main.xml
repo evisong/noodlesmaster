@@ -26,31 +26,30 @@
 		android:layout_above="@+id/TimerArea" android:layout_below="@+id/NoodleDescArea">
 		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content"
 			android:layout_weight="1" android:layout_height="fill_parent">
-			<RelativeLayout android:layout_centerHorizontal="true"
+			<include layout="@layout/step_panel" android:layout_centerHorizontal="true"
 				android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
 				android:id="@+id/Step1" android:layout_width="fill_parent"
 				android:layout_weight="0.9" android:layout_height="fill_parent"
 				android:layout_marginLeft="4dp" android:layout_marginTop="4dp"
-				android:layout_marginRight="2dp" android:layout_marginBottom="2dp"
-				android:background="@drawable/gallery_selected_default"></RelativeLayout>
-			<RelativeLayout android:id="@+id/Step2"
+				android:layout_marginRight="2dp" android:layout_marginBottom="2dp"/>
+			<include layout="@layout/step_panel" android:id="@+id/Step2"
 				android:layout_width="fill_parent" android:layout_weight="0.9"
 				android:layout_height="fill_parent" android:layout_marginRight="4dp"
 				android:layout_marginTop="4dp" android:layout_marginLeft="2dp"
-				android:layout_marginBottom="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
-		</TableRow>
+				android:layout_marginBottom="2dp"/>
+</TableRow>
 		<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content"
 			android:layout_weight="1" android:layout_height="fill_parent">
-			<RelativeLayout android:id="@+id/Step3"
+			<include layout="@layout/step_panel" android:id="@+id/Step3"
 				android:layout_weight="1" android:layout_width="fill_parent"
 				android:layout_height="fill_parent" android:layout_marginTop="2dp"
 				android:layout_marginRight="2dp" android:layout_marginBottom="4dp"
-				android:layout_marginLeft="4dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
-			<RelativeLayout android:id="@+id/Step4"
+				android:layout_marginLeft="4dp"/>
+			<include layout="@layout/step_panel" android:id="@+id/Step4"
 				android:layout_weight="1" android:layout_width="fill_parent"
 				android:layout_height="fill_parent" android:layout_marginBottom="4dp"
 				android:layout_marginRight="4dp" android:layout_marginTop="2dp"
-				android:layout_marginLeft="2dp" android:background="@drawable/gallery_selected_default"></RelativeLayout>
+				android:layout_marginLeft="2dp"/>
 		</TableRow>
 	</TableLayout>
 
@@ -69,10 +68,10 @@
 			android:layout_marginLeft="3dp" android:id="@+id/TimerLabelArea" android:layout_alignParentTop="true">
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
-				android:typeface="normal" android:id="@+id/TimerCurrentHour" />
+				android:typeface="normal" android:id="@+id/TimerCurrentHour" android:visibility="gone"/>
 			<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" />
+				style="@style/TimerSeparatorFont" android:typeface="normal" android:visibility="gone"/>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" style="@style/TimerFont"
 				android:text="00" android:id="@+id/TimerCurrentMinute" />
@@ -88,10 +87,10 @@
 				android:layout_marginRight="4dp" />
 			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
-				android:typeface="normal" android:id="@+id/TimerHour" />
+				android:typeface="normal" android:id="@+id/TimerHour" android:visibility="gone"/>
 			<TextView android:id="@+id/Semicolon3" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" />
+				style="@style/TimerSeparatorFont" android:typeface="normal" android:visibility="gone"/>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" style="@style/TimerFont"
 				android:text="00" android:id="@+id/TimerMinute" />
