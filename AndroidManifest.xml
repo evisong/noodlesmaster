@@ -1,18 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="me.evis.mobile.noodle"
-      android:versionCode="1"
-      android:versionName="1.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest android:versionCode="1" android:versionName="1.0"
+    package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".NoodlesMaster"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".NoodlesMaster">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <provider
+            android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider" android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider"/>
+        <provider
+            android:authorities="me.evis.mobile.noodle.provider.brandcontentprovider" android:name="me.evis.mobile.noodle.provider.BrandContentProvider"/>
+        <provider
+            android:authorities="me.evis.mobile.noodle.provider.noodlescontentprovider" android:name="me.evis.mobile.noodle.provider.NoodlesContentProvider"/>
+        <provider
+            android:authorities="me.evis.mobile.noodle.provider.stepcontentprovider" android:name="me.evis.mobile.noodle.provider.StepContentProvider"/>
+        <provider
+            android:authorities="me.evis.mobile.noodle.provider.barcodecontentprovider" android:name="me.evis.mobile.noodle.provider.BarcodeContentProvider"/>
     </application>
-    <uses-sdk android:minSdkVersion="7" />
-
-</manifest> 
+    <uses-sdk android:minSdkVersion="7"/>
+</manifest>

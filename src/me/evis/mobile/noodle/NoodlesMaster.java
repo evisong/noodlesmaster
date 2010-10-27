@@ -30,9 +30,15 @@ import com.android.internal.widget.NumberPicker;
 
 public class NoodlesMaster extends Activity {
 	
+    private static final String AUTHORITY = "me.evis.mobile.noodle";
+    private static final String TIME = "time";
+    private static final String CODE = "code";
+    private static final Uri NOODLES_URI = 
+        Uri.parse("noodles://" + AUTHORITY + "/noodles");
+    private static final Uri DEFAULT_NOODLES_URI = 
+        Uri.parse("noodles://" + AUTHORITY + "/noodles/0?" + TIME + "=10");
+    
     private static final int MESSAGE_WHAT_CODE = 0;
-	private static final String KEY_NOODLE_NAME = "noodleName";
-	private static final String KEY_NOODLE_TIME = "noodleTime";
 	
 	private static final int DIALOG_TIME_PICKER = 1;
 	
@@ -56,12 +62,12 @@ public class NoodlesMaster extends Activity {
         // If no data was given in the intent (because we were started
         // as a MAIN activity), then use our default content provider.
         Intent intent = getIntent();
-        if (intent.getStringExtra(KEY_NOODLE_NAME) == null) {
-            intent.putExtra(KEY_NOODLE_NAME, "传统方便面");
-            intent.putExtra(KEY_NOODLE_TIME, 15);
+        if (intent.getData() == null) {
+            intent.setData(DEFAULT_NOODLES_URI);
         }
+        Noodles noodles = retrieveNoodlesDetail(intent.getData());
         
-        totalSecs = 15;
+        totalSecs = noodles.soakageTime;
         updateTimer();
         
         // StartTimer button behavior.
@@ -177,6 +183,19 @@ public class NoodlesMaster extends Activity {
         default:
             return super.onCreateDialog(id);
         }
+    }
+    
+    private Noodles retrieveNoodlesDetail(Uri uri) {
+        if (uri.getQueryParameter(CODE) != null) {
+            String barcode = uri.getQueryParameter(CODE);
+            // TODO Search by barcode
+        }
+        // TODO DB.
+        Noodles noodles = new Noodles();
+        if (uri.getQueryParameter(TIME) != null) {
+            noodles.soakageTime = Integer.parseInt(uri.getQueryParameter(TIME));
+        }
+        return noodles;
     }
     
     /**
