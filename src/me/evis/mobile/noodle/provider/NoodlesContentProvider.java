@@ -2,10 +2,10 @@
  ******************************************************************************
  * Parts of this code sample are licensed under Apache License, Version 2.0   *
  * Copyright (c) 2009, Android Open Handset Alliance. All rights reserved.    *
- *																			  *																			*
+ *                                                                            *                                                                         *
  * Except as noted, this code sample is offered under a modified BSD license. *
  * Copyright (C) 2010, Motorola Mobility, Inc. All rights reserved.           *
- * 																			  *
+ *                                                                            *
  * For more details, see MOTODEV_Studio_for_Android_LicenseNotices.pdf        * 
  * in your installation folder.                                               *
  ******************************************************************************
@@ -27,6 +27,7 @@ public class NoodlesContentProvider extends ContentProvider {
     private NoodlesMetaDbHelper dbHelper;
     private static HashMap<String, String> NOODLES_PROJECTION_MAP;
     private static final String TABLE_NAME = "noodles";
+    private static final String BARCODE_TABLE_NAME = "barcode";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.noodlescontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
@@ -37,32 +38,9 @@ public class NoodlesContentProvider extends ContentProvider {
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/brand_id");
     public static final Uri NAME_FIELD_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/name");
-    public static final Uri NET_WEIGHT_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/net_weight");
-    public static final Uri NOODLES_WEIGHT_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/noodles_weight");
-    public static final Uri STEP_1_ID_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/step_1_id");
-    public static final Uri STEP_2_ID_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/step_2_id");
-    public static final Uri STEP_3_ID_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/step_3_id");
-    public static final Uri STEP_4_ID_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/step_4_id");
     public static final Uri SOAKAGE_TIME_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
                     + "/soakage_time");
-    public static final Uri DESCRIPTION_FIELD_CONTENT_URI = Uri
-            .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/description");
-    public static final Uri LOGO_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/logo");
 
     public static final String DEFAULT_SORT_ORDER = "ID ASC";
 
@@ -72,15 +50,8 @@ public class NoodlesContentProvider extends ContentProvider {
     private static final int NOODLES_ID = 2;
     private static final int NOODLES_BRAND_ID = 3;
     private static final int NOODLES_NAME = 4;
-    private static final int NOODLES_NET_WEIGHT = 5;
-    private static final int NOODLES_NOODLES_WEIGHT = 6;
-    private static final int NOODLES_STEP_1_ID = 7;
-    private static final int NOODLES_STEP_2_ID = 8;
-    private static final int NOODLES_STEP_3_ID = 9;
-    private static final int NOODLES_STEP_4_ID = 10;
-    private static final int NOODLES_SOAKAGE_TIME = 11;
-    private static final int NOODLES_DESCRIPTION = 12;
-    private static final int NOODLES_LOGO = 13;
+    private static final int NOODLES_SOAKAGE_TIME = 5;
+    private static final int BARCODE_CODE = 6;
 
     // Content values keys (using column names)
     public static final String ID = "ID";
@@ -120,47 +91,21 @@ public class NoodlesContentProvider extends ContentProvider {
             break;
         case NOODLES_NAME:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("name='" + url.getPathSegments().get(2) + "'");
-            break;
-        case NOODLES_NET_WEIGHT:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("net_weight='" + url.getPathSegments().get(2) + "'");
-            break;
-        case NOODLES_NOODLES_WEIGHT:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("noodles_weight='" + url.getPathSegments().get(2)
-                    + "'");
-            break;
-        case NOODLES_STEP_1_ID:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("step_1_id='" + url.getPathSegments().get(2) + "'");
-            break;
-        case NOODLES_STEP_2_ID:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("step_2_id='" + url.getPathSegments().get(2) + "'");
-            break;
-        case NOODLES_STEP_3_ID:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("step_3_id='" + url.getPathSegments().get(2) + "'");
-            break;
-        case NOODLES_STEP_4_ID:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("step_4_id='" + url.getPathSegments().get(2) + "'");
+            // A fuzzy inquiry.
+            qb.appendWhere("name LIKE'" + url.getPathSegments().get(2) + "'");
             break;
         case NOODLES_SOAKAGE_TIME:
             qb.setTables(TABLE_NAME);
             qb.appendWhere("soakage_time='" + url.getPathSegments().get(2)
                     + "'");
             break;
-        case NOODLES_DESCRIPTION:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("description='" + url.getPathSegments().get(2) + "'");
+        case BARCODE_CODE:
+            qb.setTables(TABLE_NAME + " RIGHT JOIN " + BARCODE_TABLE_NAME
+                    + " ON " + TABLE_NAME + ".id=" + BARCODE_TABLE_NAME
+                    + ".noodles_id");
+            qb.appendWhere(BARCODE_TABLE_NAME + ".code='" + url.getPathSegments().get(2) + "'");
             break;
-        case NOODLES_LOGO:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("logo='" + url.getPathSegments().get(2) + "'");
-            break;
-
+            
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -183,28 +128,15 @@ public class NoodlesContentProvider extends ContentProvider {
         case NOODLES_ID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
         case NOODLES_BRAND_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
         case NOODLES_NAME:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_NET_WEIGHT:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_NOODLES_WEIGHT:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_STEP_1_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_STEP_2_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_STEP_3_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_STEP_4_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+            // A fuzzy inquiry.
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
         case NOODLES_SOAKAGE_TIME:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_DESCRIPTION:
+        case BARCODE_CODE:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-        case NOODLES_LOGO:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
-
+           
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -248,94 +180,6 @@ public class NoodlesContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case NOODLES_BRAND_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "brand_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NET_WEIGHT:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "net_weight="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NOODLES_WEIGHT:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "noodles_weight="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_1_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "step_1_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_2_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "step_2_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_3_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "step_3_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_4_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "step_4_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_SOAKAGE_TIME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "soakage_time="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_DESCRIPTION:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "description="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -361,94 +205,6 @@ public class NoodlesContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case NOODLES_BRAND_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "brand_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NET_WEIGHT:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "net_weight="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_NOODLES_WEIGHT:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "noodles_weight="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_1_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "step_1_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_2_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "step_2_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_3_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "step_3_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_STEP_4_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "step_4_id="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_SOAKAGE_TIME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "soakage_time="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_DESCRIPTION:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "description="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case NOODLES_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -466,24 +222,10 @@ public class NoodlesContentProvider extends ContentProvider {
                 + "/*", NOODLES_BRAND_ID);
         URL_MATCHER.addURI(AUTHORITY,
                 TABLE_NAME.toLowerCase() + "/name" + "/*", NOODLES_NAME);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/net_weight"
-                + "/*", NOODLES_NET_WEIGHT);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
-                + "/noodles_weight" + "/*", NOODLES_NOODLES_WEIGHT);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/step_1_id"
-                + "/*", NOODLES_STEP_1_ID);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/step_2_id"
-                + "/*", NOODLES_STEP_2_ID);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/step_3_id"
-                + "/*", NOODLES_STEP_3_ID);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/step_4_id"
-                + "/*", NOODLES_STEP_4_ID);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
                 + "/soakage_time" + "/*", NOODLES_SOAKAGE_TIME);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/description"
-                + "/*", NOODLES_DESCRIPTION);
         URL_MATCHER.addURI(AUTHORITY,
-                TABLE_NAME.toLowerCase() + "/logo" + "/*", NOODLES_LOGO);
+                BARCODE_TABLE_NAME.toLowerCase() + "/code" + "/*", BARCODE_CODE);
 
         NOODLES_PROJECTION_MAP = new HashMap<String, String>();
         NOODLES_PROJECTION_MAP.put(ID, "id");

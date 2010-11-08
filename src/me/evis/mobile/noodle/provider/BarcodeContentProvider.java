@@ -104,7 +104,8 @@ public class BarcodeContentProvider extends ContentProvider {
         case BARCODE_CODE:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.barcode";
         case BARCODE_NOODLES_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.barcode";
+            // A noodles may match multiple barcodes, consider promotion packages, 5-in-1, 4-in-1.
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.barcode";
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
