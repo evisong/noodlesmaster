@@ -41,6 +41,18 @@ public class NoodlesContentProvider extends ContentProvider {
     public static final Uri SOAKAGE_TIME_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
                     + "/soakage_time");
+    
+    /**
+     * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+     */
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
+
+    /**
+     * The MIME type of a {@link #CONTENT_URI} sub-directory of a single note.
+     */
+    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+
+
 
     public static final String DEFAULT_SORT_ORDER = "ID ASC";
 
@@ -67,11 +79,13 @@ public class NoodlesContentProvider extends ContentProvider {
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final String LOGO = "LOGO";
 
+    @Override
     public boolean onCreate() {
         dbHelper = new NoodlesMetaDbHelper(getContext(), true);
         return (dbHelper == null) ? false : true;
     }
 
+    @Override
     public Cursor query(Uri url, String[] projection, String selection,
             String[] selectionArgs, String sort) {
         SQLiteDatabase mDB = dbHelper.getReadableDatabase();
@@ -121,27 +135,29 @@ public class NoodlesContentProvider extends ContentProvider {
         return c;
     }
 
+    @Override
     public String getType(Uri url) {
         switch (URL_MATCHER.match(url)) {
         case NOODLES:
-            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_TYPE;
         case NOODLES_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_ITEM_TYPE;
         case NOODLES_BRAND_ID:
-            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_TYPE;
         case NOODLES_NAME:
             // A fuzzy inquiry.
-            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_TYPE;
         case NOODLES_SOAKAGE_TIME:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_TYPE;
         case BARCODE_CODE:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+            return CONTENT_ITEM_TYPE;
            
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
         }
     }
 
+    @Override
     public Uri insert(Uri url, ContentValues initialValues) {
         SQLiteDatabase mDB = dbHelper.getWritableDatabase();
         long rowID;
@@ -164,6 +180,7 @@ public class NoodlesContentProvider extends ContentProvider {
         throw new SQLException("Failed to insert row into " + url);
     }
 
+    @Override
     public int delete(Uri url, String where, String[] whereArgs) {
         SQLiteDatabase mDB = dbHelper.getWritableDatabase();
         int count;
@@ -188,6 +205,7 @@ public class NoodlesContentProvider extends ContentProvider {
         return count;
     }
 
+    @Override
     public int update(Uri url, ContentValues values, String where,
             String[] whereArgs) {
         SQLiteDatabase mDB = dbHelper.getWritableDatabase();

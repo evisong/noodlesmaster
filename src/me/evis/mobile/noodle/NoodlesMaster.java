@@ -3,6 +3,7 @@ package me.evis.mobile.noodle;
 import java.io.IOException;
 import java.io.InputStream;
 
+import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -41,6 +44,9 @@ public class NoodlesMaster extends Activity {
     private static final int MESSAGE_WHAT_CODE = 0;
 	
 	private static final int DIALOG_TIME_PICKER = 1;
+	
+	// Menu item id
+	private static final int MENU_ITEM_LIST = Menu.FIRST;
 	
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
@@ -96,6 +102,30 @@ public class NoodlesMaster extends Activity {
 		
 		prepareLogo();
 		prepareSteps();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        // This is our one standard application action -- inserting a
+        // new note into the list.
+        menu.add(0, MENU_ITEM_LIST, 0, R.string.menu_list)
+                .setShortcut('3', 'a')
+                .setIcon(android.R.drawable.ic_menu_view);
+
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_ITEM_LIST:
+                // Launch activity to list the noodles.
+                startActivity(new Intent(Intent.ACTION_VIEW, NoodlesContentProvider.CONTENT_URI));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
     
     @Override

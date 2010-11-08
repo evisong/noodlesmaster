@@ -5,4 +5,9 @@
     <string name="hello">Hello World</string>
     <string name="app_name">InstantNoodlesMaster</string>
 <string name="adjust_timer">Adjust Total Time</string>
+<string name="selected">You selected: </string>
+    <string name="description">description</string>
+    <string name="noselection">No item selected</string>
+    <string name="list_item">List Item</string>
+<string name="menu_list">View All Noodles</string>
 </resources>
