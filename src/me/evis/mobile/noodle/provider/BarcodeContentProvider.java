@@ -24,7 +24,7 @@ import me.evis.mobile.noodle.*;
 
 public class BarcodeContentProvider extends ContentProvider {
 
-    private NoodlesMetaDbHelper dbHelper;
+    private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> BARCODE_PROJECTION_MAP;
     private static final String TABLE_NAME = "barcode";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.barcodecontentprovider";
@@ -54,7 +54,7 @@ public class BarcodeContentProvider extends ContentProvider {
     public static final String NOODLES_ID = "NOODLES_ID";
 
     public boolean onCreate() {
-        dbHelper = new NoodlesMetaDbHelper(getContext(), true);
+        dbHelper = new NoodlesDbHelper(getContext(), true);
         return (dbHelper == null) ? false : true;
     }
 

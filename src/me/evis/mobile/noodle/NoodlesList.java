@@ -29,7 +29,7 @@ public class NoodlesList extends ListActivity {
      * The columns we are interested in from the database
      */
     private static final String[] PROJECTION = new String[] {
-        NoodlesContentProvider.ID, // 0
+        NoodlesContentProvider._ID, // 0
         NoodlesContentProvider.NAME, // 1
         NoodlesContentProvider.LOGO, // 2
     };

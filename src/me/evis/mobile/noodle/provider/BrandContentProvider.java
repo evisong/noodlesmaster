@@ -24,7 +24,7 @@ import me.evis.mobile.noodle.*;
 
 public class BrandContentProvider extends ContentProvider {
 
-    private NoodlesMetaDbHelper dbHelper;
+    private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> BRAND_PROJECTION_MAP;
     private static final String TABLE_NAME = "brand";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.brandcontentprovider";
@@ -44,7 +44,7 @@ public class BrandContentProvider extends ContentProvider {
     public static final Uri LOGO_FIELD_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/logo");
 
-    public static final String DEFAULT_SORT_ORDER = "ID ASC";
+    public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
@@ -56,14 +56,14 @@ public class BrandContentProvider extends ContentProvider {
     private static final int BRAND_LOGO = 6;
 
     // Content values keys (using column names)
-    public static final String ID = "ID";
-    public static final String MANUFACTURER_ID = "MANUFACTURER_ID";
-    public static final String PARENT_BRAND_ID = "PARENT_BRAND_ID";
-    public static final String NAME = "NAME";
-    public static final String LOGO = "LOGO";
+    public static final String _ID = "_id";
+    public static final String MANUFACTURER_ID = "manufacturer_id";
+    public static final String PARENT_BRAND_ID = "parent_brand_id";
+    public static final String NAME = "name";
+    public static final String LOGO = "logo";
 
     public boolean onCreate() {
-        dbHelper = new NoodlesMetaDbHelper(getContext(), true);
+        dbHelper = new NoodlesDbHelper(getContext(), true);
         return (dbHelper == null) ? false : true;
     }
 
@@ -284,7 +284,7 @@ public class BrandContentProvider extends ContentProvider {
                 TABLE_NAME.toLowerCase() + "/logo" + "/*", BRAND_LOGO);
 
         BRAND_PROJECTION_MAP = new HashMap<String, String>();
-        BRAND_PROJECTION_MAP.put(ID, "id");
+        BRAND_PROJECTION_MAP.put(_ID, "_id");
         BRAND_PROJECTION_MAP.put(MANUFACTURER_ID, "manufacturer_id");
         BRAND_PROJECTION_MAP.put(PARENT_BRAND_ID, "parent_brand_id");
         BRAND_PROJECTION_MAP.put(NAME, "name");

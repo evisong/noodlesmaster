@@ -24,7 +24,7 @@ import me.evis.mobile.noodle.*;
 
 public class NoodlesContentProvider extends ContentProvider {
 
-    private NoodlesMetaDbHelper dbHelper;
+    private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> NOODLES_PROJECTION_MAP;
     private static final String TABLE_NAME = "noodles";
     private static final String BARCODE_TABLE_NAME = "barcode";
@@ -52,9 +52,7 @@ public class NoodlesContentProvider extends ContentProvider {
      */
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
 
-
-
-    public static final String DEFAULT_SORT_ORDER = "ID ASC";
+    public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
@@ -66,22 +64,22 @@ public class NoodlesContentProvider extends ContentProvider {
     private static final int BARCODE_CODE = 6;
 
     // Content values keys (using column names)
-    public static final String ID = "ID";
-    public static final String BRAND_ID = "BRAND_ID";
-    public static final String NAME = "NAME";
-    public static final String NET_WEIGHT = "NET_WEIGHT";
-    public static final String NOODLES_WEIGHT = "NOODLES_WEIGHT";
-    public static final String STEP_1_ID = "STEP_1_ID";
-    public static final String STEP_2_ID = "STEP_2_ID";
-    public static final String STEP_3_ID = "STEP_3_ID";
-    public static final String STEP_4_ID = "STEP_4_ID";
-    public static final String SOAKAGE_TIME = "SOAKAGE_TIME";
-    public static final String DESCRIPTION = "DESCRIPTION";
-    public static final String LOGO = "LOGO";
+    public static final String _ID = "_id";
+    public static final String BRAND_ID = "brand_id";
+    public static final String NAME = "name";
+    public static final String NET_WEIGHT = "net_weight";
+    public static final String NOODLES_WEIGHT = "noodles_weight";
+    public static final String STEP_1_ID = "step_1_id";
+    public static final String STEP_2_ID = "step_2_id";
+    public static final String STEP_3_ID = "step_3_id";
+    public static final String STEP_4_ID = "step_4_id";
+    public static final String SOAKAGE_TIME = "soakage_time";
+    public static final String DESCRIPTION = "description";
+    public static final String LOGO = "logo";
 
     @Override
     public boolean onCreate() {
-        dbHelper = new NoodlesMetaDbHelper(getContext(), true);
+        dbHelper = new NoodlesDbHelper(getContext(), true);
         return (dbHelper == null) ? false : true;
     }
 
@@ -246,7 +244,7 @@ public class NoodlesContentProvider extends ContentProvider {
                 BARCODE_TABLE_NAME.toLowerCase() + "/code" + "/*", BARCODE_CODE);
 
         NOODLES_PROJECTION_MAP = new HashMap<String, String>();
-        NOODLES_PROJECTION_MAP.put(ID, "id");
+        NOODLES_PROJECTION_MAP.put(_ID, "_id");
         NOODLES_PROJECTION_MAP.put(BRAND_ID, "brand_id");
         NOODLES_PROJECTION_MAP.put(NAME, "name");
         NOODLES_PROJECTION_MAP.put(NET_WEIGHT, "net_weight");

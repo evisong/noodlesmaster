@@ -24,7 +24,7 @@ import me.evis.mobile.noodle.*;
 
 public class StepContentProvider extends ContentProvider {
 
-    private NoodlesMetaDbHelper dbHelper;
+    private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> STEP_PROJECTION_MAP;
     private static final String TABLE_NAME = "step";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.stepcontentprovider";
@@ -39,7 +39,7 @@ public class StepContentProvider extends ContentProvider {
     public static final Uri ICON_FIELD_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/icon");
 
-    public static final String DEFAULT_SORT_ORDER = "ID ASC";
+    public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
@@ -49,12 +49,12 @@ public class StepContentProvider extends ContentProvider {
     private static final int STEP_ICON = 4;
 
     // Content values keys (using column names)
-    public static final String ID = "ID";
-    public static final String DESCRIPTION = "DESCRIPTION";
-    public static final String ICON = "ICON";
+    public static final String _ID = "_id";
+    public static final String DESCRIPTION = "description";
+    public static final String ICON = "icon";
 
     public boolean onCreate() {
-        dbHelper = new NoodlesMetaDbHelper(getContext(), true);
+        dbHelper = new NoodlesDbHelper(getContext(), true);
         return (dbHelper == null) ? false : true;
     }
 
@@ -225,7 +225,7 @@ public class StepContentProvider extends ContentProvider {
                 TABLE_NAME.toLowerCase() + "/icon" + "/*", STEP_ICON);
 
         STEP_PROJECTION_MAP = new HashMap<String, String>();
-        STEP_PROJECTION_MAP.put(ID, "id");
+        STEP_PROJECTION_MAP.put(_ID, "_id");
         STEP_PROJECTION_MAP.put(DESCRIPTION, "description");
         STEP_PROJECTION_MAP.put(ICON, "icon");
 

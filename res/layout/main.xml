@@ -5,7 +5,7 @@
 
 	<RelativeLayout android:id="@+id/NoodleDescArea"
 		android:layout_height="wrap_content" android:layout_alignParentTop="true"
-		android:layout_width="fill_parent">
+		android:layout_width="fill_parent" android:background="@drawable/header_bg">
 		<ImageView android:id="@+id/NoodleLogo"
 			android:layout_marginBottom="3dp" android:layout_marginLeft="3dp"
 			android:layout_marginRight="5dp" android:layout_marginTop="3dp"
