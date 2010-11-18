@@ -41,6 +41,8 @@ public class NoodlesContentProvider extends ContentProvider {
     public static final Uri SOAKAGE_TIME_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
                     + "/soakage_time");
+    public static final Uri CODE_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + BARCODE_TABLE_NAME.toLowerCase() + "/code");
     
     /**
      * The MIME type of {@link #CONTENT_URI} providing a directory of notes.

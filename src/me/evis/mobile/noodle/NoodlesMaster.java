@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.internal.widget.NumberPicker;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class NoodlesMaster extends Activity {
 	
@@ -100,6 +102,22 @@ public class NoodlesMaster extends Activity {
             }
         });
 		
+		// Browse button behavior.
+		getBrowseButton().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				browseNoodles();
+			}
+		});
+		
+		// Capture button behavior.
+		getCaptureButton().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				IntentIntegrator.initiateScan(NoodlesMaster.this);
+			}
+		});
+		
 		prepareLogo();
 		prepareSteps();
     }
@@ -121,11 +139,28 @@ public class NoodlesMaster extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ITEM_LIST:
-                // Launch activity to list the noodles.
-                startActivity(new Intent(Intent.ACTION_VIEW, NoodlesContentProvider.CONTENT_URI));
+                browseNoodles();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    	if (scanResult != null) {
+    		// Handle the barcode returned by zxing.
+    		startActivity(new Intent(Intent.ACTION_VIEW, 
+    				Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents())));
+    	}
+    	super.onActivityResult(requestCode, resultCode, data);
+    }
+    
+    /**
+     * Launch activity to list the noodles.
+     */
+    protected void browseNoodles() {
+    	startActivity(new Intent(Intent.ACTION_VIEW, NoodlesContentProvider.CONTENT_URI));
     }
     
     @Override
@@ -351,6 +386,12 @@ public class NoodlesMaster extends Activity {
     }
     private ImageButton getAdjustTimerButton() {
         return (ImageButton) findViewById(R.id.AdjustTimerButton);
+    }
+    private ImageButton getBrowseButton() {
+        return (ImageButton) findViewById(R.id.BrowseButton);
+    }
+    private ImageButton getCaptureButton() {
+        return (ImageButton) findViewById(R.id.CaptureButton);
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);

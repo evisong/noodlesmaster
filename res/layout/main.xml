@@ -14,12 +14,14 @@
 			android:layout_width="wrap_content" android:id="@+id/NoodleName"
 			android:text="Name of Instant Noodles" android:layout_toRightOf="@+id/NoodleLogo"
 			android:layout_margin="2dp"></TextView>
-		<TextView android:layout_height="wrap_content"
+		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/ic_btn_search" android:id="@+id/CaptureButton"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_btn_speak_now" android:id="@+id/BrowseButton" android:layout_toLeftOf="@+id/CaptureButton"></ImageButton><TextView android:layout_height="wrap_content"
 			android:layout_below="@+id/NoodleName" android:layout_width="wrap_content"
 			android:layout_toRightOf="@+id/ImageView01" android:id="@+id/NoodleDescription"
 			android:text="Detailed description." android:layout_alignLeft="@+id/NoodleName"
 			android:layout_marginRight="3dp" android:layout_marginBottom="2dp"></TextView>
-	</RelativeLayout>
+	
+
+</RelativeLayout>
 
 	<TableLayout android:id="@+id/StepsTable"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
