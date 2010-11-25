@@ -44,9 +44,9 @@ public class NoodlesMaster extends Activity {
 		NoodlesContentProvider.STEP_2_ID,      // 6
 		NoodlesContentProvider.STEP_3_ID,      // 7
 		NoodlesContentProvider.STEP_4_ID,      // 8
-		NoodlesContentProvider.SOAKAGE_TIME,   // 10
-		NoodlesContentProvider.DESCRIPTION,    // 11
-		NoodlesContentProvider.LOGO            // 12
+		NoodlesContentProvider.SOAKAGE_TIME,   // 9
+		NoodlesContentProvider.DESCRIPTION,    // 10
+		NoodlesContentProvider.LOGO            // 11
 	};
     
     private static final int MESSAGE_WHAT_CODE = 0;
@@ -265,24 +265,12 @@ public class NoodlesMaster extends Activity {
     			null, null, NoodlesContentProvider.DEFAULT_SORT_ORDER);
     	if (cursor.getCount() > 0 )
     	{
-//    		NoodlesContentProvider._ID,            // 0 
-//    		NoodlesContentProvider.BRAND_ID,       // 1
-//    		NoodlesContentProvider.NAME,           // 2
-//    		NoodlesContentProvider.NET_WEIGHT,     // 3
-//    		NoodlesContentProvider.NOODLES_WEIGHT, // 4
-//    		NoodlesContentProvider.STEP_1_ID,      // 5
-//    		NoodlesContentProvider.STEP_2_ID,      // 6
-//    		NoodlesContentProvider.STEP_3_ID,      // 7
-//    		NoodlesContentProvider.STEP_4_ID,      // 8
-//    		NoodlesContentProvider.SOAKAGE_TIME,   // 10
-//    		NoodlesContentProvider.DESCRIPTION,    // 11
-//    		NoodlesContentProvider.LOGO            // 12
     		cursor.moveToFirst();
     		noodles.id = cursor.getLong(0);
     		noodles.brand = cursor.getString(1);
     		noodles.name = cursor.getString(2);
-    		noodles.soakageTime = cursor.getInt(10);
-    		noodles.description = cursor.getString(11);
+    		noodles.soakageTime = cursor.getInt(9);
+    		noodles.description = cursor.getString(10);
     	}
     	
         return noodles;
