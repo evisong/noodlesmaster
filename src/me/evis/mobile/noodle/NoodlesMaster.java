@@ -11,6 +11,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -33,8 +34,20 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class NoodlesMaster extends Activity {
 	
-    private static final String TIME = "time";
-    private static final String CODE = "code";
+	private static final String[] projection = {
+		NoodlesContentProvider._ID,            // 0 
+		NoodlesContentProvider.BRAND_ID,       // 1
+		NoodlesContentProvider.NAME,           // 2
+		NoodlesContentProvider.NET_WEIGHT,     // 3
+		NoodlesContentProvider.NOODLES_WEIGHT, // 4
+		NoodlesContentProvider.STEP_1_ID,      // 5
+		NoodlesContentProvider.STEP_2_ID,      // 6
+		NoodlesContentProvider.STEP_3_ID,      // 7
+		NoodlesContentProvider.STEP_4_ID,      // 8
+		NoodlesContentProvider.SOAKAGE_TIME,   // 10
+		NoodlesContentProvider.DESCRIPTION,    // 11
+		NoodlesContentProvider.LOGO            // 12
+	};
     
     private static final int MESSAGE_WHAT_CODE = 0;
 	
@@ -67,7 +80,8 @@ public class NoodlesMaster extends Activity {
             intent.setData(ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, 1));
         }
         Noodles noodles = retrieveNoodlesDetail(intent.getData());
-        
+		displayNoodlesDetail(noodles);
+		
         totalSecs = noodles.soakageTime;
         updateTimer();
         
@@ -110,9 +124,6 @@ public class NoodlesMaster extends Activity {
 				IntentIntegrator.initiateScan(NoodlesMaster.this);
 			}
 		});
-		
-		prepareLogo();
-		prepareSteps();
     }
     
     @Override
@@ -248,16 +259,41 @@ public class NoodlesMaster extends Activity {
     }
     
     private Noodles retrieveNoodlesDetail(Uri uri) {
-        if (uri.getQueryParameter(CODE) != null) {
-            String barcode = uri.getQueryParameter(CODE);
-            // TODO Search by barcode
-        }
-        // TODO DB.
-        Noodles noodles = new Noodles();
-        if (uri.getQueryParameter(TIME) != null) {
-            noodles.soakageTime = Integer.parseInt(uri.getQueryParameter(TIME));
-        }
+    	Noodles noodles = new Noodles();
+        
+    	Cursor cursor = managedQuery(uri, projection, 
+    			null, null, NoodlesContentProvider.DEFAULT_SORT_ORDER);
+    	if (cursor.getCount() > 0 )
+    	{
+//    		NoodlesContentProvider._ID,            // 0 
+//    		NoodlesContentProvider.BRAND_ID,       // 1
+//    		NoodlesContentProvider.NAME,           // 2
+//    		NoodlesContentProvider.NET_WEIGHT,     // 3
+//    		NoodlesContentProvider.NOODLES_WEIGHT, // 4
+//    		NoodlesContentProvider.STEP_1_ID,      // 5
+//    		NoodlesContentProvider.STEP_2_ID,      // 6
+//    		NoodlesContentProvider.STEP_3_ID,      // 7
+//    		NoodlesContentProvider.STEP_4_ID,      // 8
+//    		NoodlesContentProvider.SOAKAGE_TIME,   // 10
+//    		NoodlesContentProvider.DESCRIPTION,    // 11
+//    		NoodlesContentProvider.LOGO            // 12
+    		cursor.moveToFirst();
+    		noodles.id = cursor.getLong(0);
+    		noodles.brand = cursor.getString(1);
+    		noodles.name = cursor.getString(2);
+    		noodles.soakageTime = cursor.getInt(10);
+    		noodles.description = cursor.getString(11);
+    	}
+    	
         return noodles;
+    }
+    
+    private void displayNoodlesDetail(Noodles noodles) {
+    	((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
+    	((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
+    	
+    	prepareLogo();
+    	prepareSteps();
     }
     
     /**

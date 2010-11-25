@@ -97,7 +97,7 @@ public class NoodlesContentProvider extends ContentProvider {
             break;
         case NOODLES_ID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("id='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
             break;
         case NOODLES_BRAND_ID:
             qb.setTables(TABLE_NAME);
@@ -115,7 +115,7 @@ public class NoodlesContentProvider extends ContentProvider {
             break;
         case BARCODE_CODE:
             qb.setTables(TABLE_NAME + " RIGHT JOIN " + BARCODE_TABLE_NAME
-                    + " ON " + TABLE_NAME + ".id=" + BARCODE_TABLE_NAME
+                    + " ON " + TABLE_NAME + "._id=" + BARCODE_TABLE_NAME
                     + ".noodles_id");
             qb.appendWhere(BARCODE_TABLE_NAME + ".code='" + url.getPathSegments().get(2) + "'");
             break;
@@ -192,7 +192,7 @@ public class NoodlesContentProvider extends ContentProvider {
         case NOODLES_ID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.delete(TABLE_NAME,
-                    "id="
+                    "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -218,7 +218,7 @@ public class NoodlesContentProvider extends ContentProvider {
         case NOODLES_ID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.update(TABLE_NAME, values,
-                    "id="
+                    "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);

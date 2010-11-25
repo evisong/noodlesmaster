@@ -16,9 +16,9 @@ package me.evis.mobile.noodle;
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.AssetUtil;
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,7 +50,7 @@ public class NoodlesList extends ListActivity {
         	public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				startActivity(new Intent(Intent.ACTION_VIEW,
-						Uri.parse(NoodlesContentProvider.ID_FIELD_CONTENT_URI.toString() + "/" + id)));
+						ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, id)));
 			}
         });
         

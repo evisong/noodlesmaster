@@ -67,7 +67,7 @@ public class ManufacturerContentProvider extends ContentProvider {
             break;
         case MANUFACTURER_ID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("id='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
             break;
         case MANUFACTURER_NAME:
             qb.setTables(TABLE_NAME);
@@ -136,7 +136,7 @@ public class ManufacturerContentProvider extends ContentProvider {
         case MANUFACTURER_ID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.delete(TABLE_NAME,
-                    "id="
+                    "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -161,7 +161,7 @@ public class ManufacturerContentProvider extends ContentProvider {
         case MANUFACTURER_ID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.update(TABLE_NAME, values,
-                    "id="
+                    "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);

@@ -17,9 +17,9 @@ import me.evis.mobile.noodle.provider.BrandContentProvider;
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.AssetUtil;
 import android.app.ListActivity;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,7 +50,7 @@ public class BrandList extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				startActivity(new Intent(Intent.ACTION_VIEW,
-						Uri.parse(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI.toString() + "/" + id)));
+						ContentUris.withAppendedId(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI, id)));
 			}
 		});
 
