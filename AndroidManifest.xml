@@ -7,6 +7,11 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles" />
+			</intent-filter>
 		</activity>
 		<provider android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider"
 			android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider" />
@@ -20,12 +25,25 @@
 			android:name="me.evis.mobile.noodle.provider.BarcodeContentProvider" />
 		<activity android:name=".NoodlesList">
 			<intent-filter>
-				<action android:name="android.intent.action.VIEW"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
-				<data
-					android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles"></data>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ManufacturerList">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".BrandList">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand" />
 			</intent-filter>
 		</activity>
 	</application>
-	<uses-sdk android:minSdkVersion="4"/>
+	<uses-sdk android:minSdkVersion="4" />
 </manifest>

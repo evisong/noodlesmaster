@@ -53,7 +53,6 @@ public class BrandContentProvider extends ContentProvider {
     private static final int BRAND_MANUFACTURER_ID = 3;
     private static final int BRAND_PARENT_BRAND_ID = 4;
     private static final int BRAND_NAME = 5;
-    private static final int BRAND_LOGO = 6;
 
     // Content values keys (using column names)
     public static final String _ID = "_id";
@@ -92,11 +91,7 @@ public class BrandContentProvider extends ContentProvider {
             break;
         case BRAND_NAME:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("name='" + url.getPathSegments().get(2) + "'");
-            break;
-        case BRAND_LOGO:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("logo='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("name LIKE '" + url.getPathSegments().get(2) + "'");
             break;
 
         default:
@@ -121,13 +116,11 @@ public class BrandContentProvider extends ContentProvider {
         case BRAND_ID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
         case BRAND_MANUFACTURER_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
         case BRAND_PARENT_BRAND_ID:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
         case BRAND_NAME:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
-        case BRAND_LOGO:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -188,22 +181,6 @@ public class BrandContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case BRAND_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -245,22 +222,6 @@ public class BrandContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case BRAND_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -280,8 +241,6 @@ public class BrandContentProvider extends ContentProvider {
                 + "/parent_brand_id" + "/*", BRAND_PARENT_BRAND_ID);
         URL_MATCHER.addURI(AUTHORITY,
                 TABLE_NAME.toLowerCase() + "/name" + "/*", BRAND_NAME);
-        URL_MATCHER.addURI(AUTHORITY,
-                TABLE_NAME.toLowerCase() + "/logo" + "/*", BRAND_LOGO);
 
         BRAND_PROJECTION_MAP = new HashMap<String, String>();
         BRAND_PROJECTION_MAP.put(_ID, "_id");

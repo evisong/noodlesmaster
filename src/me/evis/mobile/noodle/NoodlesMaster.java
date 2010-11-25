@@ -1,18 +1,16 @@
 package me.evis.mobile.noodle;
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import me.evis.mobile.noodle.provider.ManufacturerContentProvider;
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
+import me.evis.mobile.util.AssetUtil;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -35,13 +33,8 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class NoodlesMaster extends Activity {
 	
-    private static final String AUTHORITY = "me.evis.mobile.noodle";
     private static final String TIME = "time";
     private static final String CODE = "code";
-    private static final Uri NOODLES_URI = 
-        Uri.parse("noodles://" + AUTHORITY + "/noodles");
-    private static final Uri DEFAULT_NOODLES_URI = 
-        Uri.parse("noodles://" + AUTHORITY + "/noodles/0?" + TIME + "=10");
     
     private static final int MESSAGE_WHAT_CODE = 0;
 	
@@ -56,7 +49,7 @@ public class NoodlesMaster extends Activity {
 	// Keep the track so that scheduled work can be 
 	// stopped by user.
 	protected Handler counterHandler;
-//	protected Handler alarmHandler;
+	// protected Handler alarmHandler;
 	protected Runnable alarmRunner;
 	// According to user input.
 	protected int totalSecs;
@@ -71,7 +64,7 @@ public class NoodlesMaster extends Activity {
         // as a MAIN activity), then use our default content provider.
         Intent intent = getIntent();
         if (intent.getData() == null) {
-            intent.setData(DEFAULT_NOODLES_URI);
+            intent.setData(ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, 1));
         }
         Noodles noodles = retrieveNoodlesDetail(intent.getData());
         
@@ -145,6 +138,10 @@ public class NoodlesMaster extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
+    /**
+     * Handles Barcode scanner result.
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -160,7 +157,7 @@ public class NoodlesMaster extends Activity {
      * Launch activity to list the noodles.
      */
     protected void browseNoodles() {
-    	startActivity(new Intent(Intent.ACTION_VIEW, NoodlesContentProvider.CONTENT_URI));
+    	startActivity(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI));
     }
     
     @Override
@@ -268,14 +265,7 @@ public class NoodlesMaster extends Activity {
      */
     private void prepareLogo() {
         ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-        InputStream is = null;
-        try {
-            is = getAssets().open("logos/masterkong.png");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Bitmap bitmap = BitmapFactory.decodeStream(is);
-        noodleLogo.setImageBitmap(bitmap);
+        AssetUtil.setAssetImage(noodleLogo, "logos/masterkong.png");
     }
     
     /**
@@ -299,14 +289,7 @@ public class NoodlesMaster extends Activity {
         stepNumberText.setText(String.valueOf(stepNumber));
         // Set step icon.
         ImageView stepIcon = (ImageView) step.findViewById(R.id.StepIcon);
-        InputStream is = null;
-        try {
-            is = getAssets().open("step_icons/step" + stepNumber + "_icon.png");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Bitmap bitmap = BitmapFactory.decodeStream(is);
-        stepIcon.setImageBitmap(bitmap);
+        AssetUtil.setAssetImage(stepIcon, "step_icons/step" + stepNumber + "_icon.png");
         // Set step description.
         TextView stepDesc= (TextView) step.findViewById(R.id.StepDesc);
         stepDesc.setText("这是泡面第" + stepNumber + "步");

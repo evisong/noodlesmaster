@@ -106,7 +106,7 @@ public class NoodlesContentProvider extends ContentProvider {
         case NOODLES_NAME:
             qb.setTables(TABLE_NAME);
             // A fuzzy inquiry.
-            qb.appendWhere("name LIKE'" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("name LIKE '" + url.getPathSegments().get(2) + "'");
             break;
         case NOODLES_SOAKAGE_TIME:
             qb.setTables(TABLE_NAME);

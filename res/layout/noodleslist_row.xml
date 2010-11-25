@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">    
 
-    <ImageView android:id="@+id/img01"
+    <ImageView android:id="@+id/ItemLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dip"/>
 
-    <TextView android:id="@+id/text01"
+    <TextView android:id="@+id/ItemName"
         android:textStyle="bold"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

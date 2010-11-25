@@ -45,7 +45,6 @@ public class ManufacturerContentProvider extends ContentProvider {
     private static final int MANUFACTURER = 1;
     private static final int MANUFACTURER_ID = 2;
     private static final int MANUFACTURER_NAME = 3;
-    private static final int MANUFACTURER_LOGO = 4;
 
     // Content values keys (using column names)
     public static final String _ID = "_id";
@@ -72,13 +71,9 @@ public class ManufacturerContentProvider extends ContentProvider {
             break;
         case MANUFACTURER_NAME:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("name='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("name LIKE '" + url.getPathSegments().get(2) + "'");
             break;
-        case MANUFACTURER_LOGO:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("logo='" + url.getPathSegments().get(2) + "'");
-            break;
-
+            
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -101,9 +96,7 @@ public class ManufacturerContentProvider extends ContentProvider {
         case MANUFACTURER_ID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.manufacturer";
         case MANUFACTURER_NAME:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.manufacturer";
-        case MANUFACTURER_LOGO:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.manufacturer";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer";
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -148,22 +141,6 @@ public class ManufacturerContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case MANUFACTURER_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case MANUFACTURER_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -189,22 +166,6 @@ public class ManufacturerContentProvider extends ContentProvider {
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case MANUFACTURER_NAME:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "name="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case MANUFACTURER_LOGO:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "logo="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -220,8 +181,6 @@ public class ManufacturerContentProvider extends ContentProvider {
                 MANUFACTURER_ID);
         URL_MATCHER.addURI(AUTHORITY,
                 TABLE_NAME.toLowerCase() + "/name" + "/*", MANUFACTURER_NAME);
-        URL_MATCHER.addURI(AUTHORITY,
-                TABLE_NAME.toLowerCase() + "/logo" + "/*", MANUFACTURER_LOGO);
 
         MANUFACTURER_PROJECTION_MAP = new HashMap<String, String>();
         MANUFACTURER_PROJECTION_MAP.put(_ID, "_id");

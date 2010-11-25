@@ -13,6 +13,7 @@
 
 package me.evis.mobile.noodle;
 
+import me.evis.mobile.noodle.provider.BrandContentProvider;
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.AssetUtil;
 import android.app.ListActivity;
@@ -27,42 +28,41 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class NoodlesList extends ListActivity {
+public class BrandList extends ListActivity {
     /**
      * The columns we are interested in from the database
      */
     private static final String[] PROJECTION = new String[] {
-        NoodlesContentProvider._ID, // 0
-        NoodlesContentProvider.NAME, // 1
-        NoodlesContentProvider.LOGO, // 2
+        BrandContentProvider._ID, // 0
+        BrandContentProvider.NAME, // 1
+        BrandContentProvider.LOGO, // 2
     };
     
     private static final String LOGO_PATH = "logos/";
     
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.noodleslist);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.brandlist);
 
-        // adds listener to list view
-        ListView listView = getListView();
-        listView.setOnItemClickListener(new OnItemClickListener() {
-        	public void onItemClick(AdapterView<?> parent, View view, int position,
+		// adds listener to list view
+		ListView listView = getListView();
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				startActivity(new Intent(Intent.ACTION_VIEW,
-						Uri.parse(NoodlesContentProvider.ID_FIELD_CONTENT_URI.toString() + "/" + id)));
+						Uri.parse(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI.toString() + "/" + id)));
 			}
-        });
-        
-        // Perform a managed query. The Activity will handle closing and re-querying the cursor
+		});
+
+		// Perform a managed query. The Activity will handle closing and re-querying the cursor
         // when needed.
         Cursor cursor = managedQuery(getIntent().getData(), PROJECTION, null, null,
-                NoodlesContentProvider.DEFAULT_SORT_ORDER);
+                BrandContentProvider.DEFAULT_SORT_ORDER);
 
         // Used to map notes entries from the database to views
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
-        		R.layout.noodleslist_row, cursor,
-                new String[] { NoodlesContentProvider.NAME, NoodlesContentProvider.LOGO }, 
+        		R.layout.brandlist_row, cursor,
+                new String[] { BrandContentProvider.NAME, BrandContentProvider.LOGO }, 
                 new int[] { R.id.ItemName, R.id.ItemLogo });
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			
@@ -78,5 +78,5 @@ public class NoodlesList extends ListActivity {
 			}
 		});
         setListAdapter(adapter);
-    }
+	}
 }
