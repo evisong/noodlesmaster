@@ -37,18 +37,26 @@ public class NoodlesMaster extends Activity {
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
-		NoodlesContentProvider.BRAND_ID,       // 1
-		NoodlesContentProvider.NAME,           // 2
-		NoodlesContentProvider.NET_WEIGHT,     // 3
-		NoodlesContentProvider.NOODLES_WEIGHT, // 4
-		NoodlesContentProvider.STEP_1_ID,      // 5
-		NoodlesContentProvider.STEP_2_ID,      // 6
-		NoodlesContentProvider.STEP_3_ID,      // 7
-		NoodlesContentProvider.STEP_4_ID,      // 8
-		NoodlesContentProvider.SOAKAGE_TIME,   // 9
-		NoodlesContentProvider.DESCRIPTION,    // 10
-		NoodlesContentProvider.LOGO            // 11
+		"noodles." + NoodlesContentProvider.NAME,             // 1
+		NoodlesContentProvider.NET_WEIGHT,     // 2
+		NoodlesContentProvider.NOODLES_WEIGHT, // 3
+		NoodlesContentProvider.SOAKAGE_TIME,   // 4
+		"noodles." + NoodlesContentProvider.DESCRIPTION,    // 5
+		"noodles." + NoodlesContentProvider.LOGO,           // 6
+		"manufacturer.name",                   // 7
+		"manufacturer.logo",                   // 8
+		"step1.description",                   // 9
+		"step1.icon",                          // 10
+		"step2.description",                   // 11
+		"step2.icon",                          // 12
+		"step3.description",                   // 13
+		"step3.icon",                          // 14
+		"step4.description",                   // 15
+		"step4.icon",                          // 16
 	};
+	
+	private static final String LOGO_PATH = "logos/";
+	private static final String STEP_ICON_PATH = "step_icons/";
     
     private static final int MESSAGE_WHAT_CODE = 0;
 	
@@ -264,61 +272,69 @@ public class NoodlesMaster extends Activity {
     	Noodles noodles = new Noodles();
         
     	Cursor cursor = managedQuery(uri, projection, 
-    			null, null, "name ASC");
+    			null, null, "noodles.name ASC");
     	if (cursor.getCount() > 0 )
     	{
+
+    		
     		cursor.moveToFirst();
     		noodles.id = cursor.getLong(0);
-    		noodles.brand = cursor.getString(1);
-    		noodles.name = cursor.getString(2);
-    		noodles.soakageTime = cursor.getInt(9);
-    		noodles.description = cursor.getString(10);
+    		noodles.name = cursor.getString(1);
+    		noodles.soakageTime = cursor.getInt(4);
+    		noodles.description = cursor.getString(5);
+    		noodles.logo = cursor.getString(6);
+    		noodles.manufacturerName = cursor.getString(7);
+    		noodles.manufacturerLogo = cursor.getString(8);
+    		noodles.step1Description = cursor.getString(9);
+    		noodles.step1IconUrl = cursor.getString(10);
+    		noodles.step2Description = cursor.getString(11);
+    		noodles.step2IconUrl = cursor.getString(12);
+    		noodles.step3Description = cursor.getString(13);
+    		noodles.step3IconUrl = cursor.getString(14);
+    		noodles.step4Description = cursor.getString(15);
+    		noodles.step4IconUrl = cursor.getString(16);
     	}
     	
         return noodles;
     }
     
+    /**
+     * 
+     * Initialize noodle's name, description, manufacturer logo.
+     * Initialize noodle's steps, icons and description.
+     * 
+     * @param noodles
+     */
     private void displayNoodlesDetail(Noodles noodles) {
     	((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
     	((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
     	
-    	prepareLogo();
-    	prepareSteps();
+    	// Logo
+    	ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
+        AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
+    	
+        // Steps
+        prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
+        prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
+        prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
+        prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
     }
     
     /**
-     * Initialize noodle's logo.
+     * 
      */
-    private void prepareLogo() {
-        ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-        AssetUtil.setAssetImage(noodleLogo, "logos/masterkong.png");
-    }
-    
-    /**
-     * Initialize noodle's steps, icons and description.
-     */
-    private void prepareSteps() {
-        prepareStep(new int[] {R.id.Step1, R.id.Step2, R.id.Step3, R.id.Step4});
-    }
-    
-    private void prepareStep(int[] stepIds) {
-        for (int i = 0; i < 4; i++ ) {
-            prepareStep(i + 1, stepIds[i]);
-        }
-    }
-    
-    private void prepareStep(int stepNumber, int stepId) {
-        // Step container.
-        RelativeLayout step = (RelativeLayout) findViewById(stepId);
+    private void prepareStep(int id, String stepNumber, String desc, String icon) {
+    	// Step container.
+        RelativeLayout step = (RelativeLayout) findViewById(id);
         // Set step number.
         TextView stepNumberText = (TextView) step.findViewById(R.id.StepNumber);
-        stepNumberText.setText(String.valueOf(stepNumber));
+        stepNumberText.setText(stepNumber);
         // Set step icon.
         ImageView stepIcon = (ImageView) step.findViewById(R.id.StepIcon);
-        AssetUtil.setAssetImage(stepIcon, "step_icons/step" + stepNumber + "_icon.png");
+        AssetUtil.setAssetImage(stepIcon, STEP_ICON_PATH, icon);
         // Set step description.
         TextView stepDesc= (TextView) step.findViewById(R.id.StepDesc);
-        stepDesc.setText("这是泡面第" + stepNumber + "步");
+        stepDesc.setText(desc);
     }
     
 //    private void setAlarm(int secs) {

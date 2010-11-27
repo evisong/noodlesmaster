@@ -28,6 +28,9 @@ public class NoodlesContentProvider extends ContentProvider {
     private static HashMap<String, String> NOODLES_PROJECTION_MAP;
     private static final String TABLE_NAME = "noodles";
     private static final String BARCODE_TABLE_NAME = "barcode";
+    private static final String MANUFACTURER_TABLE_NAME = "manufacturer";
+    private static final String BRAND_TABLE_NAME = "brand";
+    private static final String STEP_TABLE_NAME = "step";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.noodlescontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
@@ -96,8 +99,15 @@ public class NoodlesContentProvider extends ContentProvider {
             qb.setProjectionMap(NOODLES_PROJECTION_MAP);
             break;
         case NOODLES_ID:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
+            qb.setTables(TABLE_NAME
+            		+ " LEFT JOIN " + BRAND_TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_ID + "=" + BRAND_TABLE_NAME + "._id"
+            		+ " LEFT JOIN " + MANUFACTURER_TABLE_NAME + " ON " + BRAND_TABLE_NAME + ".manufacturer_id=" + MANUFACTURER_TABLE_NAME + "._id"
+            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step1 ON " + TABLE_NAME + "." + STEP_1_ID + "=" + "step1._id"
+            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step2 ON " + TABLE_NAME + "." + STEP_2_ID + "=" + "step2._id"
+            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step3 ON " + TABLE_NAME + "." + STEP_3_ID + "=" + "step3._id"
+            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step4 ON " + TABLE_NAME + "." + STEP_4_ID + "=" + "step4._id"
+            	);
+            qb.appendWhere(TABLE_NAME+ "._id='" + url.getPathSegments().get(2) + "'");
             break;
         case NOODLES_BRAND_ID:
             qb.setTables(TABLE_NAME);
@@ -114,9 +124,15 @@ public class NoodlesContentProvider extends ContentProvider {
                     + "'");
             break;
         case BARCODE_CODE:
-            qb.setTables(TABLE_NAME + " JOIN " + BARCODE_TABLE_NAME
-                    + " ON " + TABLE_NAME + "._id=" + BARCODE_TABLE_NAME
-                    + ".noodles_id");
+            qb.setTables(TABLE_NAME
+            		+ " JOIN " + BARCODE_TABLE_NAME + " ON " + TABLE_NAME + "._id=" + BARCODE_TABLE_NAME + ".noodles_id"
+            		+ " LEFT JOIN " + BRAND_TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_ID + "=" + BRAND_TABLE_NAME + "._id"
+            		+ " LEFT JOIN " + MANUFACTURER_TABLE_NAME + " ON " + BRAND_TABLE_NAME + ".manufacturer_id=" + MANUFACTURER_TABLE_NAME + "._id"
+//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step1 ON " + TABLE_NAME + "." + STEP_1_ID + "=" + "step1._id"
+//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step2 ON " + TABLE_NAME + "." + STEP_2_ID + "=" + "step2._id"
+//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step3 ON " + TABLE_NAME + "." + STEP_3_ID + "=" + "step3._id"
+//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step4 ON " + TABLE_NAME + "." + STEP_4_ID + "=" + "step4._id"
+            	);
             qb.appendWhere(BARCODE_TABLE_NAME + ".code='" + url.getPathSegments().get(2) + "'");
             break;
             

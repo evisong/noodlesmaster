@@ -2,9 +2,8 @@ package me.evis.mobile.noodle;
 
 public class Noodles {
     public long id;
-    public String manufacturer;
-    public String brand;
-    public String subBrand;
+    public String manufacturerName;
+    public String manufacturerLogo;
     public String name;
     public String description;
     public String step1IconUrl;
@@ -16,4 +15,5 @@ public class Noodles {
     public String step4IconUrl;
     public String step4Description;
     public int soakageTime;
+    public String logo;
 }
