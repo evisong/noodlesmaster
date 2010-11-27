@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center_horizontal" android:background="@drawable/app_bg">
+
+	<RelativeLayout android:id="@+id/NoodleDescArea"
+		android:layout_height="wrap_content" android:layout_alignParentTop="true"
+		android:layout_width="fill_parent" android:background="@drawable/header_bg">
+		<ImageView android:id="@+id/NoodleLogo"
+			android:layout_marginBottom="3dp" android:layout_marginLeft="3dp"
+			android:layout_marginRight="5dp" android:layout_marginTop="3dp"
+			android:background="@drawable/picture_frame" android:layout_height="51dp" android:layout_width="108dp"></ImageView>
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:id="@+id/NoodleName"
+			android:text="Name of Instant Noodles" android:layout_toRightOf="@+id/NoodleLogo"
+			android:layout_margin="2dp"></TextView>
+		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/ic_btn_search" android:id="@+id/CaptureButton"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_btn_speak_now" android:id="@+id/BrowseButton" android:layout_toLeftOf="@+id/CaptureButton"></ImageButton><TextView android:layout_height="wrap_content"
+			android:layout_below="@+id/NoodleName" android:layout_width="wrap_content"
+			android:layout_toRightOf="@+id/ImageView01" android:id="@+id/NoodleDescription"
+			android:text="Detailed description." android:layout_alignLeft="@+id/NoodleName"
+			android:layout_marginRight="3dp" android:layout_marginBottom="2dp"></TextView>
+	
+
+</RelativeLayout>
+
+	<TableLayout android:id="@+id/StepsTable"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_above="@+id/TimerArea" android:layout_below="@+id/NoodleDescArea">
+		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content"
+			android:layout_weight="1" android:layout_height="fill_parent">
+			<include layout="@layout/step_panel" android:layout_centerHorizontal="true"
+				android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+				android:id="@+id/Step1" android:layout_width="fill_parent"
+				android:layout_weight="0.9" android:layout_height="fill_parent"
+				android:layout_marginLeft="4dp" android:layout_marginTop="4dp"
+				android:layout_marginRight="2dp" android:layout_marginBottom="2dp"/>
+			<include layout="@layout/step_panel" android:id="@+id/Step2"
+				android:layout_width="fill_parent" android:layout_weight="0.9"
+				android:layout_height="fill_parent" android:layout_marginRight="4dp"
+				android:layout_marginTop="4dp" android:layout_marginLeft="2dp"
+				android:layout_marginBottom="2dp"/>
+</TableRow>
+		<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content"
+			android:layout_weight="1" android:layout_height="fill_parent">
+			<include layout="@layout/step_panel" android:id="@+id/Step3"
+				android:layout_weight="1" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:layout_marginTop="2dp"
+				android:layout_marginRight="2dp" android:layout_marginBottom="4dp"
+				android:layout_marginLeft="4dp"/>
+			<include layout="@layout/step_panel" android:id="@+id/Step4"
+				android:layout_weight="1" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:layout_marginBottom="4dp"
+				android:layout_marginRight="4dp" android:layout_marginTop="2dp"
+				android:layout_marginLeft="2dp"/>
+		</TableRow>
+	</TableLayout>
+
+	<RelativeLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/TimerArea"
+		android:layout_above="@+id/ButtonArea">
+		<ProgressBar android:id="@+id/TimerProgress" android:max="1"
+			android:progress="0" style="?android:attr/progressBarStyleHorizontal"
+			android:progressDrawable="@drawable/progress_bar_horizontal"
+			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
+			android:layout_width="wrap_content"
+			android:layout_marginBottom="2dp" android:layout_alignParentTop="true" android:layout_height="46dp" android:layout_marginLeft="5dp"/>
+		<LinearLayout android:gravity="center"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
+			android:layout_marginLeft="3dp" android:id="@+id/TimerLabelArea" android:layout_alignParentTop="true">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
+				android:typeface="normal" android:id="@+id/TimerCurrentHour" android:visibility="gone"/>
+			<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont" android:typeface="normal" android:visibility="gone"/>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" style="@style/TimerFont"
+				android:text="00" android:id="@+id/TimerCurrentMinute" />
+			<TextView android:id="@+id/Semicolon2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont" />
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
+				android:id="@+id/TimerCurrentSecond" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="/" android:id="@+id/Slash1 "
+				style="@style/TimerSeparatorFont" android:layout_marginLeft="4dp"
+				android:layout_marginRight="4dp" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
+				android:typeface="normal" android:id="@+id/TimerHour" android:visibility="gone"/>
+			<TextView android:id="@+id/Semicolon3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont" android:typeface="normal" android:visibility="gone"/>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" style="@style/TimerFont"
+				android:text="00" android:id="@+id/TimerMinute" />
+			<TextView android:id="@+id/Semicolon4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text=":"
+				style="@style/TimerSeparatorFont" />
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
+				android:id="@+id/TimerSecond" />
+		</LinearLayout>
+		<ImageButton android:layout_width="wrap_content"
+			android:src="@drawable/ic_dialog_time" android:id="@+id/AdjustTimerButton"
+			android:layout_alignParentRight="true" android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"/>
+	</RelativeLayout>
+
+	<LinearLayout android:layout_width="fill_parent"
+		android:gravity="bottom|center_horizontal" android:id="@+id/ButtonArea"
+		android:layout_height="wrap_content" android:layout_alignParentBottom="true">
+		<Button android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:layout_weight="1"
+			android:text="Start" android:id="@+id/StartTimerButton"
+			android:drawableTop="@drawable/ic_menu_play_clip" />
+		<Button android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:layout_weight="1"
+			android:text="Stop" android:id="@+id/StopTimerButton"
+			android:drawableTop="@drawable/ic_menu_stop" />
+	</LinearLayout>
+
+
+</RelativeLayout>
