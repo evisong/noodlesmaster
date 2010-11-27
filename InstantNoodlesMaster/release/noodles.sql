@@ -92,8 +92,9 @@ INSERT INTO brand VALUES (NULL, "05a419dd-a4ff-47b0-96a1-67f345f4a6e5", 1, NULL,
 -- Steps                        
 
 -- Noodles                      
-INSERT INTO noodles VALUES (NULL, "1f7f90de-5de9-41bf-86d4-743e84b9d97e", 1, "红烧牛肉面", NULL, NULL, NULL, NULL, NULL, NULL, 180, NULL, NULL);
+INSERT INTO noodles VALUES (NULL, "1f7f90de-5de9-41bf-86d4-743e84b9d97e", 1, "红烧牛肉面", 109, 85, NULL, NULL, NULL, NULL, 180, "就是这个味!", NULL);
 INSERT INTO noodles VALUES (NULL, "e5186599-2ac5-4ce0-b25c-105a5302d53b", 8, "辣酱面", 118, 90, NULL, NULL, NULL, NULL, 180, "严选优质食材；精心料理好酱；正宗辣酱美味", NULL);
 
 -- Barcodes
-INSERT INTO barcode VALUES (1, 6903252049343, 2);
+INSERT INTO barcode VALUES (NULL, "6920152414019", 1);
+INSERT INTO barcode VALUES (NULL, "6903252049343", 2);

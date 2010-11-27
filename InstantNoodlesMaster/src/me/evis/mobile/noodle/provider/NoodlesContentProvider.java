@@ -114,7 +114,7 @@ public class NoodlesContentProvider extends ContentProvider {
                     + "'");
             break;
         case BARCODE_CODE:
-            qb.setTables(TABLE_NAME + " RIGHT JOIN " + BARCODE_TABLE_NAME
+            qb.setTables(TABLE_NAME + " JOIN " + BARCODE_TABLE_NAME
                     + " ON " + TABLE_NAME + "._id=" + BARCODE_TABLE_NAME
                     + ".noodles_id");
             qb.appendWhere(BARCODE_TABLE_NAME + ".code='" + url.getPathSegments().get(2) + "'");

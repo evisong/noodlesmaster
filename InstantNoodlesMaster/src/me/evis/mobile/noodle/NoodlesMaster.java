@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.internal.widget.NumberPicker;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -35,7 +36,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class NoodlesMaster extends Activity {
 	
 	private static final String[] projection = {
-		NoodlesContentProvider._ID,            // 0 
+		"noodles." + NoodlesContentProvider._ID,   // 0 
 		NoodlesContentProvider.BRAND_ID,       // 1
 		NoodlesContentProvider.NAME,           // 2
 		NoodlesContentProvider.NET_WEIGHT,     // 3
@@ -158,6 +159,7 @@ public class NoodlesMaster extends Activity {
     	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
     	if (scanResult != null) {
     		// Handle the barcode returned by zxing.
+    		Toast.makeText(this, scanResult.getContents(), Toast.LENGTH_LONG);
     		startActivity(new Intent(Intent.ACTION_VIEW, 
     				Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents())));
     	}
@@ -262,7 +264,7 @@ public class NoodlesMaster extends Activity {
     	Noodles noodles = new Noodles();
         
     	Cursor cursor = managedQuery(uri, projection, 
-    			null, null, NoodlesContentProvider.DEFAULT_SORT_ORDER);
+    			null, null, "name ASC");
     	if (cursor.getCount() > 0 )
     	{
     		cursor.moveToFirst();
