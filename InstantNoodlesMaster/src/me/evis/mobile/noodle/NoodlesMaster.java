@@ -5,12 +5,16 @@ import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.AssetUtil;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -18,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +39,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class NoodlesMaster extends Activity {
+	
+	public static final String NOODLES_TIMER_COMPLETE = "me.evis.intent.action.NOODLES_TIMER_COMPLETE";
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
@@ -135,6 +142,41 @@ public class NoodlesMaster extends Activity {
 		});
     }
     
+    private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+			final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+			ringtone.play();
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setMessage(R.string.noodle_ready)
+			       .setCancelable(false)
+			       .setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								ringtone.stop();
+							}
+						});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+			
+			stopTimer();
+		}
+	};
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+     	registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	unregisterReceiver(timerCompleteReceiver);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -167,7 +209,7 @@ public class NoodlesMaster extends Activity {
     	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
     	if (scanResult != null) {
     		// Handle the barcode returned by zxing.
-    		Toast.makeText(this, scanResult.getContents(), Toast.LENGTH_LONG);
+    		Toast.makeText(this, scanResult.getContents(), Toast.LENGTH_SHORT).show();
     		startActivity(new Intent(Intent.ACTION_VIEW, 
     				Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents())));
     	}
@@ -343,45 +385,65 @@ public class NoodlesMaster extends Activity {
 //    		PendingIntent.getBroadcast(this, 0, intent, 0);
 //    	
 //    }
+    protected PendingIntent alarmSender;
     
 	protected void startTimer(int secs) {
 		// Disable to avoid multiple timers in one time.
 		getStartTimerButton().setEnabled(false);
-		getTimerProgress().setMax(totalSecs);
+		getStopTimerButton().setEnabled(true);
+		getTimerProgress().setMax(secs);
 		// Setup counter.
+		Intent intent = new Intent(this, NoodlesTimerAlarmer.class);
+		alarmSender = PendingIntent.getBroadcast(this, 0, intent, 0);
+		
+		long startMillisecs = SystemClock.elapsedRealtime();
+		long alarmMillisecs = startMillisecs + secs * 1000;
+		
 		counterHandler = new Handler() {
 			public void handleMessage(Message msg) {
-				int currentSec = msg.arg1;
-				int totalSec = msg.arg2;
-				updateTimerCurrent(currentSec);
+				Long[] times = (Long[]) msg.obj;
+				long _startMillisecs = times[0];
+				long _alarmMillisecs = times[1];
+				long _currentMillisecs = SystemClock.elapsedRealtime();
 				
-				if (currentSec < totalSec) {
+				int _totalSecs = (int) (_alarmMillisecs - _startMillisecs) / 1000;
+				int _currentSecs = (int) (_currentMillisecs - _startMillisecs) / 1000;
+				
+				updateTimerCurrent(_currentSecs);
+				
+				if (_currentSecs < _totalSecs) {
 					Message newMsg = Message.obtain(msg);
-					newMsg.arg1 += COUNTER_INTERVAL_SECS;
 					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
 				}
 			}
 		};
 		Message msg = counterHandler.obtainMessage();
 		msg.what = MESSAGE_WHAT_CODE;
-		msg.arg1 = 0;
-		msg.arg2 = secs;
-		msg.obj = this;
+		msg.obj = new Long[] {startMillisecs, alarmMillisecs};
 		counterHandler.sendMessage(msg);
-		// Setup alarm.
-//		alarmHandler = new Handler();
-		alarmRunner = new AlarmRunner(this);
-//		alarmHandler.postDelayed(alarmRunner, secs * 1000);
-		counterHandler.postDelayed(alarmRunner, secs * 1000);
+		
+		// Setup alarm. AlarmManager must be used instead of handler or other 
+		// scheduled ways in this scenario, since AlarmManager is the only one 
+		// guaranteed active when the phone goes sleep. All other schedulers 
+		// will be paused during the standby.
+		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarmMillisecs, alarmSender);
+////		alarmHandler = new Handler();
+//		alarmRunner = new AlarmRunner(this);
+////		alarmHandler.postDelayed(alarmRunner, secs * 1000);
+//		counterHandler.postDelayed(alarmRunner, secs * 1000);
 	}
 	
 	protected void stopTimer() {
+		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		am.cancel(alarmSender);
 		counterHandler.removeMessages(MESSAGE_WHAT_CODE);
-		counterHandler.removeCallbacks(alarmRunner);
+//		counterHandler.removeCallbacks(alarmRunner);
 //		alarmHandler.removeCallbacksAndMessages(this);
 		
 		updateTimerCurrent(0);
 		getStartTimerButton().setEnabled(true);
+		getStopTimerButton().setEnabled(false);
 	}
 	
 	private void updateTimerCurrent(int currentSec) {
@@ -422,32 +484,32 @@ public class NoodlesMaster extends Activity {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
     }
 	
-	private class AlarmRunner implements Runnable {
-		private Context context;
-		
-		public AlarmRunner(Context context) {
-			this.context = context;
-		}
-		
-		public void run() {
-			Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-			ringtone.play();
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			builder.setMessage(R.string.noodle_ready)
-			       .setCancelable(false)
-			       .setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								ringtone.stop();
-							}
-						});
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-			getStartTimerButton().setEnabled(true);
-			// TODO verify necessary of this.
-//			stopTimer();
-		}
-	}
+//	private class AlarmRunner implements Runnable {
+//		private Context context;
+//		
+//		public AlarmRunner(Context context) {
+//			this.context = context;
+//		}
+//		
+//		public void run() {
+//			Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+//			final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+//			ringtone.play();
+//			
+//			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//			builder.setMessage(R.string.noodle_ready)
+//			       .setCancelable(false)
+//			       .setPositiveButton(R.string.ok,
+//						new DialogInterface.OnClickListener() {
+//							public void onClick(DialogInterface dialog, int id) {
+//								ringtone.stop();
+//							}
+//						});
+//			AlertDialog alertDialog = builder.create();
+//			alertDialog.show();
+//			getStartTimerButton().setEnabled(true);
+//			// TODO verify necessary of this.
+////			stopTimer();
+//		}
+//	}
 }
