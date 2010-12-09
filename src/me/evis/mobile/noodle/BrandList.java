@@ -40,6 +40,8 @@ public class BrandList extends ListActivity {
     
     private static final String LOGO_PATH = "logos/";
     
+    private static final int REQUEST_CODE_BROWSE_NOODLES = 2010100903;
+    
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.brandlist);
@@ -49,8 +51,9 @@ public class BrandList extends ListActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				startActivity(new Intent(Intent.ACTION_VIEW,
-						ContentUris.withAppendedId(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI, id)));
+				startActivityForResult(new Intent(Intent.ACTION_VIEW,
+						ContentUris.withAppendedId(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI, id)), 
+						REQUEST_CODE_BROWSE_NOODLES);
 			}
 		});
 
@@ -78,5 +81,15 @@ public class BrandList extends ListActivity {
 			}
 		});
         setListAdapter(adapter);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE_BROWSE_NOODLES && resultCode == RESULT_OK) {
+			setResult(resultCode, data);
+			finish();
+		}
+		
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

@@ -6,6 +6,6 @@
 		android:id="@+id/StepNumber" android:text="1" 
 		android:layout_alignParentRight="true" android:layout_alignParentTop="true" style="@style/StepNumberStyle"/>
 	<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_toLeftOf="@+id/StepNumber" android:id="@+id/StepIcon" android:layout_margin="10dp"></ImageView>
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_alignParentLeft="true" android:gravity="left|center_vertical" android:layout_alignParentBottom="true" android:id="@+id/StepDesc" android:text="Step description." android:layout_below="@+id/StepIcon" android:layout_marginBottom="10dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" style="@style/StepDescStyle"></TextView>
+	<TextView android:gravity="left|center_vertical" android:layout_alignParentBottom="true" android:id="@+id/StepDesc" android:text="Step description." android:layout_marginBottom="10dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" style="@style/StepDescStyle" android:layout_height="wrap_content" android:layout_width="140sp"></TextView>
 
 </RelativeLayout>

@@ -75,6 +75,9 @@ public class NoodlesMaster extends Activity {
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
 	
+	// Request code for browse
+	private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
+	
 	// Keep the track so that scheduled work can be 
 	// stopped by user.
 	protected Handler counterHandler;
@@ -95,11 +98,8 @@ public class NoodlesMaster extends Activity {
         if (intent.getData() == null) {
             intent.setData(ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, 1));
         }
-        Noodles noodles = retrieveNoodlesDetail(intent.getData());
-		displayNoodlesDetail(noodles);
-		
-        totalSecs = noodles.soakageTime;
-        updateTimer();
+        
+        initNoodles();
         
         // StartTimer button behavior.
         getStartTimerButton().setOnClickListener(new View.OnClickListener() {
@@ -210,17 +210,32 @@ public class NoodlesMaster extends Activity {
     	if (scanResult != null) {
     		// Handle the barcode returned by zxing.
     		Toast.makeText(this, scanResult.getContents(), Toast.LENGTH_SHORT).show();
-    		startActivity(new Intent(Intent.ACTION_VIEW, 
-    				Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents())));
+    		Uri newIntentData = Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents());
+    		getIntent().setData(newIntentData);
+    		initNoodles();
     	}
+    	
+    	if (requestCode == REQUEST_CODE_BROWSE_MANUFACTURERS && resultCode == RESULT_OK) {
+    		getIntent().setData(data.getData());
+    		initNoodles();
+    	}
+    	
     	super.onActivityResult(requestCode, resultCode, data);
+    }
+    
+    protected void initNoodles() {
+    	Noodles noodles = retrieveNoodlesDetail(getIntent().getData());
+		displayNoodlesDetail(noodles);
+		
+        totalSecs = noodles.soakageTime;
+        updateTimer();
     }
     
     /**
      * Launch activity to list the noodles.
      */
     protected void browseNoodles() {
-    	startActivity(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI));
+    	startActivityForResult(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI), REQUEST_CODE_BROWSE_MANUFACTURERS);
     }
     
     @Override

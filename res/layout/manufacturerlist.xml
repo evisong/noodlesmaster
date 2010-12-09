@@ -18,7 +18,10 @@
 	</RelativeLayout>
 	-->
 	
+	<!-- Added android:cacheColorHint="#00000000" to disable the background cache, 
+	    according to http://developer.android.com/resources/articles/listview-backgrounds.html -->
 	<ListView android:id="@id/android:list" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:drawSelectorOnTop="false" />
+		android:layout_height="fill_parent" android:drawSelectorOnTop="false" 
+		android:cacheColorHint="#00000000" />
 
 </LinearLayout>

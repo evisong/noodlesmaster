@@ -49,8 +49,9 @@ public class NoodlesList extends ListActivity {
         listView.setOnItemClickListener(new OnItemClickListener() {
         	public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				startActivity(new Intent(Intent.ACTION_VIEW,
+				setResult(RESULT_OK, new Intent(Intent.ACTION_VIEW,
 						ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, id)));
+				finish();
 			}
         });
         
