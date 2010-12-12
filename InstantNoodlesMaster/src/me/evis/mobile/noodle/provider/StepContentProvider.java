@@ -31,25 +31,26 @@ public class StepContentProvider extends ContentProvider {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + TABLE_NAME);
-    public static final Uri ID_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/id");
+    public static final Uri _ID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase());
+    public static final Uri UUID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/uuid");
     public static final Uri DESCRIPTION_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
                     + "/description");
-    public static final Uri ICON_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/icon");
 
     public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
     private static final int STEP = 1;
-    private static final int STEP_ID = 2;
-    private static final int STEP_DESCRIPTION = 3;
-    private static final int STEP_ICON = 4;
+    private static final int STEP__ID = 2;
+    private static final int STEP_UUID = 3;
+    private static final int STEP_DESCRIPTION = 4;
 
     // Content values keys (using column names)
     public static final String _ID = "_id";
+    public static final String UUID = "uuid";
     public static final String DESCRIPTION = "description";
     public static final String ICON = "icon";
 
@@ -67,17 +68,17 @@ public class StepContentProvider extends ContentProvider {
             qb.setTables(TABLE_NAME);
             qb.setProjectionMap(STEP_PROJECTION_MAP);
             break;
-        case STEP_ID:
+        case STEP__ID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("_id=" + url.getPathSegments().get(1));
+            break;
+        case STEP_UUID:
+            qb.setTables(TABLE_NAME);
+            qb.appendWhere("uuid='" + url.getPathSegments().get(2) + "'");
             break;
         case STEP_DESCRIPTION:
             qb.setTables(TABLE_NAME);
             qb.appendWhere("description='" + url.getPathSegments().get(2) + "'");
-            break;
-        case STEP_ICON:
-            qb.setTables(TABLE_NAME);
-            qb.appendWhere("icon='" + url.getPathSegments().get(2) + "'");
             break;
 
         default:
@@ -99,12 +100,12 @@ public class StepContentProvider extends ContentProvider {
         switch (URL_MATCHER.match(url)) {
         case STEP:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.step";
-        case STEP_ID:
+        case STEP__ID:
+            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.step";
+        case STEP_UUID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.step";
         case STEP_DESCRIPTION:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.step";
-        case STEP_ICON:
-            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.step";
+            return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.step";
 
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
@@ -141,26 +142,18 @@ public class StepContentProvider extends ContentProvider {
         case STEP:
             count = mDB.delete(TABLE_NAME, where, whereArgs);
             break;
-        case STEP_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case STEP__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.delete(TABLE_NAME,
                     "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case STEP_DESCRIPTION:
+        case STEP_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.delete(TABLE_NAME,
-                    "description="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case STEP_ICON:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.delete(TABLE_NAME,
-                    "icon="
+                    "uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -182,26 +175,18 @@ public class StepContentProvider extends ContentProvider {
         case STEP:
             count = mDB.update(TABLE_NAME, values, where, whereArgs);
             break;
-        case STEP_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case STEP__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.update(TABLE_NAME, values,
                     "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case STEP_DESCRIPTION:
+        case STEP_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.update(TABLE_NAME, values,
-                    "description="
-                            + segment
-                            + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                    + ')' : ""), whereArgs);
-            break;
-        case STEP_ICON:
-            segment = "'" + url.getPathSegments().get(2) + "'";
-            count = mDB.update(TABLE_NAME, values,
-                    "icon="
+                    "uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -217,15 +202,16 @@ public class StepContentProvider extends ContentProvider {
     static {
         URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), STEP);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/id" + "/*",
-                STEP_ID);
+        URL_MATCHER
+                .addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/#", STEP__ID);
+        URL_MATCHER.addURI(AUTHORITY,
+                TABLE_NAME.toLowerCase() + "/uuid" + "/*", STEP_UUID);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/description"
                 + "/*", STEP_DESCRIPTION);
-        URL_MATCHER.addURI(AUTHORITY,
-                TABLE_NAME.toLowerCase() + "/icon" + "/*", STEP_ICON);
 
         STEP_PROJECTION_MAP = new HashMap<String, String>();
         STEP_PROJECTION_MAP.put(_ID, "_id");
+        STEP_PROJECTION_MAP.put(UUID, "uuid");
         STEP_PROJECTION_MAP.put(DESCRIPTION, "description");
         STEP_PROJECTION_MAP.put(ICON, "icon");
 
