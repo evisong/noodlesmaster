@@ -17,9 +17,9 @@ import me.evis.mobile.noodle.provider.BrandContentProvider;
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.AssetUtil;
 import android.app.ListActivity;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 public class BrandList extends ListActivity {
     /**
@@ -34,8 +35,9 @@ public class BrandList extends ListActivity {
      */
     private static final String[] PROJECTION = new String[] {
         BrandContentProvider._ID, // 0
-        BrandContentProvider.NAME, // 1
-        BrandContentProvider.LOGO, // 2
+        BrandContentProvider.UUID, // 1
+        BrandContentProvider.NAME, // 2
+        BrandContentProvider.LOGO, // 3
     };
     
     private static final String LOGO_PATH = "logos/";
@@ -51,8 +53,9 @@ public class BrandList extends ListActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
+			    String uuid = ((TextView) view.findViewById(R.id.ItemUuid)).getText().toString();
 				startActivityForResult(new Intent(Intent.ACTION_VIEW,
-						ContentUris.withAppendedId(NoodlesContentProvider.BRAND_ID_FIELD_CONTENT_URI, id)), 
+						Uri.withAppendedPath(NoodlesContentProvider.BRAND_UUID_FIELD_CONTENT_URI, uuid)), 
 						REQUEST_CODE_BROWSE_NOODLES);
 			}
 		});
@@ -65,14 +68,14 @@ public class BrandList extends ListActivity {
         // Used to map notes entries from the database to views
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
         		R.layout.brandlist_row, cursor,
-                new String[] { BrandContentProvider.NAME, BrandContentProvider.LOGO }, 
-                new int[] { R.id.ItemName, R.id.ItemLogo });
+                new String[] { BrandContentProvider.UUID, BrandContentProvider.NAME, BrandContentProvider.LOGO }, 
+                new int[] { R.id.ItemUuid, R.id.ItemName, R.id.ItemLogo });
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			
 			@Override
 			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 				// NoodlesContentProvider.LOGO
-				if (view instanceof ImageView && columnIndex == 2) {
+				if (view instanceof ImageView && columnIndex == 3) {
 					String logo = cursor.getString(columnIndex);
 					AssetUtil.setAssetImage((ImageView) view, LOGO_PATH, logo);
 					return true;

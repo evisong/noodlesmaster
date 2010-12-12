@@ -26,7 +26,7 @@ public class StepContentProvider extends ContentProvider {
 
     private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> STEP_PROJECTION_MAP;
-    private static final String TABLE_NAME = "step";
+    protected static final String TABLE_NAME = "step";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.stepcontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY

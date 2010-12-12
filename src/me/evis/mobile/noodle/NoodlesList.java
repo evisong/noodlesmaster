@@ -50,7 +50,7 @@ public class NoodlesList extends ListActivity {
         	public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				setResult(RESULT_OK, new Intent(Intent.ACTION_VIEW,
-						ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, id)));
+						ContentUris.withAppendedId(NoodlesContentProvider._ID_FIELD_CONTENT_URI, id)));
 				finish();
 			}
         });

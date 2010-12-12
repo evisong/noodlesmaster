@@ -12,25 +12,25 @@
  */
 package me.evis.mobile.noodle.provider;
 
-import java.util.*;
+import java.util.HashMap;
 
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.net.*;
-import android.text.*;
-
-import me.evis.mobile.noodle.*;
+import me.evis.mobile.noodle.NoodlesDbHelper;
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.text.TextUtils;
 
 public class NoodlesContentProvider extends ContentProvider {
 
     private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> NOODLES_PROJECTION_MAP;
-    private static final String TABLE_NAME = "noodles";
-    private static final String BARCODE_TABLE_NAME = "barcode";
-    private static final String MANUFACTURER_TABLE_NAME = "manufacturer";
-    private static final String BRAND_TABLE_NAME = "brand";
-    private static final String STEP_TABLE_NAME = "step";
+    protected static final String TABLE_NAME = "noodles";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.noodlescontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
@@ -48,17 +48,19 @@ public class NoodlesContentProvider extends ContentProvider {
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
                     + "/soakage_time");
     public static final Uri CODE_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + BARCODE_TABLE_NAME.toLowerCase() + "/code");
+            + AUTHORITY + "/" + BarcodeContentProvider.TABLE_NAME.toLowerCase() + "/code");
     
     /**
      * The MIME type of {@link #CONTENT_URI} providing a directory of noodles.
      */
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
+    public static final String CONTENT_TYPE = 
+        "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles";
 
     /**
      * The MIME type of a {@link #CONTENT_URI} sub-directory of a single noodle.
      */
-    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
+    public static final String CONTENT_ITEM_TYPE = 
+        "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles";
 
     public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
@@ -86,7 +88,24 @@ public class NoodlesContentProvider extends ContentProvider {
     public static final String SOAKAGE_TIME = "soakage_time";
     public static final String DESCRIPTION = "description";
     public static final String LOGO = "logo";
+    
+    private static final String JOINED_TABLE_NAMES = TABLE_NAME
+        + " LEFT JOIN " + BrandContentProvider.TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_UUID + "=" + BrandContentProvider.TABLE_NAME + "." + BrandContentProvider.UUID
+        + " LEFT JOIN " + ManufacturerContentProvider.TABLE_NAME + " ON " + BrandContentProvider.TABLE_NAME + "." + BrandContentProvider.MANUFACTURER_UUID + "=" + ManufacturerContentProvider.TABLE_NAME + "." + ManufacturerContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step1 ON " + TABLE_NAME + "." + STEP_1_UUID + "=" + "step1." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step2 ON " + TABLE_NAME + "." + STEP_2_UUID + "=" + "step2." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step3 ON " + TABLE_NAME + "." + STEP_3_UUID + "=" + "step3." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step4 ON " + TABLE_NAME + "." + STEP_4_UUID + "=" + "step4." + StepContentProvider.UUID;
 
+    private static final String JOINED_WITH_BARCODE_TABLE_NAMES = TABLE_NAME
+        + " JOIN " + BarcodeContentProvider.TABLE_NAME + " ON " + TABLE_NAME + "." + UUID + "=" + BarcodeContentProvider.TABLE_NAME + "." + BarcodeContentProvider.NOODLES_UUID
+        + " LEFT JOIN " + BrandContentProvider.TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_UUID + "=" + BrandContentProvider.TABLE_NAME + "." + BrandContentProvider.UUID
+        + " LEFT JOIN " + ManufacturerContentProvider.TABLE_NAME + " ON " + BrandContentProvider.TABLE_NAME + "." + BrandContentProvider.MANUFACTURER_UUID + "=" + ManufacturerContentProvider.TABLE_NAME + "." + ManufacturerContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step1 ON " + TABLE_NAME + "." + STEP_1_UUID + "=" + "step1." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step2 ON " + TABLE_NAME + "." + STEP_2_UUID + "=" + "step2." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step3 ON " + TABLE_NAME + "." + STEP_3_UUID + "=" + "step3." + StepContentProvider.UUID
+        + " LEFT JOIN " + StepContentProvider.TABLE_NAME + " step4 ON " + TABLE_NAME + "." + STEP_4_UUID + "=" + "step4." + StepContentProvider.UUID;
+    
     @Override
     public boolean onCreate() {
         dbHelper = new NoodlesDbHelper(getContext(), true);
@@ -104,19 +123,12 @@ public class NoodlesContentProvider extends ContentProvider {
             qb.setProjectionMap(NOODLES_PROJECTION_MAP);
             break;
         case NOODLES__ID:
-            qb.setTables(TABLE_NAME
-            		+ " LEFT JOIN " + BRAND_TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_UUID + "=" + BRAND_TABLE_NAME + ".uuid"
-            		+ " LEFT JOIN " + MANUFACTURER_TABLE_NAME + " ON " + BRAND_TABLE_NAME + ".manufacturer_uuid=" + MANUFACTURER_TABLE_NAME + ".uuid"
-            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step1 ON " + TABLE_NAME + "." + STEP_1_UUID + "=" + "step1.uuid"
-            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step2 ON " + TABLE_NAME + "." + STEP_2_UUID + "=" + "step2.uuid"
-            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step3 ON " + TABLE_NAME + "." + STEP_3_UUID + "=" + "step3.uuid"
-            		+ " LEFT JOIN " + STEP_TABLE_NAME + " step4 ON " + TABLE_NAME + "." + STEP_4_UUID + "=" + "step4.uuid"
-            	);
-            qb.appendWhere(TABLE_NAME+ "._id=" + url.getPathSegments().get(1));
+            qb.setTables(JOINED_TABLE_NAMES);
+            qb.appendWhere(TABLE_NAME + "._id=" + url.getPathSegments().get(1));
             break;
         case NOODLES_UUID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("uuid='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere(TABLE_NAME + ".uuid='" + url.getPathSegments().get(2) + "'");
             break;
         case NOODLES_BRAND_UUID:
             qb.setTables(TABLE_NAME);
@@ -125,7 +137,7 @@ public class NoodlesContentProvider extends ContentProvider {
         case NOODLES_NAME:
             qb.setTables(TABLE_NAME);
             // A fuzzy inquiry.
-            qb.appendWhere("name LIKE '" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("name LIKE '%" + url.getPathSegments().get(2) + "%'");
             break;
         case NOODLES_SOAKAGE_TIME:
             qb.setTables(TABLE_NAME);
@@ -133,16 +145,8 @@ public class NoodlesContentProvider extends ContentProvider {
                     + "'");
             break;
         case BARCODE_CODE:
-            qb.setTables(TABLE_NAME
-            		+ " JOIN " + BARCODE_TABLE_NAME + " ON " + TABLE_NAME + "._id=" + BARCODE_TABLE_NAME + ".noodles_id"
-            		+ " LEFT JOIN " + BRAND_TABLE_NAME + " ON " + TABLE_NAME + "." + BRAND_UUID + "=" + BRAND_TABLE_NAME + ".uuid"
-            		+ " LEFT JOIN " + MANUFACTURER_TABLE_NAME + " ON " + BRAND_TABLE_NAME + ".manufacturer_uuid=" + MANUFACTURER_TABLE_NAME + ".uuid"
-//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step1 ON " + TABLE_NAME + "." + STEP_1_ID + "=" + "step1._id"
-//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step2 ON " + TABLE_NAME + "." + STEP_2_ID + "=" + "step2._id"
-//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step3 ON " + TABLE_NAME + "." + STEP_3_ID + "=" + "step3._id"
-//            		+ " LEFT JOIN " + STEP_TABLE_NAME + " AS step4 ON " + TABLE_NAME + "." + STEP_4_ID + "=" + "step4._id"
-            	);
-            qb.appendWhere(BARCODE_TABLE_NAME + ".code='" + url.getPathSegments().get(2) + "'");
+            qb.setTables(JOINED_WITH_BARCODE_TABLE_NAMES);
+            qb.appendWhere(BarcodeContentProvider.TABLE_NAME + "." + BarcodeContentProvider.CODE + "='" + url.getPathSegments().get(2) + "'");
             break;
             
         default:
@@ -304,7 +308,7 @@ public class NoodlesContentProvider extends ContentProvider {
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
                 + "/soakage_time" + "/*", NOODLES_SOAKAGE_TIME);
         URL_MATCHER.addURI(AUTHORITY,
-                BARCODE_TABLE_NAME.toLowerCase() + "/code" + "/*", BARCODE_CODE);
+                BarcodeContentProvider.TABLE_NAME.toLowerCase() + "/code" + "/*", BARCODE_CODE);
 
         NOODLES_PROJECTION_MAP = new HashMap<String, String>();
         NOODLES_PROJECTION_MAP.put(_ID, "_id");

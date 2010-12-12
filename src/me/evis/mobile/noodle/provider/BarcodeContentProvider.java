@@ -26,7 +26,7 @@ public class BarcodeContentProvider extends ContentProvider {
 
     private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> BARCODE_PROJECTION_MAP;
-    private static final String TABLE_NAME = "barcode";
+    protected static final String TABLE_NAME = "barcode";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.barcodecontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY

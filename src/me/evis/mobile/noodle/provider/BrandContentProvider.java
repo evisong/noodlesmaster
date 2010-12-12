@@ -26,7 +26,7 @@ public class BrandContentProvider extends ContentProvider {
 
     private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> BRAND_PROJECTION_MAP;
-    private static final String TABLE_NAME = "brand";
+    protected static final String TABLE_NAME = "brand";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.brandcontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
