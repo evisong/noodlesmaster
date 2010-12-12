@@ -26,7 +26,7 @@ public class ManufacturerContentProvider extends ContentProvider {
 
     private NoodlesDbHelper dbHelper;
     private static HashMap<String, String> MANUFACTURER_PROJECTION_MAP;
-    private static final String TABLE_NAME = "manufacturer";
+    protected static final String TABLE_NAME = "manufacturer";
     private static final String AUTHORITY = "me.evis.mobile.noodle.provider.manufacturercontentprovider";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY

@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +97,7 @@ public class NoodlesMaster extends Activity {
         // as a MAIN activity), then use our default content provider.
         Intent intent = getIntent();
         if (intent.getData() == null) {
-            intent.setData(ContentUris.withAppendedId(NoodlesContentProvider.ID_FIELD_CONTENT_URI, 1));
+            intent.setData(ContentUris.withAppendedId(NoodlesContentProvider._ID_FIELD_CONTENT_URI, 1));
         }
         
         initNoodles();
@@ -224,7 +225,33 @@ public class NoodlesMaster extends Activity {
     }
     
     protected void initNoodles() {
-    	Noodles noodles = retrieveNoodlesDetail(getIntent().getData());
+        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+            Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
+        }
+        
+        Noodles noodles = new Noodles();
+        
+        Cursor cursor = managedQuery(getIntent().getData(), projection, 
+                null, null, "noodles.name ASC");
+        if (cursor.getCount() > 0 )
+        {
+            cursor.moveToFirst();
+            noodles.id = cursor.getLong(0);
+            noodles.name = cursor.getString(1);
+            noodles.soakageTime = cursor.getInt(4);
+            noodles.description = cursor.getString(5);
+            noodles.logo = cursor.getString(6);
+            noodles.manufacturerName = cursor.getString(7);
+            noodles.manufacturerLogo = cursor.getString(8);
+            noodles.step1Description = cursor.getString(9);
+            noodles.step1IconUrl = cursor.getString(10);
+            noodles.step2Description = cursor.getString(11);
+            noodles.step2IconUrl = cursor.getString(12);
+            noodles.step3Description = cursor.getString(13);
+            noodles.step3IconUrl = cursor.getString(14);
+            noodles.step4Description = cursor.getString(15);
+            noodles.step4IconUrl = cursor.getString(16);
+        }
 		displayNoodlesDetail(noodles);
 		
         totalSecs = noodles.soakageTime;
@@ -324,37 +351,7 @@ public class NoodlesMaster extends Activity {
             return super.onCreateDialog(id);
         }
     }
-    
-    private Noodles retrieveNoodlesDetail(Uri uri) {
-    	Noodles noodles = new Noodles();
-        
-    	Cursor cursor = managedQuery(uri, projection, 
-    			null, null, "noodles.name ASC");
-    	if (cursor.getCount() > 0 )
-    	{
 
-    		
-    		cursor.moveToFirst();
-    		noodles.id = cursor.getLong(0);
-    		noodles.name = cursor.getString(1);
-    		noodles.soakageTime = cursor.getInt(4);
-    		noodles.description = cursor.getString(5);
-    		noodles.logo = cursor.getString(6);
-    		noodles.manufacturerName = cursor.getString(7);
-    		noodles.manufacturerLogo = cursor.getString(8);
-    		noodles.step1Description = cursor.getString(9);
-    		noodles.step1IconUrl = cursor.getString(10);
-    		noodles.step2Description = cursor.getString(11);
-    		noodles.step2IconUrl = cursor.getString(12);
-    		noodles.step3Description = cursor.getString(13);
-    		noodles.step3IconUrl = cursor.getString(14);
-    		noodles.step4Description = cursor.getString(15);
-    		noodles.step4IconUrl = cursor.getString(16);
-    	}
-    	
-        return noodles;
-    }
-    
     /**
      * 
      * Initialize noodle's name, description, manufacturer logo.

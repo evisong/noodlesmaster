@@ -23,4 +23,13 @@
 	<style name="StepDescStyle">
 		<item name="android:textColor">#4A86BA</item>
 	</style>
+	<style name="NoodlesNameStyle">
+		<item name="android:textColor">#333333</item>
+		<item name="android:textSize">20sp</item>
+		<item name="android:typeface">sans</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+	<style name="NoodlesDescStyle">
+		<item name="android:textColor">#666666</item>
+	</style>
 </resources>
