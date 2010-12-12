@@ -31,33 +31,35 @@ public class BrandContentProvider extends ContentProvider {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + TABLE_NAME);
-    public static final Uri ID_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/id");
-    public static final Uri MANUFACTURER_ID_FIELD_CONTENT_URI = Uri
+    public static final Uri _ID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase());
+    public static final Uri UUID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/uuid");
+    public static final Uri MANUFACTURER_UUID_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/manufacturer_id");
-    public static final Uri PARENT_BRAND_ID_FIELD_CONTENT_URI = Uri
+                    + "/manufacturer_uuid");
+    public static final Uri PARENT_BRAND_UUID_FIELD_CONTENT_URI = Uri
             .parse("content://" + AUTHORITY + "/" + TABLE_NAME.toLowerCase()
-                    + "/parent_brand_id");
+                    + "/parent_brand_uuid");
     public static final Uri NAME_FIELD_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/name");
-    public static final Uri LOGO_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/logo");
 
     public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
     private static final int BRAND = 1;
-    private static final int BRAND_ID = 2;
-    private static final int BRAND_MANUFACTURER_ID = 3;
-    private static final int BRAND_PARENT_BRAND_ID = 4;
-    private static final int BRAND_NAME = 5;
+    private static final int BRAND__ID = 2;
+    private static final int BRAND_UUID = 3;
+    private static final int BRAND_MANUFACTURER_UUID = 4;
+    private static final int BRAND_PARENT_BRAND_UUID = 5;
+    private static final int BRAND_NAME = 6;
 
     // Content values keys (using column names)
     public static final String _ID = "_id";
-    public static final String MANUFACTURER_ID = "manufacturer_id";
-    public static final String PARENT_BRAND_ID = "parent_brand_id";
+    public static final String UUID = "uuid";
+    public static final String MANUFACTURER_UUID = "manufacturer_uuid";
+    public static final String PARENT_BRAND_UUID = "parent_brand_uuid";
     public static final String NAME = "name";
     public static final String LOGO = "logo";
 
@@ -75,23 +77,27 @@ public class BrandContentProvider extends ContentProvider {
             qb.setTables(TABLE_NAME);
             qb.setProjectionMap(BRAND_PROJECTION_MAP);
             break;
-        case BRAND_ID:
+        case BRAND__ID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("_id=" + url.getPathSegments().get(1));
             break;
-        case BRAND_MANUFACTURER_ID:
+        case BRAND_UUID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("manufacturer_id='" + url.getPathSegments().get(2)
+            qb.appendWhere("uuid='" + url.getPathSegments().get(2) + "'");
+            break;
+        case BRAND_MANUFACTURER_UUID:
+            qb.setTables(TABLE_NAME);
+            qb.appendWhere("manufacturer_uuid='" + url.getPathSegments().get(2)
                     + "'");
             break;
-        case BRAND_PARENT_BRAND_ID:
+        case BRAND_PARENT_BRAND_UUID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("parent_brand_id='" + url.getPathSegments().get(2)
+            qb.appendWhere("parent_brand_uuid='" + url.getPathSegments().get(2)
                     + "'");
             break;
         case BRAND_NAME:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("name LIKE '" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("name LIKE '%" + url.getPathSegments().get(2) + "%'");
             break;
 
         default:
@@ -113,11 +119,13 @@ public class BrandContentProvider extends ContentProvider {
         switch (URL_MATCHER.match(url)) {
         case BRAND:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
-        case BRAND_ID:
+        case BRAND__ID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
-        case BRAND_MANUFACTURER_ID:
+        case BRAND_UUID:
+            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.brand";
+        case BRAND_MANUFACTURER_UUID:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
-        case BRAND_PARENT_BRAND_ID:
+        case BRAND_PARENT_BRAND_UUID:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
         case BRAND_NAME:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand";
@@ -157,26 +165,34 @@ public class BrandContentProvider extends ContentProvider {
         case BRAND:
             count = mDB.delete(TABLE_NAME, where, whereArgs);
             break;
-        case BRAND_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case BRAND__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.delete(TABLE_NAME,
                     "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_MANUFACTURER_ID:
+        case BRAND_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.delete(TABLE_NAME,
-                    "manufacturer_id="
+                    "uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_PARENT_BRAND_ID:
+        case BRAND_MANUFACTURER_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.delete(TABLE_NAME,
-                    "parent_brand_id="
+                    "manufacturer_uuid="
+                            + segment
+                            + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                    + ')' : ""), whereArgs);
+            break;
+        case BRAND_PARENT_BRAND_UUID:
+            segment = "'" + url.getPathSegments().get(2) + "'";
+            count = mDB.delete(TABLE_NAME,
+                    "parent_brand_uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -198,26 +214,34 @@ public class BrandContentProvider extends ContentProvider {
         case BRAND:
             count = mDB.update(TABLE_NAME, values, where, whereArgs);
             break;
-        case BRAND_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case BRAND__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.update(TABLE_NAME, values,
                     "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_MANUFACTURER_ID:
+        case BRAND_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.update(TABLE_NAME, values,
-                    "manufacturer_id="
+                    "uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-        case BRAND_PARENT_BRAND_ID:
+        case BRAND_MANUFACTURER_UUID:
             segment = "'" + url.getPathSegments().get(2) + "'";
             count = mDB.update(TABLE_NAME, values,
-                    "parent_brand_id="
+                    "manufacturer_uuid="
+                            + segment
+                            + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                    + ')' : ""), whereArgs);
+            break;
+        case BRAND_PARENT_BRAND_UUID:
+            segment = "'" + url.getPathSegments().get(2) + "'";
+            count = mDB.update(TABLE_NAME, values,
+                    "parent_brand_uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -233,19 +257,22 @@ public class BrandContentProvider extends ContentProvider {
     static {
         URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), BRAND);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/id" + "/*",
-                BRAND_ID);
+        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/#",
+                BRAND__ID);
+        URL_MATCHER.addURI(AUTHORITY,
+                TABLE_NAME.toLowerCase() + "/uuid" + "/*", BRAND_UUID);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
-                + "/manufacturer_id" + "/*", BRAND_MANUFACTURER_ID);
+                + "/manufacturer_uuid" + "/*", BRAND_MANUFACTURER_UUID);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase()
-                + "/parent_brand_id" + "/*", BRAND_PARENT_BRAND_ID);
+                + "/parent_brand_uuid" + "/*", BRAND_PARENT_BRAND_UUID);
         URL_MATCHER.addURI(AUTHORITY,
                 TABLE_NAME.toLowerCase() + "/name" + "/*", BRAND_NAME);
 
         BRAND_PROJECTION_MAP = new HashMap<String, String>();
         BRAND_PROJECTION_MAP.put(_ID, "_id");
-        BRAND_PROJECTION_MAP.put(MANUFACTURER_ID, "manufacturer_id");
-        BRAND_PROJECTION_MAP.put(PARENT_BRAND_ID, "parent_brand_id");
+        BRAND_PROJECTION_MAP.put(UUID, "uuid");
+        BRAND_PROJECTION_MAP.put(MANUFACTURER_UUID, "manufacturer_uuid");
+        BRAND_PROJECTION_MAP.put(PARENT_BRAND_UUID, "parent_brand_uuid");
         BRAND_PROJECTION_MAP.put(NAME, "name");
         BRAND_PROJECTION_MAP.put(LOGO, "logo");
 

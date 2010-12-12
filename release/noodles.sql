@@ -1,5 +1,11 @@
 --<ScriptOptions statementTerminator=";"/>
-	
+
+DROP TABLE IF EXISTS MANUFACTURER;
+DROP TABLE IF EXISTS BARCODE;
+DROP TABLE IF EXISTS STEP;
+DROP TABLE IF EXISTS NOODLES;
+DROP TABLE IF EXISTS BRAND;
+
 CREATE TABLE MANUFACTURER (
 		_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		uuid TEXT NOT NULL,
@@ -12,8 +18,8 @@ CREATE UNIQUE INDEX manufacturer_uuid_idx ON MANUFACTURER (uuid);
 CREATE TABLE BRAND (
 		_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		uuid TEXT NOT NULL,
-		manufacturer_id INTEGER NOT NULL,
-		parent_brand_id INTEGER,
+		manufacturer_uuid TEXT NOT NULL,
+		parent_brand_uuid TEXT,
 		name TEXT NOT NULL,
 		logo TEXT
 	);
@@ -23,14 +29,14 @@ CREATE UNIQUE INDEX brand_uuid_idx ON BRAND (uuid);
 CREATE TABLE NOODLES (
 		_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		uuid TEXT NOT NULL,
-		brand_id INTEGER NOT NULL,
+		brand_uuid TEXT NOT NULL,
 		name TEXT NOT NULL,
 		net_weight INTEGER,
 		noodles_weight INTEGER,
-		step_1_id INTEGER,
-		step_2_id INTEGER,
-		step_3_id INTEGER,
-		step_4_id INTEGER,
+		step_1_uuid TEXT,
+		step_2_uuid TEXT,
+		step_3_uuid TEXT,
+		step_4_uuid TEXT,
 		soakage_time INTEGER NOT NULL,
 		description TEXT,
 		logo TEXT
@@ -50,12 +56,14 @@ CREATE UNIQUE INDEX step_uuid_idx ON STEP (uuid);
 CREATE TABLE BARCODE (
 		_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		code TEXT NOT NULL,
-		noodles_id INTEGER NOT NULL
+		noodles_uuid INTEGER NOT NULL
 	);
+
+CREATE UNIQUE INDEX barcode_code_idx ON BARCODE (code);
 
 -- Manufacturers
 INSERT INTO manufacturer VALUES (NULL, "a12e6233-d181-4d7f-bf20-1471252447f1", "康师傅控股有限公司", "masterkong.png");
-INSERT INTO manufacturer VALUES (NULL, "a2ba56ec-afad-401c-9706-3de35eb7d697", "统一企业(中国);投资有限公司", "uni-president.png");
+INSERT INTO manufacturer VALUES (NULL, "a2ba56ec-afad-401c-9706-3de35eb7d697", "统一企业(中国)投资有限公司", "uni-president.png");
 
 -- Brands
 INSERT INTO brand VALUES (NULL, "43e62c19-72c1-481f-a04c-93fb53df8f13", 1, NULL, "红烧牛肉", NULL);

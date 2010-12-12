@@ -31,23 +31,25 @@ public class ManufacturerContentProvider extends ContentProvider {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + TABLE_NAME);
-    public static final Uri ID_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/id");
+    public static final Uri _ID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase());
+    public static final Uri UUID_FIELD_CONTENT_URI = Uri.parse("content://"
+            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/uuid");
     public static final Uri NAME_FIELD_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/name");
-    public static final Uri LOGO_FIELD_CONTENT_URI = Uri.parse("content://"
-            + AUTHORITY + "/" + TABLE_NAME.toLowerCase() + "/logo");
 
     public static final String DEFAULT_SORT_ORDER = "_id ASC";
 
     private static final UriMatcher URL_MATCHER;
 
     private static final int MANUFACTURER = 1;
-    private static final int MANUFACTURER_ID = 2;
-    private static final int MANUFACTURER_NAME = 3;
+    private static final int MANUFACTURER__ID = 2;
+    private static final int MANUFACTURER_UUID = 3;
+    private static final int MANUFACTURER_NAME = 4;
 
     // Content values keys (using column names)
     public static final String _ID = "_id";
+    public static final String UUID = "uuid";
     public static final String NAME = "name";
     public static final String LOGO = "logo";
 
@@ -65,9 +67,13 @@ public class ManufacturerContentProvider extends ContentProvider {
             qb.setTables(TABLE_NAME);
             qb.setProjectionMap(MANUFACTURER_PROJECTION_MAP);
             break;
-        case MANUFACTURER_ID:
+        case MANUFACTURER__ID:
             qb.setTables(TABLE_NAME);
-            qb.appendWhere("_id='" + url.getPathSegments().get(2) + "'");
+            qb.appendWhere("_id=" + url.getPathSegments().get(1));
+            break;
+        case MANUFACTURER_UUID:
+            qb.setTables(TABLE_NAME);
+            qb.appendWhere("uuid='" + url.getPathSegments().get(2) + "'");
             break;
         case MANUFACTURER_NAME:
             qb.setTables(TABLE_NAME);
@@ -93,7 +99,9 @@ public class ManufacturerContentProvider extends ContentProvider {
         switch (URL_MATCHER.match(url)) {
         case MANUFACTURER:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer";
-        case MANUFACTURER_ID:
+        case MANUFACTURER__ID:
+            return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.manufacturer";
+        case MANUFACTURER_UUID:
             return "vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.manufacturer";
         case MANUFACTURER_NAME:
             return "vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer";
@@ -133,15 +141,23 @@ public class ManufacturerContentProvider extends ContentProvider {
         case MANUFACTURER:
             count = mDB.delete(TABLE_NAME, where, whereArgs);
             break;
-        case MANUFACTURER_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case MANUFACTURER__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.delete(TABLE_NAME,
                     "_id="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
             break;
-
+        case MANUFACTURER_UUID:
+            segment = "'" + url.getPathSegments().get(2) + "'";
+            count = mDB.delete(TABLE_NAME,
+                    "uuid="
+                            + segment
+                            + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                    + ')' : ""), whereArgs);
+            break;
+            
         default:
             throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -158,10 +174,18 @@ public class ManufacturerContentProvider extends ContentProvider {
         case MANUFACTURER:
             count = mDB.update(TABLE_NAME, values, where, whereArgs);
             break;
-        case MANUFACTURER_ID:
-            segment = "'" + url.getPathSegments().get(2) + "'";
+        case MANUFACTURER__ID:
+            segment = url.getPathSegments().get(1);
             count = mDB.update(TABLE_NAME, values,
                     "_id="
+                            + segment
+                            + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                    + ')' : ""), whereArgs);
+            break;
+        case MANUFACTURER_UUID:
+            segment = "'" + url.getPathSegments().get(2) + "'";
+            count = mDB.update(TABLE_NAME, values,
+                    "uuid="
                             + segment
                             + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ')' : ""), whereArgs);
@@ -177,13 +201,16 @@ public class ManufacturerContentProvider extends ContentProvider {
     static {
         URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase(), MANUFACTURER);
-        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/id" + "/*",
-                MANUFACTURER_ID);
+        URL_MATCHER.addURI(AUTHORITY, TABLE_NAME.toLowerCase() + "/#",
+                MANUFACTURER__ID);
+        URL_MATCHER.addURI(AUTHORITY,
+                TABLE_NAME.toLowerCase() + "/uuid" + "/*", MANUFACTURER_UUID);
         URL_MATCHER.addURI(AUTHORITY,
                 TABLE_NAME.toLowerCase() + "/name" + "/*", MANUFACTURER_NAME);
 
         MANUFACTURER_PROJECTION_MAP = new HashMap<String, String>();
         MANUFACTURER_PROJECTION_MAP.put(_ID, "_id");
+        MANUFACTURER_PROJECTION_MAP.put(UUID, "uuid");
         MANUFACTURER_PROJECTION_MAP.put(NAME, "name");
         MANUFACTURER_PROJECTION_MAP.put(LOGO, "logo");
 
