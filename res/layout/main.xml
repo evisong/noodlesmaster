@@ -10,15 +10,13 @@
 			android:layout_marginBottom="3dp" android:layout_marginLeft="3dp"
 			android:layout_marginRight="5dp" android:layout_marginTop="3dp"
 			android:background="@drawable/picture_frame" android:layout_height="51dp" android:layout_width="108dp"></ImageView>
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:id="@+id/NoodleName"
+		<TextView android:layout_width="wrap_content" android:id="@+id/NoodleName"
 			android:text="Name of Instant Noodles" android:layout_toRightOf="@+id/NoodleLogo"
-			android:layout_margin="2dp" android:layout_toLeftOf="@+id/BrowseButton" style="@style/NoodlesNameStyle"></TextView>
-		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/ic_btn_search" android:id="@+id/CaptureButton" android:layout_below="@+id/BrowseButton"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_btn_speak_now" android:id="@+id/BrowseButton" android:layout_alignParentRight="true" android:layout_alignParentTop="true"></ImageButton><TextView android:layout_height="wrap_content"
-			android:layout_below="@+id/NoodleName" android:layout_width="wrap_content"
-			android:layout_toRightOf="@+id/ImageView01" android:id="@+id/NoodleDescription"
-			android:text="Detailed description." android:layout_alignLeft="@+id/NoodleName"
-			android:layout_marginRight="3dp" android:layout_marginBottom="2dp" android:layout_toLeftOf="@+id/BrowseButton" style="@style/NoodlesDescStyle"></TextView>
+			android:layout_margin="2dp" android:layout_toLeftOf="@+id/BrowseButton" style="@style/NoodlesNameStyle" android:layout_alignTop="@+id/ItemLogo" android:layout_height="51dp" android:gravity="center_vertical"></TextView>
+		<ImageButton android:layout_width="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/btn_scan_small" android:id="@+id/ScanButton" android:layout_alignTop="@+id/BrowseButton" android:layout_height="51dp"></ImageButton><ImageButton android:layout_width="wrap_content" android:id="@+id/BrowseButton" android:src="@drawable/btn_browse_small" android:layout_toLeftOf="@+id/ScanButton" android:layout_marginLeft="3dp" android:layout_alignTop="@+id/NoodleLogo" android:layout_height="51dp"></ImageButton><TextView android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:id="@+id/NoodleDescription"
+			android:text="Detailed description." android:layout_marginRight="3dp" android:layout_marginBottom="2dp" style="@style/NoodlesDescStyle" android:layout_marginLeft="3dp" android:layout_alignLeft="@+id/NoodleLogo" android:layout_below="@+id/NoodleLogo"></TextView>
 	
 
 </RelativeLayout>

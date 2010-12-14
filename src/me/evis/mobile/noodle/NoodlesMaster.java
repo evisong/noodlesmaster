@@ -41,7 +41,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class NoodlesMaster extends Activity {
 	
-	public static final String NOODLES_TIMER_COMPLETE = "me.evis.intent.action.NOODLES_TIMER_COMPLETE";
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
@@ -66,28 +65,69 @@ public class NoodlesMaster extends Activity {
 	private static final String LOGO_PATH = "logos/";
 	private static final String STEP_ICON_PATH = "step_icons/";
     
-    private static final int MESSAGE_WHAT_CODE = 0;
+    
+    // Request code for browse
+    private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
 	
+    // Dialog id
 	private static final int DIALOG_TIME_PICKER = 1;
 	
 	// Menu item id
-	private static final int MENU_ITEM_LIST = Menu.FIRST;
+	private static final int MENU_ITEM_BROWSE = Menu.FIRST;
+	private static final int MENU_ITEM_SCAN = Menu.FIRST + 1;
+	
+	
+    // -----------------------------------------------------------------------
+    // Timer related constants / variables
+    // -----------------------------------------------------------------------
+	
+	/**
+	 * Intent indicating noodles' time up.
+	 */
+	public static final String NOODLES_TIMER_COMPLETE = "me.evis.intent.action.NOODLES_TIMER_COMPLETE";
 	
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
-	
-	// Request code for browse
-	private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
+	private static final int MESSAGE_WHAT_CODE = 0;
 	
 	// Keep the track so that scheduled work can be 
 	// stopped by user.
-	protected Handler counterHandler;
-	// protected Handler alarmHandler;
-	protected Runnable alarmRunner;
+	private Handler counterHandler;
 	// According to user input.
-	protected int totalSecs;
+	private int totalSecs;
 	
-    /** Called when the activity is first created. */
+    // Receiver for NOODLES_TIMER_COMPLETE intent.
+    private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+            ringtone.play();
+            
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(R.string.noodle_ready)
+                   .setCancelable(false)
+                   .setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ringtone.stop();
+                            }
+                        });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            
+            stopTimer();
+        }
+    };
+	
+    
+    // -----------------------------------------------------------------------
+    // Activity methods
+    // -----------------------------------------------------------------------
+    
+    /** 
+     * Called when the activity is first created. 
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,37 +174,14 @@ public class NoodlesMaster extends Activity {
 			}
 		});
 		
-		// Capture button behavior.
-		getCaptureButton().setOnClickListener(new View.OnClickListener() {
+		// Scan button behavior.
+		getScanButton().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				IntentIntegrator.initiateScan(NoodlesMaster.this);
+				scanNoodlesBarcode();
 			}
 		});
     }
-    
-    private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-			ringtone.play();
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			builder.setMessage(R.string.noodle_ready)
-			       .setCancelable(false)
-			       .setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								ringtone.stop();
-							}
-						});
-			AlertDialog alertDialog = builder.create();
-			alertDialog.show();
-			
-			stopTimer();
-		}
-	};
     
     @Override
     protected void onResume() {
@@ -181,21 +198,23 @@ public class NoodlesMaster extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
-        // This is our one standard application action -- inserting a
-        // new note into the list.
-        menu.add(0, MENU_ITEM_LIST, 0, R.string.menu_list)
-                .setShortcut('3', 'a')
-                .setIcon(android.R.drawable.ic_menu_view);
-
+        menu.add(0, MENU_ITEM_BROWSE, 0, R.string.menu_browse)
+                .setShortcut('1', 'a')
+                .setIcon(R.drawable.btn_browse);
+        menu.add(0, MENU_ITEM_SCAN, 0, R.string.menu_scan)
+                .setShortcut('2', 'b')
+                .setIcon(R.drawable.btn_scan);
         return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ITEM_LIST:
+            case MENU_ITEM_BROWSE:
                 browseNoodles();
+                return true;
+            case MENU_ITEM_SCAN:
+                scanNoodlesBarcode();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -222,47 +241,6 @@ public class NoodlesMaster extends Activity {
     	}
     	
     	super.onActivityResult(requestCode, resultCode, data);
-    }
-    
-    protected void initNoodles() {
-        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
-            Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
-        }
-        
-        Noodles noodles = new Noodles();
-        
-        Cursor cursor = managedQuery(getIntent().getData(), projection, 
-                null, null, "noodles.name ASC");
-        if (cursor.getCount() > 0 )
-        {
-            cursor.moveToFirst();
-            noodles.id = cursor.getLong(0);
-            noodles.name = cursor.getString(1);
-            noodles.soakageTime = cursor.getInt(4);
-            noodles.description = cursor.getString(5);
-            noodles.logo = cursor.getString(6);
-            noodles.manufacturerName = cursor.getString(7);
-            noodles.manufacturerLogo = cursor.getString(8);
-            noodles.step1Description = cursor.getString(9);
-            noodles.step1IconUrl = cursor.getString(10);
-            noodles.step2Description = cursor.getString(11);
-            noodles.step2IconUrl = cursor.getString(12);
-            noodles.step3Description = cursor.getString(13);
-            noodles.step3IconUrl = cursor.getString(14);
-            noodles.step4Description = cursor.getString(15);
-            noodles.step4IconUrl = cursor.getString(16);
-        }
-		displayNoodlesDetail(noodles);
-		
-        totalSecs = noodles.soakageTime;
-        updateTimer();
-    }
-    
-    /**
-     * Launch activity to list the noodles.
-     */
-    protected void browseNoodles() {
-    	startActivityForResult(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI), REQUEST_CODE_BROWSE_MANUFACTURERS);
     }
     
     @Override
@@ -351,32 +329,73 @@ public class NoodlesMaster extends Activity {
             return super.onCreateDialog(id);
         }
     }
-
+    
+    
     /**
-     * 
-     * Initialize noodle's name, description, manufacturer logo.
-     * Initialize noodle's steps, icons and description.
-     * 
-     * @param noodles
+     * Launch activity to browse the noodles.
      */
-    private void displayNoodlesDetail(Noodles noodles) {
-    	((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
-    	((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
-    	
-    	// Logo
-    	ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-        AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
-    	
-        // Steps
-        prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
-        prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
-        prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
-        prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
+    protected void browseNoodles() {
+        startActivityForResult(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI), REQUEST_CODE_BROWSE_MANUFACTURERS);
+    }
+    /**
+     * Call BarcodeScanner for noodles barcode.
+     */
+    protected void scanNoodlesBarcode() {
+        IntentIntegrator.initiateScan(NoodlesMaster.this);
     }
     
     /**
      * 
      */
+    protected void initNoodles() {
+        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+            Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
+        }
+        
+        Noodles noodles = new Noodles();
+        
+        Cursor cursor = managedQuery(getIntent().getData(), projection, 
+                null, null, "noodles.name ASC");
+        
+        if (cursor.getCount() > 0 )
+        {
+            cursor.moveToFirst();
+            noodles.id = cursor.getLong(0);
+            noodles.name = cursor.getString(1);
+            noodles.soakageTime = cursor.getInt(4);
+            noodles.description = cursor.getString(5);
+            noodles.logo = cursor.getString(6);
+            noodles.manufacturerName = cursor.getString(7);
+            noodles.manufacturerLogo = cursor.getString(8);
+            noodles.step1Description = cursor.getString(9);
+            noodles.step1IconUrl = cursor.getString(10);
+            noodles.step2Description = cursor.getString(11);
+            noodles.step2IconUrl = cursor.getString(12);
+            noodles.step3Description = cursor.getString(13);
+            noodles.step3IconUrl = cursor.getString(14);
+            noodles.step4Description = cursor.getString(15);
+            noodles.step4IconUrl = cursor.getString(16);
+        }
+        
+        // Noodle's name, description
+        ((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
+        ((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
+        
+        // Logo
+        ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
+        AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
+        
+        // Steps
+        prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
+        prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
+        prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
+        prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
+        
+        // Timer
+        totalSecs = noodles.soakageTime;
+        updateTimer();
+    }
+
     private void prepareStep(int id, String stepNumber, String desc, String icon) {
     	// Step container.
         RelativeLayout step = (RelativeLayout) findViewById(id);
@@ -391,12 +410,10 @@ public class NoodlesMaster extends Activity {
         stepDesc.setText(desc);
     }
     
-//    private void setAlarm(int secs) {
-//    	Intent intent = new Intent(this, NoodlesAlarmer.class);
-//    	PendingIntent pendingIntent = 
-//    		PendingIntent.getBroadcast(this, 0, intent, 0);
-//    	
-//    }
+    // -----------------------------------------------------------------------
+    // Timer logics
+    // -----------------------------------------------------------------------
+    
     protected PendingIntent alarmSender;
     
 	protected void startTimer(int secs) {
@@ -440,18 +457,12 @@ public class NoodlesMaster extends Activity {
 		// will be paused during the standby.
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarmMillisecs, alarmSender);
-////		alarmHandler = new Handler();
-//		alarmRunner = new AlarmRunner(this);
-////		alarmHandler.postDelayed(alarmRunner, secs * 1000);
-//		counterHandler.postDelayed(alarmRunner, secs * 1000);
 	}
 	
 	protected void stopTimer() {
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(alarmSender);
 		counterHandler.removeMessages(MESSAGE_WHAT_CODE);
-//		counterHandler.removeCallbacks(alarmRunner);
-//		alarmHandler.removeCallbacksAndMessages(this);
 		
 		updateTimerCurrent(0);
 		getStartTimerButton().setEnabled(true);
@@ -477,6 +488,10 @@ public class NoodlesMaster extends Activity {
 	    return NumberPicker.TWO_DIGIT_FORMATTER.toString(value);
 	}
 	
+    // -----------------------------------------------------------------------
+    // Widget getters
+    // -----------------------------------------------------------------------
+	
     private Button getStartTimerButton() {
         return (Button) findViewById(R.id.StartTimerButton);
     }
@@ -489,39 +504,10 @@ public class NoodlesMaster extends Activity {
     private ImageButton getBrowseButton() {
         return (ImageButton) findViewById(R.id.BrowseButton);
     }
-    private ImageButton getCaptureButton() {
-        return (ImageButton) findViewById(R.id.CaptureButton);
+    private ImageButton getScanButton() {
+        return (ImageButton) findViewById(R.id.ScanButton);
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
     }
-	
-//	private class AlarmRunner implements Runnable {
-//		private Context context;
-//		
-//		public AlarmRunner(Context context) {
-//			this.context = context;
-//		}
-//		
-//		public void run() {
-//			Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-//			final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-//			ringtone.play();
-//			
-//			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//			builder.setMessage(R.string.noodle_ready)
-//			       .setCancelable(false)
-//			       .setPositiveButton(R.string.ok,
-//						new DialogInterface.OnClickListener() {
-//							public void onClick(DialogInterface dialog, int id) {
-//								ringtone.stop();
-//							}
-//						});
-//			AlertDialog alertDialog = builder.create();
-//			alertDialog.show();
-//			getStartTimerButton().setEnabled(true);
-//			// TODO verify necessary of this.
-////			stopTimer();
-//		}
-//	}
 }
