@@ -9,5 +9,6 @@
     <string name="description">description</string>
     <string name="noselection">No item selected</string>
     <string name="list_item">List Item</string>
-<string name="menu_list">View All Noodles</string>
+<string name="menu_browse">Browse Noodles</string>
+<string name="menu_scan">Scan Barcode</string>
 </resources>
