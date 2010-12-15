@@ -92,10 +92,10 @@ INSERT INTO brand VALUES (NULL, "741d68fa-18b1-47fc-9575-0321a371f0f0", "a12e623
 INSERT INTO brand VALUES (NULL, "05a419dd-a4ff-47b0-96a1-67f345f4a6e5", "a12e6233-d181-4d7f-bf20-1471252447f1", NULL, "一碗香", NULL);
 
 -- Steps
-INSERT INTO step VALUES (NULL, "237520d3-731b-48f8-922b-f72458d5c567", "放入菜包、粉包、菜包", "step1_icon.png");
-INSERT INTO step VALUES (NULL, "dd5a6522-73f7-4da2-8185-57a8baeeb382", "注入开水", "step2_icon.png");
-INSERT INTO step VALUES (NULL, "28ea53f2-7152-4114-a08a-161a9adb4fd3", "毕盖，等待计时完成", "step3_icon.png");
-INSERT INTO step VALUES (NULL, "ac5195d6-4e43-438d-ac21-564c9ae263a0", "开盖享受美味", "step4_icon.png");
+INSERT INTO step VALUES (NULL, "237520d3-731b-48f8-922b-f72458d5c567", "面饼菜粉酱包", "step_dry_noodles_icon.png");
+INSERT INTO step VALUES (NULL, "dd5a6522-73f7-4da2-8185-57a8baeeb382", "小心注入开水", "step_add_water_icon.png");
+INSERT INTO step VALUES (NULL, "28ea53f2-7152-4114-a08a-161a9adb4fd3", "毕盖计时等待", "step_wait_icon.png");
+INSERT INTO step VALUES (NULL, "ac5195d6-4e43-438d-ac21-564c9ae263a0", "开盖享受美味", "step_enjoy_icon.png");
 
 -- Noodles                      
 INSERT INTO noodles VALUES (NULL, "1f7f90de-5de9-41bf-86d4-743e84b9d97e", "43e62c19-72c1-481f-a04c-93fb53df8f13", "红烧牛肉面", 109, 85, "237520d3-731b-48f8-922b-f72458d5c567", "dd5a6522-73f7-4da2-8185-57a8baeeb382", "28ea53f2-7152-4114-a08a-161a9adb4fd3", "ac5195d6-4e43-438d-ac21-564c9ae263a0", 180, "就是这个味!", NULL);

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="ok">OK</string>
-    <string name="noodle_ready">Noodle is ready.</string>
+    <string name="noodles_ready">Noodles is ready, enjoy!</string>
     <string name="hello">Hello World</string>
-    <string name="app_name">InstantNoodlesMaster</string>
-<string name="adjust_timer">Adjust Total Time</string>
-<string name="selected">You selected: </string>
+    <string name="app_name">NoodlesMaster</string>
+	<string name="adjust_timer">Adjust Total Time</string>
+	<string name="selected">You selected: </string>
     <string name="description">description</string>
     <string name="noselection">No item selected</string>
     <string name="list_item">List Item</string>
-<string name="menu_browse">Browse Noodles</string>
-<string name="menu_scan">Scan Barcode</string>
+	<string name="menu_browse">Browse Noodles</string>
+	<string name="menu_scan">Scan Barcode</string>
+	<string name="no">No</string>
+    <string name="install_barcode_scanner_message">This application requires Barcode Scanner. Would you like to install it?</string>
+    <string name="yes">Yes</string>
+    <string name="install_barcode_scanner_title">Install Barcode Scanner</string>
+    <string name="noodles_not_found">Noodles not found</string>
+<string name="stop">Stop</string>
+    <string name="start">Start</string>
 </resources>

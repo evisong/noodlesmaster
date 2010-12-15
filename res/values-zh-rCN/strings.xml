@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="ok">确定</string>
+    <string name="noodles_ready">面泡好了，享用吧！</string>
+    <string name="hello">你好世界</string>
+    <string name="app_name">泡面管家</string>
+    <string name="adjust_timer">调整泡面时间</string>
+    <string name="selected">您选择了：</string>
+    <string name="description">描述</string>
+    <string name="noselection">没有项目选定</string>
+    <string name="list_item">列表项</string>
+    <string name="menu_browse">浏览泡面</string>
+    <string name="menu_scan">条码扫描</string>
+    <string name="no">拒绝</string>
+    <string name="install_barcode_scanner_message">此应用程序需要调用条码扫描程序。你要安装它吗？</string>
+    <string name="yes">同意</string>
+    <string name="install_barcode_scanner_title">安装条码扫描程序</string>
+    <string name="noodles_not_found">泡面信息没有找到</string>
+    <string name="start">开始计时</string>
+    <string name="stop">停止计时</string>
+</resources>
