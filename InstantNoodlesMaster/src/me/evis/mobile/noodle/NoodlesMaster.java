@@ -105,7 +105,7 @@ public class NoodlesMaster extends Activity {
             ringtone.play();
             
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.noodle_ready)
+            builder.setMessage(R.string.noodles_ready)
                    .setCancelable(false)
                    .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
@@ -335,30 +335,34 @@ public class NoodlesMaster extends Activity {
      * Launch activity to browse the noodles.
      */
     protected void browseNoodles() {
-        startActivityForResult(new Intent(Intent.ACTION_VIEW, ManufacturerContentProvider.CONTENT_URI), REQUEST_CODE_BROWSE_MANUFACTURERS);
+        startActivityForResult(new Intent(Intent.ACTION_VIEW, 
+                ManufacturerContentProvider.CONTENT_URI), 
+                REQUEST_CODE_BROWSE_MANUFACTURERS);
     }
     /**
      * Call BarcodeScanner for noodles barcode.
      */
     protected void scanNoodlesBarcode() {
-        IntentIntegrator.initiateScan(NoodlesMaster.this);
+        IntentIntegrator.initiateScan(NoodlesMaster.this, 
+                R.string.install_barcode_scanner_title, 
+                R.string.install_barcode_scanner_message, 
+                R.string.yes, R.string.no);
     }
     
     /**
-     * 
+     * Query and initialize view.
      */
     protected void initNoodles() {
         if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
             Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
         }
         
-        Noodles noodles = new Noodles();
-        
         Cursor cursor = managedQuery(getIntent().getData(), projection, 
                 null, null, "noodles.name ASC");
         
-        if (cursor.getCount() > 0 )
-        {
+        if (cursor.getCount() > 0 ) {
+            Noodles noodles = new Noodles();
+            
             cursor.moveToFirst();
             noodles.id = cursor.getLong(0);
             noodles.name = cursor.getString(1);
@@ -375,25 +379,27 @@ public class NoodlesMaster extends Activity {
             noodles.step3IconUrl = cursor.getString(14);
             noodles.step4Description = cursor.getString(15);
             noodles.step4IconUrl = cursor.getString(16);
+            
+            // Noodle's name, description
+            ((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
+            ((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
+            
+            // Logo
+            ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
+            AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
+            
+            // Steps
+            prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
+            prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
+            prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
+            prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
+            
+            // Timer
+            totalSecs = noodles.soakageTime;
+            updateTimer();
+        } else {
+            Toast.makeText(this, R.string.noodles_not_found, Toast.LENGTH_SHORT).show();
         }
-        
-        // Noodle's name, description
-        ((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
-        ((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
-        
-        // Logo
-        ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-        AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
-        
-        // Steps
-        prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
-        prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
-        prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
-        prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
-        
-        // Timer
-        totalSecs = noodles.soakageTime;
-        updateTimer();
     }
 
     private void prepareStep(int id, String stepNumber, String desc, String icon) {

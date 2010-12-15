@@ -112,12 +112,12 @@
 		android:layout_height="wrap_content" android:layout_alignParentBottom="true">
 		<Button android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:layout_weight="1"
-			android:text="Start" android:id="@+id/StartTimerButton"
-			android:drawableTop="@drawable/ic_menu_play_clip" />
+			android:id="@+id/StartTimerButton"
+			android:drawableTop="@drawable/ic_menu_play_clip" android:text="@string/start"/>
 		<Button android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:layout_weight="1"
-			android:text="Stop" android:id="@+id/StopTimerButton"
-			android:drawableTop="@drawable/ic_menu_stop" android:enabled="false"/>
+			android:id="@+id/StopTimerButton"
+			android:drawableTop="@drawable/ic_menu_stop" android:enabled="false" android:text="@string/stop"/>
 	</LinearLayout>
 
 
