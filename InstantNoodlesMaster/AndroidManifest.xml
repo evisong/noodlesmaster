@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest android:versionCode="1" android:versionName="1.0"
-    package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name">
-        <activity android:label="@string/app_name"
-            android:name=".NoodlesMaster" android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles"/>
-            </intent-filter>
-        </activity>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider" android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.brandcontentprovider" android:name="me.evis.mobile.noodle.provider.BrandContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.noodlescontentprovider" android:name="me.evis.mobile.noodle.provider.NoodlesContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.stepcontentprovider" android:name="me.evis.mobile.noodle.provider.StepContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.barcodecontentprovider" android:name="me.evis.mobile.noodle.provider.BarcodeContentProvider"/>
-        <activity android:name=".NoodlesList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".ManufacturerList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".BrandList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand"/>
-            </intent-filter>
-        </activity>
-        <receiver android:name=".NoodlesTimerAlarmer"/>
-    </application>
-    <uses-sdk android:minSdkVersion="4"/>
+	package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
+	<application android:icon="@drawable/noodles_master_logo"
+		android:label="@string/app_name">
+		<activity android:label="@string/app_name" android:name=".NoodlesMaster"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles" />
+			</intent-filter>
+		</activity>
+		<provider android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider"
+			android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider" />
+		<provider android:authorities="me.evis.mobile.noodle.provider.brandcontentprovider"
+			android:name="me.evis.mobile.noodle.provider.BrandContentProvider" />
+		<provider android:authorities="me.evis.mobile.noodle.provider.noodlescontentprovider"
+			android:name="me.evis.mobile.noodle.provider.NoodlesContentProvider" />
+		<provider android:authorities="me.evis.mobile.noodle.provider.stepcontentprovider"
+			android:name="me.evis.mobile.noodle.provider.StepContentProvider" />
+		<provider android:authorities="me.evis.mobile.noodle.provider.barcodecontentprovider"
+			android:name="me.evis.mobile.noodle.provider.BarcodeContentProvider" />
+		<activity android:name=".NoodlesList">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ManufacturerList">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".BrandList">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data
+					android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand" />
+			</intent-filter>
+		</activity>
+		<receiver android:name=".NoodlesTimerAlarmer" />
+	</application>
+	<uses-sdk android:minSdkVersion="4" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.DEVICE_POWER" />
 </manifest>
