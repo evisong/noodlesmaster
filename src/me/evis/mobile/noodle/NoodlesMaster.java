@@ -22,7 +22,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,11 +102,16 @@ public class NoodlesMaster extends Activity {
     private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            PowerManager pm = (PowerManager) NoodlesMaster.this.getSystemService(Context.POWER_SERVICE);
+            // TODO bug: screen won't turn on
+            WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
+            wl.acquire();
+            
             Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            final Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+            final Ringtone ringtone = RingtoneManager.getRingtone(NoodlesMaster.this, uri);
             ringtone.play();
             
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(NoodlesMaster.this);
             builder.setMessage(R.string.noodles_ready)
                    .setCancelable(false)
                    .setPositiveButton(R.string.ok,
@@ -117,6 +124,8 @@ public class NoodlesMaster extends Activity {
             alertDialog.show();
             
             stopTimer();
+            
+            wl.release();
         }
     };
 	
@@ -184,15 +193,15 @@ public class NoodlesMaster extends Activity {
     }
     
     @Override
-    protected void onResume() {
-    	super.onResume();
-     	registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
     }
     
     @Override
-    protected void onPause() {
-    	super.onPause();
-    	unregisterReceiver(timerCompleteReceiver);
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(timerCompleteReceiver);
     }
     
     @Override
@@ -265,33 +274,23 @@ public class NoodlesMaster extends Activity {
                     });
                     
                     NumberPicker timerMinutePicker = getTimerMinutePicker();
-                    timerMinutePicker.setRange(0, 60);
+                    timerMinutePicker.setRange(0, 59);
                     timerMinutePicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
                     timerMinutePicker.setCurrent(totalDhms[2]);
                     timerMinutePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
                         @Override
                         public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-                            if (newVal == 60) {
-                                picker.setCurrent(0);
-                                NumberPicker timerHourPicker = getTimerHourPicker();
-                                timerHourPicker.setCurrent(timerHourPicker.getCurrent() + 1);
-                            }
                             calculateTotalSecs();
                         }
                     });
                     
                     NumberPicker timerSecondPicker = getTimerSecondPicker();
-                    timerSecondPicker.setRange(0, 60);
+                    timerSecondPicker.setRange(0, 59);
                     timerSecondPicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
                     timerSecondPicker.setCurrent(totalDhms[3]);
                     timerSecondPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
                         @Override
                         public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-                            if (newVal == 60) {
-                                picker.setCurrent(0);
-                                NumberPicker timerMinutePicker = getTimerMinutePicker();
-                                timerMinutePicker.setCurrent(timerMinutePicker.getCurrent() + 1);
-                            }
                             calculateTotalSecs();
                         }
                     });
@@ -300,6 +299,7 @@ public class NoodlesMaster extends Activity {
                     okButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            calculateTotalSecs();
                             dismiss();
                         }
                     });
