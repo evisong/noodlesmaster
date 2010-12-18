@@ -104,7 +104,7 @@ public class NoodlesMaster extends Activity {
         public void onReceive(Context context, Intent intent) {
             PowerManager pm = (PowerManager) NoodlesMaster.this.getSystemService(Context.POWER_SERVICE);
             // TODO bug: screen won't turn on
-            WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
+            WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
             wl.acquire();
             
             Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
