@@ -1,0 +1,29 @@
+《泡面管家》是一款面向泡面（方便面、速食面、即食面）爱好者的小工具。
+Instant Noodles Master (NoodlesMaster for short) is a small tool for instant noodles funs.
+主要功能如下：
+Features:
+ * 泡面计时
+ * Timer for instant noodles
+ * 泡面产品大全（目前只有中国区域数据，且尚需补充）
+ * Instant noodles product list (Chinese data only, still insufficient)
+ * 泡面条码识别（目前只有中国区域数据，且尚需补充）
+ * Instant noodles barcode recognition (Chinese data only, still insufficient)
+ * 泡面向导
+ * Wizard of cooking instant noodles
+
+在将来版本中可能加入的功能：
+Possible future features:
+ * 更多泡面产品数据/在线更新/新品推介
+ * More instant noodles product data / online sync / new product promotion
+ * 泡面评分/评论
+ * Rating / commenting
+ * 泡面统计/健康饮食提醒
+ * Statistics / healthy diet prompt
+ * 个人泡面活动与SNS整合
+ * Integration with SNS
+
+欢迎大家提出宝贵意见，bug或新功能建议请提交到：
+Bugs or new feature requests please submit to:http://code.google.com/p/noodlesmaster/issues/list
+
+注：本软件中出现的泡面厂商图标、产品名称及相关信息等版权均为相应厂商所有。
+Note: all instant noodles product logos, brands and related info belong to its manufacturer.
