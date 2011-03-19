@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+
+/* ---- Common styles ---- */
+body,form {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 75%;
+	font-family: Tahoma, "宋体", serif;
+	background: url(images/bg.png) repeat;
+	color: #111b02;
+}
+
+p,li,dt,dd {
+	font: 1.2em;
+	line-height: 1.8em;
+	margin-bottom: 10px;
+}
+
+.english {
+	font-family: Tahoma, sans-serif;
+}
+
+blockquote {
+	margin: 10px 20px;
+	padding: 10px;
+	border: 1px solid #E6DAB4;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	background-color: #FFF8EF;
+}
+
+h1 {
+	margin: 5px 0 10px 0;
+	font-family: Georgia, "宋体", sans-serif;
+	font-size: 1.8em;
+	color: #41980d;
+	line-height: 1.8em;
+}
+
+h2 {
+	margin: 5px 0 10px;
+	font-family: Verdana, "微软雅黑", "黑体", serif;
+	font-size: 1.6em;
+	color: #41980d;
+	font-style: italic;
+	line-height: 1.6em;
+}
+
+h3 {
+	margin: 5px 0 10px;
+	font-family: Verdana, "微软雅黑", "黑体", serif;
+	font-size: 1.4em;
+	color: #41980d;
+	line-height: 1.4em;
+}
+
+ul {
+	margin-left: 25px;
+}
+
+img {
+	border: none;
+}
+
+a:link,a:visited {
+	color: #41980d;
+	text-decoration: none;
+}
+
+a:hover,a:active {
+	color: #41980d;
+	text-decoration: underline;
+}
+
+a[href ^="\/file.axd"] {
+	font-weight: bold;
+	background: url(download.png) no-repeat right center;
+	padding-right: 15px;
+}
+
+/* ---- page styles ---- */
+.selected {
+	background-color: aqua;
+}

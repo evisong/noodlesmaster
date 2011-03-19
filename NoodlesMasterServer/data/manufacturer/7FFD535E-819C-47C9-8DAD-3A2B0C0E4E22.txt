@@ -1,0 +1,1 @@
+O:12:"Manufacturer":3:{s:4:"name";s:12:"WuGuDaoChang";s:4:"logo";s:6:"df.png";s:4:"uuid";s:36:"7FFD535E-819C-47C9-8DAD-3A2B0C0E4E22";}
