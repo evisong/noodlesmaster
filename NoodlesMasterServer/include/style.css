@@ -9,7 +9,7 @@ body,form {
 body {
 	font-size: 75%;
 	font-family: Tahoma, "宋体", serif;
-	background: url(images/bg.png) repeat;
+	background: url(../images/bg.png) repeat;
 	color: #111b02;
 }
 

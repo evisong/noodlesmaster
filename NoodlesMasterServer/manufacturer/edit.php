@@ -17,6 +17,7 @@ if (!$manufacturer) {
 <link rel="stylesheet" href="../include/style.css" type="text/css" />
 </head>
 <body>
+<h1>修改生产厂家</h1>
 <form action="controller.php?from=<?php echo $_GET['from'] ?>" method="post">
 	<div><label for="name">名称</label><input id="name" type="text" name="name" value="<?php echo $manufacturer->name ?>" /></div>
 	<div><label for="logo">Logo</label><input id="logo" type="text" name="logo" value="<?php echo $manufacturer->logo ?>" /></div>

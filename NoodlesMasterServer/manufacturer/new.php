@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../include/style.css" type="text/css" />
 </head>
 <body>
+<h1>添加生产厂家</h1>
 <form action="controller.php?from=<?php echo $_GET['from'] ?>" method="post">
 	<div><label for="name">名称</label><input id="name" type="text" name="name" /></div>
 	<div><label for="logo">Logo</label><input id="logo" type="text" name="logo" /></div>

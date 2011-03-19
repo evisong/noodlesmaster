@@ -23,6 +23,7 @@ if ($selected_id) {
 <link rel="stylesheet" href="../include/style.css" type="text/css" />
 </head>
 <body>
+<h1>生产厂家</h1>
 <ul>
 <?php foreach ($manufacturers as $manufacturer) { ?>
     <li<?php if ($manufacturer->uuid == $selected_id) echo ' class="selected"' ?>>
@@ -37,6 +38,8 @@ if ($selected_id) {
 </ul>
 <a href="new.php?from=<?php echo urlencode($_SERVER['REQUEST_URI']) ?>">添加厂家</a>
 <?php if ($selected_id) { ?>
+<h1>拥有品牌</h1>
+<a href="../brand/new.php?manufacturer_uuid=<?php echo $selected_id ?>&from=<?php echo urlencode($_SERVER['REQUEST_URI']) ?>">添加品牌</a>
 <ul>
 <?php     foreach ($brands as $brand) { ?>
     <li>
@@ -49,7 +52,6 @@ if ($selected_id) {
     </li>
 <?php     } ?>
 </ul>
-<a href="../brand/new.php?manufacturer_uuid=<?php echo $selected_id ?>&from=<?php echo urlencode($_SERVER['REQUEST_URI']) ?>">添加品牌</a>
 <?php } ?>
 </body>
 </html>
