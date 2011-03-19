@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>添加生产厂家</title>
+<title>添加品牌</title>
 <link rel="stylesheet" href="../include/style.css" type="text/css" />
 </head>
 <body>
@@ -12,6 +12,7 @@
 	<div>
     	<label></label>
     	<input type="submit" value="创建" />
+    	<input type="hidden" name="manufacturer_uuid" value="<?php echo $_GET['manufacturer_uuid'] ?>" />
     	<input type="hidden" name="action" value="create" />
 	</div>
 </form>

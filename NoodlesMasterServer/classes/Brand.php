@@ -13,12 +13,20 @@ class Brand extends AbstractModel {
             $objs = $all_objs;
         } else {
             foreach ($all_objs as $obj) {
-                if ($obj->$manufacturer_uuid == $parent_uuid) {
+                if ($obj->manufacturer_uuid == $parent_uuid) {
                     $objs[] = $obj;
                 }
             }
         }
         return $objs;
+    }
+    
+    protected function validate_model() {
+        $manufacturer_model = new Manufacturer();
+        $manufacturer = $manufacturer_model->read($this->manufacturer_uuid);
+        if (!$manufacturer) {
+            throw new ModelException("对应的厂商不存在");
+        }
     }
 }
 ?>

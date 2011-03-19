@@ -1,0 +1,1 @@
+O:5:"Brand":4:{s:17:"manufacturer_uuid";s:36:"EB44EFFD-8A2D-497E-BFEE-29D107DF79B7";s:4:"name";s:3:"康";s:4:"logo";s:8:"dsdf.dsf";s:4:"uuid";s:36:"F6AA2105-DFDE-484B-BE01-D771AAA5E731";}

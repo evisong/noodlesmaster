@@ -83,7 +83,15 @@ a[href ^="\/file.axd"] {
 	padding-right: 15px;
 }
 
+label {
+	display: inline-block;
+	padding-right: 10px;
+	text-align: right;
+	width: 60px;
+}
+
 /* ---- page styles ---- */
+
 .selected {
-	background-color: aqua;
+	background-color: #e6dab4;
 }

@@ -1,0 +1,1 @@
+O:5:"Brand":4:{s:17:"manufacturer_uuid";s:36:"EB44EFFD-8A2D-497E-BFEE-29D107DF79B7";s:4:"name";s:3:"KDD";s:4:"logo";s:8:"sdsa.pnp";s:4:"uuid";s:36:"01BFBE90-F53B-4E3F-881C-A15253350BEB";}

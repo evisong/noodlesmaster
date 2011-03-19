@@ -6,9 +6,9 @@ abstract class AbstractModel {
 
     public $uuid;
     
-    public function read_list() {
+    public function read_list($parent_uuid = NULL) {
         $objs = array();
-        $data_path = self::get_data_path();
+        $data_path = $this->get_data_path();
         
         $d = dir($data_path);
         while (false !== ($entry = $d->read())) {
@@ -27,7 +27,7 @@ abstract class AbstractModel {
     
     public function read($obj_uuid) {
         $obj = NULL;
-        $target_path = self::get_data_path().$obj_uuid.self::FILE_SUFFIX;
+        $target_path = $this->get_data_path().$obj_uuid.self::FILE_SUFFIX;
         
         if (file_exists($target_path)) {
             $content = file_get_contents($target_path);
@@ -38,7 +38,9 @@ abstract class AbstractModel {
     }
     
     public function create() {
-        $target_path = self::get_data_path().$this->uuid.self::FILE_SUFFIX;
+        $this->validate_model();
+        
+        $target_path = $this->get_data_path().$this->uuid.self::FILE_SUFFIX;
         
         if (!file_exists($target_path)) {
             $file = fopen($target_path, 'w');
@@ -46,6 +48,22 @@ abstract class AbstractModel {
             fclose($file);
         }
     }
+    
+    public function update() {
+        $this->validate_model();
+        
+        $target_path = $this->get_data_path().$this->uuid.self::FILE_SUFFIX;
+        
+        if (!file_exists($target_path)) {
+            throw new ModelException("所更新的对象不存在");
+        } else {
+            $file = fopen($target_path, 'w');
+            fwrite($file, serialize($this));
+            fclose($file);
+        }
+    }
+    
+    protected abstract function validate_model();
     
     public function to_json() {
         return "";

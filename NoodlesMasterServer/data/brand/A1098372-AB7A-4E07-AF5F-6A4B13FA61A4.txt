@@ -1,0 +1,1 @@
+O:5:"Brand":4:{s:17:"manufacturer_uuid";s:36:"EB44EFFD-8A2D-497E-BFEE-29D107DF79B7";s:4:"name";s:15:"红烧牛肉面";s:4:"logo";s:9:"Ccxxx.png";s:4:"uuid";s:36:"A1098372-AB7A-4E07-AF5F-6A4B13FA61A4";}
