@@ -5,6 +5,8 @@ abstract class AbstractModel {
     const FILE_SUFFIX = ".txt";
 
     public $uuid;
+    public $last_update;
+    public $last_update_user;
     
     public function read_list($parent_uuid = NULL) {
         $objs = array();
@@ -43,6 +45,7 @@ abstract class AbstractModel {
         $target_path = $this->get_data_path().$this->uuid.self::FILE_SUFFIX;
         
         if (!file_exists($target_path)) {
+            $this->set_last_update();
             $file = fopen($target_path, 'w');
             fwrite($file, serialize($this));
             fclose($file);
@@ -57,6 +60,7 @@ abstract class AbstractModel {
         if (!file_exists($target_path)) {
             throw new ModelException("所更新的对象不存在");
         } else {
+            $this->set_last_update();
             $file = fopen($target_path, 'w');
             fwrite($file, serialize($this));
             fclose($file);
@@ -71,6 +75,13 @@ abstract class AbstractModel {
     
     private function get_data_path() {
         return self::DATA_ROOT.DIRECTORY_SEPARATOR.strtolower(get_class($this)).DIRECTORY_SEPARATOR;
+    }
+    
+    private function set_last_update() {
+        $this->last_update = time();
+        //$username = $_SESSION["user"]["name"];
+        //$username = $username ? $username : "admin";
+        $this->last_update_user = "admin";
     }
 }
 ?>

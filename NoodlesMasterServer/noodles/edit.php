@@ -12,12 +12,14 @@ if (!$noodles) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>修改产品</title>
-<link rel="stylesheet" href="../include/style.css" type="text/css" />
+<title>修改产品 -【泡面管家】泡面大全</title>
+<?php include '../include/htmlhead.php'; ?>
 </head>
 <body>
+<?php include '../include/header.php'; ?>
+<div id="page-wrap">
 <h1>修改产品</h1>
+<a class="cancel" href="<?php echo urldecode($_GET['from']) ?>">撤销</a>
 <form action="controller.php?from=<?php echo $_GET['from'] ?>" method="post">
 	<div><label for="name">名称</label><input id="name" type="text" name="name" value="<?php echo $noodles->name ?>" /></div>
 	<div><label for="net_weight">净重</label><input id="net_weight" type="text" name="net_weight" value="<?php echo $noodles->net_weight ?>" /></div>
@@ -39,5 +41,7 @@ if (!$noodles) {
     	<input type="hidden" name="action" value="update" />
 	</div>
 </form>
+</div>
+<?php include '../include/footer.php'; ?>
 </body>
 </html>

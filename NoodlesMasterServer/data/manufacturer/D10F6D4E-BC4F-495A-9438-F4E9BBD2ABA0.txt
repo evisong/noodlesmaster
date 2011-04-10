@@ -1,1 +1,1 @@
-O:12:"Manufacturer":3:{s:4:"name";s:4:"Unif";s:4:"logo";s:8:"dcba.png";s:4:"uuid";s:36:"D10F6D4E-BC4F-495A-9438-F4E9BBD2ABA0";}
+O:12:"Manufacturer":3:{s:4:"name";s:4:"Unif";s:4:"logo";s:17:"uni-president.png";s:4:"uuid";s:36:"D10F6D4E-BC4F-495A-9438-F4E9BBD2ABA0";}
