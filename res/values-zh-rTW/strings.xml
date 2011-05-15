@@ -18,4 +18,6 @@
     <string name="noodles_not_found">泡麵訊息沒有找到</string>
     <string name="start">開始計時</string>
     <string name="stop">停止計時</string>
+    <string name="menu_sync">同步數據</string>
+    <string name="menu_preference">設置</string>
 </resources>

@@ -4,19 +4,50 @@
     <string name="noodles_ready">Noodles is ready, enjoy!</string>
     <string name="hello">Hello World</string>
     <string name="app_name">NoodlesMaster</string>
-	<string name="adjust_timer">Adjust Total Time</string>
-	<string name="selected">You selected: </string>
+    <string name="adjust_timer">Adjust Total Time</string>
+    <string name="selected">You selected: </string>
     <string name="description">description</string>
     <string name="noselection">No item selected</string>
     <string name="list_item">List Item</string>
-	<string name="menu_browse">Browse Noodles</string>
-	<string name="menu_scan">Scan Barcode</string>
-	<string name="no">No</string>
+    <string name="menu_browse">Browse Noodles</string>
+    <string name="menu_scan">Scan Barcode</string>
+    <string name="no">No</string>
     <string name="install_barcode_scanner_message">This application requires Barcode Scanner. Would you like to install it?</string>
     <string name="yes">Yes</string>
     <string name="install_barcode_scanner_title">Install Barcode Scanner</string>
     <string name="noodles_not_found">Noodles not found</string>
-<string name="stop">Stop</string>
+    <string name="stop">Stop</string>
     <string name="start">Start</string>
-<string name="evis_studio">Evis Studio</string>
+    <string name="evis_studio">Evis Studio</string>
+    <string name="sample_pref_choose_number">Choose a number</string>
+    <string name="sample_pref_check_it">Check It</string>
+    <string name="sample_pref_summary">Preference Summary</string>
+    <string name="sample_pref_ckb">Checkbox Preference</string>
+    <string name="sample_pref_click_pop_up">Click to pop up a list to choose from</string>
+    <string name="sample_pref_sel_dialog">Selection Dialog</string>
+    <string name="sample_pref_add_prefs">Additional preferences</string>
+    <string name="sample_pref_categ_3">Preferences category 3</string>
+    <string name="sample_pref_categ_2">Preferences category 2</string>
+    <string name="sample_pref_categ_1">Preferences category 1</string>
+    <string name="sample_pref_other_ckb">Another Checkbox</string>
+    <string name="sample_pref_other_screen">Another Preference Screen</string>
+    <string name="sample_pref_txt_dialog">Text Entry Dialog</string>
+    <string name="sample_pref_enter_txt">Enter something</string>
+    <string-array name="numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="numbernames">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
+    <string name="menu_sync">Sync Data</string>
+    <string name="menu_preference">Settings</string>
+    <string name="pref_cat_notification">Notification</string>
+    <string name="pref_cat_sync">Synchronization</string>
+    <string name="pref_ringtone_desc">Change the ringtone of the notification</string>
+    <string name="pref_ringtone">Ringtone</string>
+    <string name="pref_last_update_date">Last update date</string>
 </resources>

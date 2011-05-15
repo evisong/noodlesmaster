@@ -77,6 +77,8 @@ public class NoodlesMaster extends Activity {
 	// Menu item id
 	private static final int MENU_ITEM_BROWSE = Menu.FIRST;
 	private static final int MENU_ITEM_SCAN = Menu.FIRST + 1;
+	private static final int MENU_ITEM_SYNC = Menu.FIRST + 2;
+	private static final int MENU_ITEM_PREFERENCE = Menu.FIRST + 3;
 	
 	
     // -----------------------------------------------------------------------
@@ -213,6 +215,12 @@ public class NoodlesMaster extends Activity {
         menu.add(0, MENU_ITEM_SCAN, 0, R.string.menu_scan)
                 .setShortcut('2', 'b')
                 .setIcon(R.drawable.btn_scan);
+        menu.add(0, MENU_ITEM_SYNC, 0, R.string.menu_sync)
+            .setShortcut('3', 'c')
+            .setIcon(R.drawable.ic_menu_refresh);
+        menu.add(0, MENU_ITEM_PREFERENCE, 0, R.string.menu_preference)
+            .setShortcut('4', 'd')
+            .setIcon(R.drawable.ic_menu_preferences);
         return true;
     }
     
@@ -224,6 +232,13 @@ public class NoodlesMaster extends Activity {
                 return true;
             case MENU_ITEM_SCAN:
                 scanNoodlesBarcode();
+                return true;
+            case MENU_ITEM_SYNC:
+                // TODO
+                return true;
+            case MENU_ITEM_PREFERENCE:
+                Intent preferenceIntent = new Intent(this, Preference.class);
+                startActivity(preferenceIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

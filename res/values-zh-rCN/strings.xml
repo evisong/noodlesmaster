@@ -18,4 +18,11 @@
     <string name="noodles_not_found">泡面信息没有找到</string>
     <string name="start">开始计时</string>
     <string name="stop">停止计时</string>
+    <string name="menu_sync">同步数据</string>
+    <string name="menu_preference">设置</string>
+    <string name="pref_cat_sync">数据同步</string>
+    <string name="pref_cat_notification">提醒</string>
+    <string name="pref_ringtone_desc">修改提示铃声</string>
+    <string name="pref_ringtone">提示铃声</string>
+    <string name="pref_last_update_date">最近一次同步时间</string>
 </resources>
