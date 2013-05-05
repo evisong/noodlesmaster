@@ -20,4 +20,10 @@
     <string name="stop">停止計時</string>
     <string name="menu_sync">同步數據</string>
     <string name="menu_preference">設置</string>
+    <string name="start_3_00">3:00\n三分鐘</string>
+    <string name="start_3_30">3:30\n三分半</string>
+    <string name="start_4_00">4:00\n四分鐘</string>
+    <string name="start_4_30">4:30\n四分半</string>
+    <string name="start_5_00">5:00\n五分鐘</string>
+    <string name="start_custom">[ ? ]\n自定義</string>
 </resources>

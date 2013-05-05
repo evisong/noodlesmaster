@@ -1,151 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res/me.evis.mobile.noodle"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:gravity="center_horizontal" android:background="@drawable/app_bg">
+    xmlns:app="http://schemas.android.com/apk/res/me.evis.mobile.noodle"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_vertical" >
 
-	<RelativeLayout android:id="@+id/NoodleDescArea"
-		android:layout_height="wrap_content" android:layout_alignParentTop="true"
-		android:layout_width="fill_parent" android:background="@drawable/header_bg">
-		<ImageView android:id="@+id/NoodleLogo"
-			android:layout_marginBottom="3dp" android:layout_marginLeft="3dp"
-			android:layout_marginRight="5dp" android:layout_marginTop="3dp"
-			android:background="@drawable/picture_frame" android:layout_height="51dp"
-			android:layout_width="108dp"></ImageView>
-		<TextView android:layout_width="wrap_content" android:id="@+id/NoodleName"
-			android:text="Name of Instant Noodles" android:layout_toRightOf="@+id/NoodleLogo"
-			android:layout_margin="2dp" android:layout_toLeftOf="@+id/BrowseButton"
-			style="@style/NoodlesNameStyle" android:layout_alignTop="@+id/ItemLogo"
-			android:layout_height="51dp" android:gravity="center_vertical"></TextView>
-		<ImageButton android:layout_width="wrap_content"
-			android:layout_alignParentRight="true" android:src="@drawable/btn_scan_small"
-			android:id="@+id/ScanButton" android:layout_alignTop="@+id/BrowseButton"
-			android:layout_height="51dp"></ImageButton>
-		<ImageButton android:layout_width="wrap_content"
-			android:id="@+id/BrowseButton" android:src="@drawable/btn_browse_small"
-			android:layout_toLeftOf="@+id/ScanButton" android:layout_marginLeft="3dp"
-			android:layout_alignTop="@+id/NoodleLogo" android:layout_height="51dp"></ImageButton>
-		<TextView android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:id="@+id/NoodleDescription"
-			android:text="Detailed description." android:layout_marginRight="3dp"
-			android:layout_marginBottom="2dp" style="@style/NoodlesDescStyle"
-			android:layout_marginLeft="3dp" android:layout_alignLeft="@+id/NoodleLogo"
-			android:layout_below="@+id/NoodleLogo"></TextView>
+    <RelativeLayout
+        android:id="@+id/TimerArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/TimerLabelArea"
+        android:layout_weight="1"
+        android:paddingTop="10dp" >
 
+        <me.evis.mobile.noodle.widget.PieProgressBar
+            android:id="@+id/TimerProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:max="1"
+            android:progress="0" />
 
-	</RelativeLayout>
+        <ImageButton
+            android:id="@+id/StopTimerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_menu_stop"
+            android:enabled="false"
+            android:text="@string/stop" />
 
-	<TableLayout android:id="@+id/StepsTable"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_above="@+id/TimerArea" android:layout_below="@+id/NoodleDescArea">
-		<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content"
-			android:layout_weight="1" android:layout_height="fill_parent">
-			<include layout="@layout/step_panel"
-				android:layout_centerHorizontal="true"
-				android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
-				android:id="@+id/Step1" android:layout_width="fill_parent"
-				android:layout_weight="0.9" android:layout_height="fill_parent"
-				android:layout_marginLeft="4dp" android:layout_marginTop="4dp"
-				android:layout_marginRight="2dp" android:layout_marginBottom="2dp" />
-			<include layout="@layout/step_panel" android:id="@+id/Step2"
-				android:layout_width="fill_parent" android:layout_weight="0.9"
-				android:layout_height="fill_parent" android:layout_marginRight="4dp"
-				android:layout_marginTop="4dp" android:layout_marginLeft="2dp"
-				android:layout_marginBottom="2dp" />
-		</TableRow>
-		<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content"
-			android:layout_weight="1" android:layout_height="fill_parent">
-			<include layout="@layout/step_panel" android:id="@+id/Step3"
-				android:layout_weight="1" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:layout_marginTop="2dp"
-				android:layout_marginRight="2dp" android:layout_marginBottom="4dp"
-				android:layout_marginLeft="4dp" />
-			<include layout="@layout/step_panel" android:id="@+id/Step4"
-				android:layout_weight="1" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:layout_marginBottom="4dp"
-				android:layout_marginRight="4dp" android:layout_marginTop="2dp"
-				android:layout_marginLeft="2dp" />
-		</TableRow>
-	</TableLayout>
+        <ImageView
+            android:id="@+id/TimerCenterLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/noodles_master_logo" />
 
-	<RelativeLayout android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:id="@+id/TimerArea"
-		android:layout_above="@+id/ButtonArea">
-		<ProgressBar android:id="@+id/TimerProgress" android:max="1"
-			android:progress="0" style="?android:attr/progressBarStyleHorizontal"
-			android:progressDrawable="@drawable/progress_bar_horizontal"
-			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
-			android:layout_width="wrap_content" android:layout_marginBottom="2dp"
-			android:layout_alignParentTop="true" android:layout_height="46dp"
-			android:layout_marginLeft="5dp" />
-		<LinearLayout android:gravity="center"
-			android:layout_height="wrap_content" android:layout_width="wrap_content"
-			android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/AdjustTimerButton"
-			android:layout_marginLeft="3dp" android:id="@+id/TimerLabelArea"
-			android:layout_alignParentTop="true">
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
-				android:typeface="normal" android:id="@+id/TimerCurrentHour"
-				android:visibility="gone" />
-			<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" android:typeface="normal"
-				android:visibility="gone" />
-			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" style="@style/TimerFont"
-				android:text="00" android:id="@+id/TimerCurrentMinute" />
-			<TextView android:id="@+id/Semicolon2" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" />
-			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
-				android:id="@+id/TimerCurrentSecond" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="/" android:id="@+id/Slash1 "
-				style="@style/TimerSeparatorFont" android:layout_marginLeft="4dp"
-				android:layout_marginRight="4dp" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="0" style="@style/TimerFont"
-				android:typeface="normal" android:id="@+id/TimerHour"
-				android:visibility="gone" />
-			<TextView android:id="@+id/Semicolon3" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" android:typeface="normal"
-				android:visibility="gone" />
-			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" style="@style/TimerFont"
-				android:text="00" android:id="@+id/TimerMinute" />
-			<TextView android:id="@+id/Semicolon4" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text=":"
-				style="@style/TimerSeparatorFont" />
-			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="00" style="@style/TimerFont"
-				android:id="@+id/TimerSecond" />
-		</LinearLayout>
-		<ImageButton android:layout_width="wrap_content"
-			android:src="@drawable/ic_dialog_time" android:id="@+id/AdjustTimerButton"
-			android:layout_alignParentRight="true" android:layout_height="wrap_content"
-			android:layout_alignParentTop="true" />
-	</RelativeLayout>
+        <ImageButton
+            android:id="@+id/MenuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/abs__ic_menu_moreoverflow_holo_light" />
+    </RelativeLayout>
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:gravity="bottom|center_horizontal" android:id="@+id/ButtonArea"
-		android:layout_height="wrap_content" android:layout_above="@+id/Ad">
-		<Button android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:layout_weight="1"
-			android:id="@+id/StartTimerButton" android:drawableTop="@drawable/ic_menu_play_clip"
-			android:text="@string/start" />
-		<Button android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:layout_weight="1"
-			android:id="@+id/StopTimerButton" android:drawableTop="@drawable/ic_menu_stop"
-			android:enabled="false" android:text="@string/stop" />
-	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/TimerLabelArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ButtonsTable"
+        android:layout_marginBottom="10dp"
+        android:gravity="center" >
 
-	<com.admob.android.ads.AdView android:id="@+id/Ad"
-	 	android:layout_alignParentBottom="true"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		app:backgroundColor="#FFFFFF" app:primaryTextColor="#0088FF"
-		app:secondaryTextColor="#333333" 
-		app:keywords="instant noodles 泡面 方便面 即食面 速食面" />
+        <TextView
+            android:id="@+id/TimerCurrentHour"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:typeface="normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/Semicolon1"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:typeface="normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/TimerCurrentMinute"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00" />
+
+        <TextView
+            android:id="@+id/Semicolon2"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/TimerCurrentSecond"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00" />
+
+        <TextView
+            android:id="@+id/Slash1 "
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:text="/" />
+
+        <TextView
+            android:id="@+id/TimerHour"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:typeface="normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/Semicolon3"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"
+            android:typeface="normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/TimerMinute"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00" />
+
+        <TextView
+            android:id="@+id/Semicolon4"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/TimerSecond"
+            style="@style/TimerFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/ButtonsTable"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Ad"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true">
+
+        <TableRow
+            android:id="@+id/TableRow01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ToggleButton
+                android:id="@+id/StartTimerButton01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:textOn="@string/start_3_00"
+                android:textOff="@string/start_3_00"
+                android:text="@string/start_3_00" />
+
+            <ToggleButton
+                android:id="@+id/StartTimerButton02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:textOn="@string/start_3_30"
+                android:textOff="@string/start_3_30"
+                android:text="@string/start_3_30" />
+
+            <ToggleButton
+                android:id="@+id/StartTimerButton03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:textOn="@string/start_4_00"
+                android:textOff="@string/start_4_00"
+                android:text="@string/start_4_00" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/TableRow02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ToggleButton
+                android:id="@+id/StartTimerButton04"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:textOn="@string/start_4_30"
+                android:textOff="@string/start_4_30"
+                android:text="@string/start_4_30" />
+
+            <ToggleButton
+                android:id="@+id/StartTimerButton05"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:text="@string/start_5_00"
+                android:textOff="@string/start_5_00"
+                android:textOn="@string/start_5_00" />
+
+            <ToggleButton
+                android:id="@+id/AdjustTimerButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:height="80dp"
+                android:textOn="@string/start_custom"
+                android:textOff="@string/start_custom"
+                android:text="@string/start_custom" />
+        </TableRow>
+    </TableLayout>
+
+    <com.admob.android.ads.AdView
+        android:id="@+id/Ad"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        app:backgroundColor="#FFFFFF"
+        app:keywords="instant noodles 泡面 方便面 即食面 速食面"
+        app:primaryTextColor="#0088FF"
+        app:secondaryTextColor="#333333" />
 
 </RelativeLayout>

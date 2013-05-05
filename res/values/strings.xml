@@ -50,4 +50,10 @@
     <string name="pref_ringtone_desc">Change the ringtone of the notification</string>
     <string name="pref_ringtone">Ringtone</string>
     <string name="pref_last_update_date">Last update date</string>
+    <string name="start_3_00">3:00</string>
+    <string name="start_3_30">3:30</string>
+    <string name="start_4_00">4:00</string>
+    <string name="start_4_30">4:30</string>
+    <string name="start_5_00">5:00</string>
+    <string name="start_custom">Custom</string>
 </resources>
