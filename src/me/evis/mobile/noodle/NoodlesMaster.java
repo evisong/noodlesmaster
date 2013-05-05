@@ -557,7 +557,6 @@ public class NoodlesMaster extends Activity {
         animatorSet.playSequentially(ani1, ani2);
         animatorSet.start();
     }
-
 	
     // -----------------------------------------------------------------------
     // Widget getters
