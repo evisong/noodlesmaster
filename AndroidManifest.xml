@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest android:versionCode="3" android:versionName="Beta"
     package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>
     <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
         <activity android:label="@string/app_name"
             android:name=".NoodlesMaster" android:screenOrientation="portrait">
@@ -47,21 +48,14 @@
         </activity>
         <receiver android:name=".NoodlesTimerAlarmer"/>
         <!-- AdMob START -->
-        <!-- The application's publisher ID assigned by AdMob -->
-        <meta-data android:name="ADMOB_PUBLISHER_ID" android:value="a14d3e5dec9ea76"/>
         <!-- AdMobActivity definition -->
-        <activity android:name="com.admob.android.ads.AdMobActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <!-- Track Market installs -->
-        <receiver android:exported="true" android:name="com.admob.android.ads.analytics.InstallReceiver">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
-            </intent-filter>
-        </receiver>
+        <activity android:name="com.google.ads.AdActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!-- AdMob END -->
         <activity android:name=".Preference"/>
     </application>
-    <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- AdMob SDK requires Internet permission -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

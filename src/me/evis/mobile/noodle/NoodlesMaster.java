@@ -17,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Matrix;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -36,20 +35,21 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
+import com.google.ads.mediation.admob.AdMobAdapterExtras;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 public class NoodlesMaster extends Activity {
-	
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
@@ -499,6 +499,8 @@ public class NoodlesMaster extends Activity {
 		getStopTimerButton().setEnabled(false);
 		// Workaround: button state change will cause PieProgressBar messed up.
 		getTimerProgress().invalidate();
+		
+        showAd();
 	}
 	
 	private void updateTimerCurrent(final int currentSec) {
@@ -556,6 +558,29 @@ public class NoodlesMaster extends Activity {
         ani2.setInterpolator(new DecelerateInterpolator());
         animatorSet.playSequentially(ani1, ani2);
         animatorSet.start();
+    }
+    
+    private AdRequest adRequest;
+    
+    private void showAd() {
+        if (adRequest == null) {
+            adRequest = new AdRequest();
+            AdMobAdapterExtras extras = new AdMobAdapterExtras()
+                .addExtra("color_bg", "FFFFFF")
+                .addExtra("color_bg_top", "FFFFFF")
+                .addExtra("color_border", "DDDDDD")
+                .addExtra("color_link", "000080")
+                .addExtra("color_text", "0088FF")
+                .addExtra("color_url", "333333");
+    
+            adRequest.setNetworkExtras(extras);
+        }
+        
+        // Look up the AdView as a resource and load a request.
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        if (!adView.isReady() && !adView.isRefreshing()) {
+            adView.loadAd(adRequest);
+        }
     }
 	
     // -----------------------------------------------------------------------

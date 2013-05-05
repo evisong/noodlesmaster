@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/me.evis.mobile.noodle"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_vertical" >
@@ -20,7 +21,9 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:max="1"
             android:progress="0" />
 
@@ -152,8 +155,7 @@
         android:id="@+id/ButtonsTable"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/Ad"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/adView"
         android:layout_alignWithParentIfMissing="true">
 
         <TableRow
@@ -230,16 +232,16 @@
                 android:text="@string/start_custom" />
         </TableRow>
     </TableLayout>
-
-    <com.admob.android.ads.AdView
-        android:id="@+id/Ad"
+    
+	<com.google.ads.AdView android:id="@+id/adView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        app:backgroundColor="#FFFFFF"
-        app:keywords="instant noodles 泡面 方便面 即食面 速食面"
-        app:primaryTextColor="#0088FF"
-        app:secondaryTextColor="#333333" />
-
+		ads:adUnitId="a14d3e5dec9ea76"
+		ads:adSize="BANNER"
+		ads:testDevices="TEST_EMULATOR, motorola-me860-TA7440B9FQ" 
+		ads:background="#FFFFFF" 
+		ads:keywords="instant noodles 泡面 方便面 即食面 速食面"
+        ads:primaryTextColor="#0088FF"
+        ads:secondaryTextColor="#333333"/>
 </RelativeLayout>
