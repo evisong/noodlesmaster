@@ -1,31 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
 
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
 
-	<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center">
-		<com.android.internal.widget.NumberPicker
-			android:id="@+id/TimerHourPicker" android:layout_width="70dip"
-			android:layout_height="wrap_content" android:focusable="true"
-			android:focusableInTouchMode="true" />
-		<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text=":"
-			android:layout_marginLeft="3dp" android:layout_marginRight="3dp"
-			style="@style/TimerSeparatorFont"></TextView>
-		<com.android.internal.widget.NumberPicker
-			android:id="@+id/TimerMinutePicker" android:layout_width="70dip"
-			android:layout_height="wrap_content" android:focusable="true"
-			android:focusableInTouchMode="true" />
-		<TextView android:id="@+id/Semicolon1" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text=":"
-			android:layout_marginLeft="3dp" android:layout_marginRight="3dp"
-			style="@style/TimerSeparatorFont"></TextView>
-		<com.android.internal.widget.NumberPicker
-			android:id="@+id/TimerSecondPicker" android:layout_width="70dip"
-			android:layout_height="wrap_content" android:focusable="true"
-			android:focusableInTouchMode="true" />
-	</LinearLayout>
-	
-	
-<Button android:layout_height="wrap_content" android:text="OK" android:id="@+id/TimePickerOk" android:layout_width="fill_parent" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginTop="20dp"></Button>
+        <com.android.internal.widget.NumberPicker
+            android:id="@+id/TimerHourPicker"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <TextView
+            android:id="@+id/Semicolon1"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:text=":" >
+        </TextView>
+
+        <com.android.internal.widget.NumberPicker
+            android:id="@+id/TimerMinutePicker"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <TextView
+            android:id="@+id/Semicolon1"
+            style="@style/TimerSeparatorFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:text=":" >
+        </TextView>
+
+        <com.android.internal.widget.NumberPicker
+            android:id="@+id/TimerSecondPicker"
+            android:layout_width="70dip"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/StartTimerButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start" />
+
 </LinearLayout>

@@ -1,8 +1,9 @@
 package me.evis.mobile.noodle;
 
-import me.evis.mobile.noodle.provider.ManufacturerContentProvider;
+import java.util.ArrayList;
+import java.util.List;
+
 import me.evis.mobile.noodle.provider.NoodlesContentProvider;
-import me.evis.mobile.util.AssetUtil;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -16,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Matrix;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -23,23 +25,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 public class NoodlesMaster extends Activity {
 	
@@ -66,7 +73,7 @@ public class NoodlesMaster extends Activity {
 	
 	private static final String LOGO_PATH = "logos/";
 	private static final String STEP_ICON_PATH = "step_icons/";
-    
+    private static final String SOUND_PATH = "android.resource://" + NoodlesMaster.class.getPackage().getName() + "/";
     
     // Request code for browse
     private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
@@ -109,7 +116,8 @@ public class NoodlesMaster extends Activity {
             WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
             wl.acquire();
             
-            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            // Free sound from http://www.freesound.org/people/Georgeantoniv/sounds/169584/
+            Uri uri = Uri.parse(SOUND_PATH + R.raw.microwave_beep);
             final Ringtone ringtone = RingtoneManager.getRingtone(NoodlesMaster.this, uri);
             ringtone.play();
             
@@ -153,14 +161,71 @@ public class NoodlesMaster extends Activity {
         
         initNoodles();
         
-        // StartTimer button behavior.
-        getStartTimerButton().setOnClickListener(new View.OnClickListener() {
+        // Workaround view.setScaleX() is since API Level 11, use opensouce lib to provide initial value.
+        ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f).setDuration(1).start();
+//        LinearLayout layout = (LinearLayout) findViewById(R.id.ButtonArea);
+//        p = new PieChart(this);
+//        LayoutParams lp = new LayoutParams(200, 200);
+//        p.setLayoutParams(lp);
+//        p.setBackgroundColor(0xffffffff);
+//        p.setOnSliceClickListener(new OnSliceClickListener() {
+//            @Override
+//            public void onSliceClicked(PieChart pieChart, int sliceNumber) {
+//                Toast.makeText(NoodlesMaster.this, "slice: " + sliceNumber, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        layout.addView(p);
+        
+        // StartTimer buttons behavior.
+        getStartTimerButton01().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-				startTimer(totalSecs);
+                int secs = 3 * 60;
+                setTimerTotalSecs(secs);
+				startTimer(secs);
 			}
 		});
+        getStartTimerButton02().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int secs = 3 * 60 + 30;
+                setTimerTotalSecs(secs);
+                startTimer(secs);
+            }
+        });
+        getStartTimerButton03().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int secs = 4 * 60;
+                setTimerTotalSecs(secs);
+                startTimer(secs);
+            }
+        });
+        getStartTimerButton04().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int secs = 4 * 60 + 30;
+                setTimerTotalSecs(secs);
+                startTimer(secs);
+            }
+        });
+        getStartTimerButton05().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int secs = 5 * 60;
+                setTimerTotalSecs(secs);
+                startTimer(secs);
+            }
+        });
 		
+        // AdjustTimer button behavior.
+        getAdjustTimerButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(DIALOG_TIME_PICKER);
+            }
+        });
+        
         // StopTimer button behavior.
 		getStopTimerButton().setOnClickListener(new View.OnClickListener() {
 		    @Override
@@ -169,27 +234,11 @@ public class NoodlesMaster extends Activity {
 			}
 		});
 		
-        // AdjustTimer button behavior.
-		getAdjustTimerButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(DIALOG_TIME_PICKER);
-            }
-        });
-		
-		// Browse button behavior.
-		getBrowseButton().setOnClickListener(new View.OnClickListener() {
+		// Menu button behavior.
+		getMenuButton().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				browseNoodles();
-			}
-		});
-		
-		// Scan button behavior.
-		getScanButton().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				scanNoodlesBarcode();
+				openOptionsMenu();
 			}
 		});
     }
@@ -227,12 +276,6 @@ public class NoodlesMaster extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ITEM_BROWSE:
-                browseNoodles();
-                return true;
-            case MENU_ITEM_SCAN:
-                scanNoodlesBarcode();
-                return true;
             case MENU_ITEM_SYNC:
                 // TODO
                 return true;
@@ -274,10 +317,11 @@ public class NoodlesMaster extends Activity {
             return new Dialog(this) {
                 @Override
                 protected void onCreate(Bundle savedInstanceState) {
+                    getTimerProgress().invalidate();
                     setTitle(R.string.adjust_timer);
                     setContentView(R.layout.time_picker);
                     
-                    final int[] totalDhms = DateTimeUtil.calculateDhms(totalSecs);
+                    final int[] totalDhms = DateTimeUtil.calculateDhms(getTimerTotalSecs());
                     NumberPicker timerHourPicker = getTimerHourPicker();
                     timerHourPicker.setRange(0, Integer.MAX_VALUE);
                     timerHourPicker.setCurrent(totalDhms[1]);
@@ -310,24 +354,25 @@ public class NoodlesMaster extends Activity {
                         }
                     });
                     
-                    Button okButton = (Button) findViewById(R.id.TimePickerOk);
+                    Button okButton = (Button) findViewById(R.id.StartTimerButton);
                     okButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             calculateTotalSecs();
                             dismiss();
+                            startTimer(getTimerTotalSecs());
                         }
                     });
                 }
                 
                 private void calculateTotalSecs() {
-                    totalSecs = DateTimeUtil.calculateSeconds(new int[] {
+                    int secs = DateTimeUtil.calculateSeconds(new int[] {
                             0,
                             getTimerHourPicker().getCurrent(),
                             getTimerMinutePicker().getCurrent(),
                             getTimerSecondPicker().getCurrent()
                     });
-                    updateTimer();
+                    setTimerTotalSecs(secs);
                 }
                 private NumberPicker getTimerHourPicker() {
                     return (NumberPicker) findViewById(R.id.TimerHourPicker);
@@ -345,24 +390,6 @@ public class NoodlesMaster extends Activity {
         }
     }
     
-    
-    /**
-     * Launch activity to browse the noodles.
-     */
-    protected void browseNoodles() {
-        startActivityForResult(new Intent(Intent.ACTION_VIEW, 
-                ManufacturerContentProvider.CONTENT_URI), 
-                REQUEST_CODE_BROWSE_MANUFACTURERS);
-    }
-    /**
-     * Call BarcodeScanner for noodles barcode.
-     */
-    protected void scanNoodlesBarcode() {
-        IntentIntegrator.initiateScan(NoodlesMaster.this, 
-                R.string.install_barcode_scanner_title, 
-                R.string.install_barcode_scanner_message, 
-                R.string.yes, R.string.no);
-    }
     
     /**
      * Query and initialize view.
@@ -395,53 +422,29 @@ public class NoodlesMaster extends Activity {
             noodles.step4Description = cursor.getString(15);
             noodles.step4IconUrl = cursor.getString(16);
             
-            // Noodle's name, description
-            ((TextView) findViewById(R.id.NoodleName)).setText(noodles.name);
-            ((TextView) findViewById(R.id.NoodleDescription)).setText(noodles.description);
-            
-            // Logo
-            ImageView noodleLogo = (ImageView) findViewById(R.id.NoodleLogo);
-            AssetUtil.setAssetImage(noodleLogo, LOGO_PATH, noodles.manufacturerLogo);
-            
-            // Steps
-            prepareStep(R.id.Step1, "1", noodles.step1Description, noodles.step1IconUrl);
-            prepareStep(R.id.Step2, "2", noodles.step2Description, noodles.step2IconUrl);
-            prepareStep(R.id.Step3, "3", noodles.step3Description, noodles.step3IconUrl);
-            prepareStep(R.id.Step4, "4", noodles.step4Description, noodles.step4IconUrl);
-            
             // Timer
-            totalSecs = noodles.soakageTime;
-            updateTimer();
+            setTimerTotalSecs(noodles.soakageTime);
         } else {
             Toast.makeText(this, R.string.noodles_not_found, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void prepareStep(int id, String stepNumber, String desc, String icon) {
-    	// Step container.
-        RelativeLayout step = (RelativeLayout) findViewById(id);
-        // Set step number.
-        TextView stepNumberText = (TextView) step.findViewById(R.id.StepNumber);
-        stepNumberText.setText(stepNumber);
-        // Set step icon.
-        ImageView stepIcon = (ImageView) step.findViewById(R.id.StepIcon);
-        AssetUtil.setAssetImage(stepIcon, STEP_ICON_PATH, icon);
-        // Set step description.
-        TextView stepDesc= (TextView) step.findViewById(R.id.StepDesc);
-        stepDesc.setText(desc);
-    }
-    
     // -----------------------------------------------------------------------
     // Timer logics
     // -----------------------------------------------------------------------
     
     protected PendingIntent alarmSender;
     
-	protected void startTimer(int secs) {
+	protected void startTimer(final int secs) {
+	    playShowStopButtonAnimation();
+        
 		// Disable to avoid multiple timers in one time.
-		getStartTimerButton().setEnabled(false);
+	    setStartTimerButtonsEnabled(false);
 		getStopTimerButton().setEnabled(true);
+		// Workaround: button state change will cause PieProgressBar messed up.
+		getTimerProgress().invalidate();
 		getTimerProgress().setMax(secs);
+		
 		// Setup counter.
 		Intent intent = new Intent(this, NoodlesTimerAlarmer.class);
 		alarmSender = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -460,6 +463,8 @@ public class NoodlesMaster extends Activity {
 				int _currentSecs = (int) (_currentMillisecs - _startMillisecs) / 1000;
 				
 				updateTimerCurrent(_currentSecs);
+//				p.setSlices(new float[] {_currentSecs, _totalSecs - _currentSecs});
+//				p.anima();
 				
 				if (_currentSecs < _totalSecs) {
 					Message newMsg = Message.obtain(msg);
@@ -477,20 +482,26 @@ public class NoodlesMaster extends Activity {
 		// guaranteed active when the phone goes sleep. All other schedulers 
 		// will be paused during the standby.
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarmMillisecs, alarmSender);
+		// Add 1s to ensure last message is handled.
+		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarmMillisecs + 1000, alarmSender);
 	}
 	
-	protected void stopTimer() {
+    protected void stopTimer() {
+        playHideStopButtonAnimation();
+        
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(alarmSender);
-		counterHandler.removeMessages(MESSAGE_WHAT_CODE);
+		if (counterHandler != null) {
+		    counterHandler.removeMessages(MESSAGE_WHAT_CODE);
+		}
 		
-		updateTimerCurrent(0);
-		getStartTimerButton().setEnabled(true);
+		setStartTimerButtonsEnabled(true);
 		getStopTimerButton().setEnabled(false);
+		// Workaround: button state change will cause PieProgressBar messed up.
+		getTimerProgress().invalidate();
 	}
 	
-	private void updateTimerCurrent(int currentSec) {
+	private void updateTimerCurrent(final int currentSec) {
 	    final int[] currentDhms = DateTimeUtil.calculateDhms(currentSec);
 	    ((TextView) findViewById(R.id.TimerCurrentHour)).setText(String.valueOf(currentDhms[1]));
 	    ((TextView) findViewById(R.id.TimerCurrentMinute)).setText(formatNumber(currentDhms[2]));
@@ -498,35 +509,102 @@ public class NoodlesMaster extends Activity {
 	    getTimerProgress().setProgress(currentSec);
 	}
 	
-	private void updateTimer() {
+	private void setTimerTotalSecs(final int totalSecs) {
+	    this.totalSecs = totalSecs; 
         final int[] dhms = DateTimeUtil.calculateDhms(totalSecs);
         ((TextView) findViewById(R.id.TimerHour)).setText(String.valueOf(dhms[1]));
         ((TextView) findViewById(R.id.TimerMinute)).setText(formatNumber(dhms[2]));
         ((TextView) findViewById(R.id.TimerSecond)).setText(formatNumber(dhms[3]));
     }
 	
+	private int getTimerTotalSecs() {
+	    return this.totalSecs;
+	}
+	
 	private String formatNumber(int value) {
 	    return NumberPicker.TWO_DIGIT_FORMATTER.toString(value);
 	}
+	
+	private void setStartTimerButtonsEnabled(boolean enabled) {
+	    for (ToggleButton button : getStartTimerButtons()) {
+	        button.setEnabled(enabled);
+	        if (enabled) {
+	            button.setChecked(false);
+	        }
+	    }
+	}
+	
+    private void playShowStopButtonAnimation() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator ani1 = ObjectAnimator.ofFloat(getTimerCenterLogo(), "scaleX", 1f, 0f);
+        ani1.setDuration(500);
+        ani1.setInterpolator(new AccelerateInterpolator());
+        ObjectAnimator ani2 = ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 0f, 1f);
+        ani2.setDuration(500);
+        ani2.setInterpolator(new DecelerateInterpolator());
+        animatorSet.playSequentially(ani1, ani2);
+        animatorSet.start();
+    }
+       
+    private void playHideStopButtonAnimation() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator ani1 = ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f);
+        ani1.setDuration(500);
+        ani1.setInterpolator(new AccelerateInterpolator());
+        ObjectAnimator ani2 = ObjectAnimator.ofFloat(getTimerCenterLogo(), "scaleX", 0f, 1f);
+        ani2.setDuration(500);
+        ani2.setInterpolator(new DecelerateInterpolator());
+        animatorSet.playSequentially(ani1, ani2);
+        animatorSet.start();
+    }
+
 	
     // -----------------------------------------------------------------------
     // Widget getters
     // -----------------------------------------------------------------------
 	
-    private Button getStartTimerButton() {
-        return (Button) findViewById(R.id.StartTimerButton);
+	private List<ToggleButton> buttons;
+	
+	private List<ToggleButton> getStartTimerButtons() {
+	    if (buttons == null) {
+    	    buttons = new ArrayList<ToggleButton>();
+    	    
+    	    buttons.add(getStartTimerButton01());
+    	    buttons.add(getStartTimerButton02());
+    	    buttons.add(getStartTimerButton03());
+    	    buttons.add(getStartTimerButton04());
+    	    buttons.add(getStartTimerButton05());
+    	    buttons.add(getAdjustTimerButton());
+	    }
+	    return buttons;
+	}
+	
+	private ToggleButton getStartTimerButton01() {
+	    return (ToggleButton) findViewById(R.id.StartTimerButton01);
+	}
+	private ToggleButton getStartTimerButton02() {
+	    return (ToggleButton) findViewById(R.id.StartTimerButton02);
+	}
+	private ToggleButton getStartTimerButton03() {
+	    return (ToggleButton) findViewById(R.id.StartTimerButton03);
+	}
+	private ToggleButton getStartTimerButton04() {
+	    return (ToggleButton) findViewById(R.id.StartTimerButton04);
+	}
+	private ToggleButton getStartTimerButton05() {
+	    return (ToggleButton) findViewById(R.id.StartTimerButton05);
+	}
+	private ToggleButton getAdjustTimerButton() {
+	    return (ToggleButton) findViewById(R.id.AdjustTimerButton);
+	}
+    private ImageButton getStopTimerButton() {
+        return (ImageButton) findViewById(R.id.StopTimerButton);
     }
-    private Button getStopTimerButton() {
-        return (Button) findViewById(R.id.StopTimerButton);
+    private ImageView getTimerCenterLogo() {
+        return (ImageView) findViewById(R.id.TimerCenterLogo);
     }
-    private ImageButton getAdjustTimerButton() {
-        return (ImageButton) findViewById(R.id.AdjustTimerButton);
-    }
-    private ImageButton getBrowseButton() {
-        return (ImageButton) findViewById(R.id.BrowseButton);
-    }
-    private ImageButton getScanButton() {
-        return (ImageButton) findViewById(R.id.ScanButton);
+    private ImageButton getMenuButton() {
+        return (ImageButton) findViewById(R.id.MenuButton);
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
