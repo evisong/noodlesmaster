@@ -29,22 +29,26 @@
 
         <ImageButton
             android:id="@+id/StopTimerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_menu_stop"
+            android:background="@drawable/empty_btn_bg"
             android:enabled="false"
+            android:scaleType="fitCenter"
+            android:src="@drawable/stop_timer_btn"
             android:text="@string/stop" />
 
         <ImageView
             android:id="@+id/TimerCenterLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/noodles_master_logo" />
+            android:background="@drawable/timer_center_bg"
+            android:scaleType="centerInside"
+            android:src="@drawable/step_dry_noodles_icon" />
 
         <ImageButton
             android:id="@+id/MenuButton"
@@ -52,7 +56,10 @@
             android:layout_height="51dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:background="@drawable/empty_btn_bg"
+            android:padding="5dp"
             android:src="@drawable/abs__ic_menu_moreoverflow_holo_light" />
+
     </RelativeLayout>
 
     <LinearLayout

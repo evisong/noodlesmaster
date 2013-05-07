@@ -4,13 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.graphics.Path.Direction;
-import android.graphics.Path.FillType;
-import android.graphics.Region.Op;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
@@ -21,7 +16,7 @@ import android.widget.ProgressBar;
  */
 public class PieProgressBar extends ProgressBar {
     private static int[] colors = new int[] {
-            Color.argb(0xff, 0x00, 0xaa, 0xff),
+            Color.argb(0xff, 0x00, 0x88, 0xff),
             Color.argb(0xff, 0xee, 0xee, 0xee)
         };
     private Paint[] paints;
@@ -97,7 +92,7 @@ public class PieProgressBar extends ProgressBar {
 //        canvas.clipPath(path);
         
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.argb(0xff, 0x00, 0xaa, 0xff));
+        paint.setColor(colors[0]);
         paint.setShadowLayer(3, 0, 0, Color.BLACK);
         canvas.drawOval(bounds, paint);
 

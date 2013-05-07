@@ -17,9 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,10 +41,10 @@ import com.android.internal.widget.NumberPicker;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.ads.mediation.admob.AdMobAdapterExtras;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 
 public class NoodlesMaster extends Activity {
 	
@@ -73,7 +70,6 @@ public class NoodlesMaster extends Activity {
 	
 	private static final String LOGO_PATH = "logos/";
 	private static final String STEP_ICON_PATH = "step_icons/";
-    private static final String SOUND_PATH = "android.resource://" + NoodlesMaster.class.getPackage().getName() + "/";
     
     // Request code for browse
     private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
@@ -116,18 +112,13 @@ public class NoodlesMaster extends Activity {
             WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
             wl.acquire();
             
-            // Free sound from http://www.freesound.org/people/Georgeantoniv/sounds/169584/
-            Uri uri = Uri.parse(SOUND_PATH + R.raw.microwave_beep);
-            final Ringtone ringtone = RingtoneManager.getRingtone(NoodlesMaster.this, uri);
-            ringtone.play();
-            
             AlertDialog.Builder builder = new AlertDialog.Builder(NoodlesMaster.this);
             builder.setMessage(R.string.noodles_ready)
                    .setCancelable(false)
                    .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                ringtone.stop();
+                                //ringtone.stop();
                             }
                         });
             AlertDialog alertDialog = builder.create();
@@ -285,29 +276,6 @@ public class NoodlesMaster extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    
-    /**
-     * Handles Barcode scanner result.
-     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-    	if (scanResult != null) {
-    		// Handle the barcode returned by zxing.
-    		Toast.makeText(this, scanResult.getContents(), Toast.LENGTH_SHORT).show();
-    		Uri newIntentData = Uri.parse(NoodlesContentProvider.CODE_FIELD_CONTENT_URI.toString() + "/" + scanResult.getContents());
-    		getIntent().setData(newIntentData);
-    		initNoodles();
-    	}
-    	
-    	if (requestCode == REQUEST_CODE_BROWSE_MANUFACTURERS && resultCode == RESULT_OK) {
-    		getIntent().setData(data.getData());
-    		initNoodles();
-    	}
-    	
-    	super.onActivityResult(requestCode, resultCode, data);
     }
     
     @Override
@@ -536,15 +504,52 @@ public class NoodlesMaster extends Activity {
 	    }
 	}
 	
+	/**
+	 * Ensure pieProgressBar is redrawn during the center animation.
+	 */
+	private Animator.AnimatorListener timerProgressRefresher = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator arg0) {
+            getTimerProgress().postInvalidate();
+        }
+        
+        @Override
+        public void onAnimationRepeat(Animator arg0) {
+            getTimerProgress().postInvalidate();
+        }
+        
+        @Override
+        public void onAnimationEnd(Animator arg0) {
+            getTimerProgress().postInvalidate();
+        }
+        
+        @Override
+        public void onAnimationCancel(Animator arg0) {
+            getTimerProgress().postInvalidate();
+        }
+    };
+    
+    private ValueAnimator.AnimatorUpdateListener timerProgressUpdateRefresher = 
+            new ValueAnimator.AnimatorUpdateListener() {
+        
+        @Override
+        public void onAnimationUpdate(ValueAnimator arg0) {
+            getTimerProgress().postInvalidate();
+        }
+    };
+	
     private void playShowStopButtonAnimation() {
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator ani1 = ObjectAnimator.ofFloat(getTimerCenterLogo(), "scaleX", 1f, 0f);
         ani1.setDuration(500);
         ani1.setInterpolator(new AccelerateInterpolator());
+        ani1.addUpdateListener(timerProgressUpdateRefresher);
         ObjectAnimator ani2 = ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 0f, 1f);
         ani2.setDuration(500);
         ani2.setInterpolator(new DecelerateInterpolator());
+        ani2.addUpdateListener(timerProgressUpdateRefresher);
         animatorSet.playSequentially(ani1, ani2);
+        animatorSet.addListener(timerProgressRefresher);
         animatorSet.start();
     }
        
@@ -553,10 +558,13 @@ public class NoodlesMaster extends Activity {
         ObjectAnimator ani1 = ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f);
         ani1.setDuration(500);
         ani1.setInterpolator(new AccelerateInterpolator());
+        ani1.addUpdateListener(timerProgressUpdateRefresher);
         ObjectAnimator ani2 = ObjectAnimator.ofFloat(getTimerCenterLogo(), "scaleX", 0f, 1f);
         ani2.setDuration(500);
         ani2.setInterpolator(new DecelerateInterpolator());
+        ani2.addUpdateListener(timerProgressUpdateRefresher);
         animatorSet.playSequentially(ani1, ani2);
+        animatorSet.addListener(timerProgressRefresher);
         animatorSet.start();
     }
     
