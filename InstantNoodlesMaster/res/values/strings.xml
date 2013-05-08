@@ -74,4 +74,13 @@
     <string name="widget3_label">4:00</string>
     <string name="widget4_label">4:30</string>
     <string name="widget5_label">5:00</string>
+    <string name="about_title">关于《泡面管家》</string>
+    <string name="about_version_label">版本：</string>
+    <string name="about_paragraph1">《泡面管家》是一款面向泡面（方便面、速食面、即食面）爱好者的小工具。\n\n泡面人人都会，无非如下四个步骤：</string>
+    <string name="about_step1_desc">面饼菜粉酱包</string>
+    <string name="about_step2_desc">小心注入开水</string>
+    <string name="about_step3_desc">闭盖计时等待</string>
+    <string name="about_step4_desc">开盖享受美味</string>
+    <string name="about_paragraph2">新版中强化了泡面计时器的功能，力求成为最便捷的泡面计时器。\n\n用户可以点击主界面底部任一按钮开始计时，《泡面管家》会在到达指定时限时提示用户。上部圆形计时表盘在计时过程中，点击正中间的按钮会停止计时。用户也可以向手机主屏添加快捷启动计时的小部件。</string>
+    <string name="about_official_website">官方网站 http://n.evis.me</string>
 </resources>
