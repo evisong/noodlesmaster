@@ -6,12 +6,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 public class NoodlesTimerAlarmer extends BroadcastReceiver {
@@ -32,12 +30,12 @@ public class NoodlesTimerAlarmer extends BroadcastReceiver {
 	    
 	    Toast.makeText(context, R.string.notification_timer_complete_text, Toast.LENGTH_SHORT).show();
 	    
-//	    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+	    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 	    Intent newIntent = new Intent(NoodlesMaster.NOODLES_TIMER_COMPLETE);
 	    newIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	    PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//		localBroadcastManager.sendBroadcastSync(newIntent);
-	    context.sendBroadcast(newIntent);
+//	    PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		localBroadcastManager.sendBroadcastSync(newIntent);
+//	    context.sendBroadcast(newIntent);
         
 		WakeLocker.release();
 	}
@@ -51,7 +49,7 @@ public class NoodlesTimerAlarmer extends BroadcastReceiver {
                 .setSound(soundUri)
                 .setAutoCancel(true);
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(NoodlesMaster.NOODLES_TIMER_COMPLETE);
+        Intent resultIntent = new Intent(context, NoodlesMaster.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         
         // The stack builder object will contain an artificial back stack for the

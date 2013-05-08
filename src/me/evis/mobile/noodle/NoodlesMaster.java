@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -47,6 +49,10 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 public class NoodlesMaster extends Activity {
+	/**
+	 * Used for external intent starts up the timer.
+	 */
+	public static final String EXTRA_TOTAL_SECS = "extraTotalSecs";
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
@@ -92,6 +98,9 @@ public class NoodlesMaster extends Activity {
 	 * Intent indicating noodles' time up.
 	 */
 	public static final String NOODLES_TIMER_COMPLETE = "me.evis.intent.action.NOODLES_TIMER_COMPLETE";
+	public static final String URI_SCHEME = "me.evis.mobile.noodle";
+	public static final String URI_SEGMENT_START = "start";
+	public static final String START_TIMER_URI = URI_SCHEME + "://n.evis.me/" + URI_SEGMENT_START + "/{}";
 	
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
@@ -142,13 +151,6 @@ public class NoodlesMaster extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        // If no data was given in the intent (because we were started
-        // as a MAIN activity), then use our default content provider.
-        Intent intent = getIntent();
-        if (intent.getData() == null) {
-            intent.setData(ContentUris.withAppendedId(NoodlesContentProvider._ID_FIELD_CONTENT_URI, 1));
-        }
         
         initNoodles();
         
@@ -241,6 +243,21 @@ public class NoodlesMaster extends Activity {
     }
     
     @Override
+    protected void onResume() {
+        super.onResume();
+        
+        if (getIntent().getData() != null && 
+                URI_SCHEME.equals(getIntent().getData().getScheme()) &&
+                !getIntent().getData().getPathSegments().isEmpty()) {
+            if (URI_SEGMENT_START.equals(getIntent().getData().getPathSegments().get(0))) {
+                int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
+                setTimerTotalSecs(totalSecsParam);
+                startTimer(totalSecsParam);
+            }
+        }
+    }
+    
+    @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(timerCompleteReceiver);
@@ -249,30 +266,19 @@ public class NoodlesMaster extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_ITEM_BROWSE, 0, R.string.menu_browse)
-                .setShortcut('1', 'a')
-                .setIcon(R.drawable.btn_browse);
-        menu.add(0, MENU_ITEM_SCAN, 0, R.string.menu_scan)
-                .setShortcut('2', 'b')
-                .setIcon(R.drawable.btn_scan);
-        menu.add(0, MENU_ITEM_SYNC, 0, R.string.menu_sync)
-            .setShortcut('3', 'c')
-            .setIcon(R.drawable.ic_menu_refresh);
-        menu.add(0, MENU_ITEM_PREFERENCE, 0, R.string.menu_preference)
-            .setShortcut('4', 'd')
-            .setIcon(R.drawable.ic_menu_preferences);
+        
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main, menu);
+        
         return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ITEM_SYNC:
-                // TODO
-                return true;
-            case MENU_ITEM_PREFERENCE:
-                Intent preferenceIntent = new Intent(this, Preference.class);
-                startActivity(preferenceIntent);
+            case R.id.menu_about:
+                Intent aboutIntent = new Intent(this, About.class);
+                startActivity(aboutIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -366,8 +372,9 @@ public class NoodlesMaster extends Activity {
         if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
             Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
         }
+        Uri data = ContentUris.withAppendedId(NoodlesContentProvider._ID_FIELD_CONTENT_URI, 1);
         
-        Cursor cursor = managedQuery(getIntent().getData(), projection, 
+        Cursor cursor = managedQuery(data, projection, 
                 null, null, "noodles.name ASC");
         
         if (cursor.getCount() > 0 ) {
@@ -455,6 +462,7 @@ public class NoodlesMaster extends Activity {
 	}
 	
     protected void stopTimer() {
+        getTimerCenterLogo().setImageResource(R.drawable.step_enjoy_icon);
         playHideStopButtonAnimation();
         
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
