@@ -57,7 +57,10 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/empty_btn_bg"
-            android:padding="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:src="@drawable/abs__ic_menu_moreoverflow_holo_light" />
 
     </RelativeLayout>

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 public class NoodlesTimerAlarmer extends BroadcastReceiver {
@@ -30,12 +29,12 @@ public class NoodlesTimerAlarmer extends BroadcastReceiver {
 	    
 	    Toast.makeText(context, R.string.notification_timer_complete_text, Toast.LENGTH_SHORT).show();
 	    
-	    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+	    // LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 	    Intent newIntent = new Intent(NoodlesMaster.NOODLES_TIMER_COMPLETE);
 	    newIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//	    PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		localBroadcastManager.sendBroadcastSync(newIntent);
-//	    context.sendBroadcast(newIntent);
+	    // PendingIntent newPendingIntent = PendingIntent.getActivity(context, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		// localBroadcastManager.sendBroadcastSync(newIntent);
+	    context.sendBroadcast(newIntent);
         
 		WakeLocker.release();
 	}

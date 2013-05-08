@@ -31,7 +31,7 @@
         android:title="@string/menu_addWidget5"/> -->
     <item
         android:id="@+id/menu_about"
-        android:icon="@drawable/ic_menu_back"
+        android:icon="@drawable/action_help"
         android:orderInCategory="999"
         android:showAsAction="never"
         android:title="@string/menu_about"/>

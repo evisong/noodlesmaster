@@ -14,14 +14,14 @@
 				</shape>
 			</item>
 			<item>
-			    <bitmap android:src="@drawable/ic_menu_stop" android:gravity="center" />
+			    <bitmap android:src="@drawable/av_pause" android:gravity="center" />
 			</item>
         </layer-list>
     </item>
     
     <!-- pressed -->
     <item android:state_pressed="true" android:state_enabled="true"
-          android:drawable="@drawable/timepicker_up_pressed" />
+          android:drawable="@drawable/av_pause" />
     
     <!-- selected -->
     <item android:state_pressed="false" android:state_enabled="true"
