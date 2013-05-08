@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/NoodlesNameStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="关于《泡面管家》" />
+
+    <TextView
+        android:id="@+id/versionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/textView10"
+        style="@style/NoodlesDescStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="《泡面管家》是一款面向泡面（方便面、速食面、即食面）爱好者的小工具。\n\n泡面人人都会，无非如下四个步骤：" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:paddingLeft="30dp" >
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/StepNumberStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/step_dry_noodles_icon" />
+
+        <TextView
+            android:id="@+id/textView6"
+            style="@style/StepDescStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="面饼菜粉酱包" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:paddingLeft="30dp" >
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/StepNumberStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/step_add_water_icon" />
+
+        <TextView
+            android:id="@+id/textView7"
+            style="@style/StepDescStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="小心注入开水" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:paddingLeft="30dp" >
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/StepNumberStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/step_wait_icon" />
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/StepDescStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="闭盖计时等待" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="bottom"
+        android:paddingLeft="30dp" >
+
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/StepNumberStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/step_enjoy_icon" />
+
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/StepDescStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开盖享受美味" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView11"
+        style="@style/NoodlesDescStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="新版中强化了泡面计时器的功能，力求成为最便捷的泡面计时器。" />
+
+    <Button
+        android:id="@+id/visitWebsiteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="官方网站 http://n.evis.me" />
+
+</LinearLayout>

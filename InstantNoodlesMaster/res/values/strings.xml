@@ -44,7 +44,13 @@
         <item>Three</item>
     </string-array>
     <string name="menu_sync">Sync Data</string>
+    <string name="menu_addWidget1">Add 3:00 Widget</string>
+    <string name="menu_addWidget2">Add 3:30 Widget</string>
+    <string name="menu_addWidget3">Add 4:00 Widget</string>
+    <string name="menu_addWidget4">Add 4:30 Widget</string>
+    <string name="menu_addWidget5">Add 5:00 Widget</string>
     <string name="menu_preference">Settings</string>
+    <string name="menu_about">About</string>
     <string name="pref_cat_notification">Notification</string>
     <string name="pref_cat_sync">Synchronization</string>
     <string name="pref_ringtone_desc">Change the ringtone of the notification</string>
@@ -58,4 +64,14 @@
     <string name="start_custom">Custom</string>
     <string name="notification_timer_complete_title">Noodles ready</string>
     <string name="notification_timer_complete_text">Your instant noodles is ready, enjoy.</string>
+    <string name="widget1_receiver_label">NoodlesMaster 3:00 Shortcut</string>
+    <string name="widget2_receiver_label">NoodlesMaster 3:30 Shortcut</string>
+    <string name="widget3_receiver_label">NoodlesMaster 4:00 Shortcut</string>
+    <string name="widget4_receiver_label">NoodlesMaster 4:30 Shortcut</string>
+    <string name="widget5_receiver_label">NoodlesMaster 5:00 Shortcut</string>
+    <string name="widget1_label">3:00</string>
+    <string name="widget2_label">3:30</string>
+    <string name="widget3_label">4:00</string>
+    <string name="widget4_label">4:30</string>
+    <string name="widget5_label">5:00</string>
 </resources>

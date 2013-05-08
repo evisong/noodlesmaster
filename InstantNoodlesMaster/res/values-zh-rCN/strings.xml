@@ -19,7 +19,13 @@
     <string name="start">开始计时</string>
     <string name="stop">停止计时</string>
     <string name="menu_sync">同步数据</string>
+    <string name="menu_addWidget1">添加3:00小部件</string>
+    <string name="menu_addWidget2">添加3:30小部件</string>
+    <string name="menu_addWidget3">添加4:00小部件</string>
+    <string name="menu_addWidget4">添加4:30小部件</string>
+    <string name="menu_addWidget5">添加5:00小部件</string>
     <string name="menu_preference">设置</string>
+    <string name="menu_about">关于</string>
     <string name="pref_cat_sync">数据同步</string>
     <string name="pref_cat_notification">提醒</string>
     <string name="pref_ringtone_desc">修改提示铃声</string>
@@ -31,4 +37,6 @@
     <string name="start_4_30">4:30\n四分半</string>
     <string name="start_5_00">5:00\n五分钟</string>
     <string name="start_custom">[ ? ]\n自定义</string>
+    <string name="notification_timer_complete_title">泡面完成</string>
+    <string name="notification_timer_complete_text">《泡面管家》：面泡好了，享用吧！</string>
 </resources>

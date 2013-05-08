@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- <item
+        android:id="@+id/menu_addWidget1"
+        android:icon="@drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_addWidget1"/>
+    <item
+        android:id="@+id/menu_addWidget2"
+        android:icon="@drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_addWidget2"/>
+    <item
+        android:id="@+id/menu_addWidget3"
+        android:icon="@drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_addWidget3"/>
+    <item
+        android:id="@+id/menu_addWidget4"
+        android:icon="@drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_addWidget4"/>
+    <item
+        android:id="@+id/menu_addWidget5"
+        android:icon="@drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_addWidget5"/> -->
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@drawable/ic_menu_back"
+        android:orderInCategory="999"
+        android:showAsAction="never"
+        android:title="@string/menu_about"/>
+</menu>

@@ -21,7 +21,6 @@
 		<EditTextPreference android:key="text"
 							android:title="@string/sample_pref_txt_dialog" 							
 							android:dialogTitle="@string/sample_pref_enter_txt" />
-							android:summary="Preference Summary"/>
 		<ListPreference android:key="list"
 						android:title="@string/sample_pref_sel_dialog" 
 						android:summary="@string/sample_pref_click_pop_up"

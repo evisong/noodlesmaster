@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="3" android:versionName="Beta"
+<manifest android:versionCode="5" android:versionName="2.0"
     package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>
     <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
@@ -13,8 +13,14 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles"/>
+            </intent-filter><intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="me.evis.mobile.noodle" />
             </intent-filter>
         </activity>
+        <activity android:label="@string/app_name" android:name=".About" />
         <provider
             android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider" android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider"/>
         <provider
@@ -47,6 +53,43 @@
             </intent-filter>
         </activity>
         <receiver android:name=".NoodlesTimerAlarmer"/>
+        <!-- AppWidgets START -->
+        <receiver android:name=".StartTimerWidget1Provider" android:label="@string/widget1_receiver_label">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/start_timer_widget1" />
+		</receiver>
+        <receiver android:name=".StartTimerWidget2Provider" android:label="@string/widget2_receiver_label">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/start_timer_widget2" />
+		</receiver>
+        <receiver android:name=".StartTimerWidget3Provider" android:label="@string/widget3_receiver_label">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/start_timer_widget3" />
+		</receiver>
+        <receiver android:name=".StartTimerWidget4Provider" android:label="@string/widget4_receiver_label">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/start_timer_widget4" />
+		</receiver>
+        <receiver android:name=".StartTimerWidget5Provider" android:label="@string/widget5_receiver_label">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/start_timer_widget5" />
+		</receiver>
+		<!-- AppWidgets END -->
         <!-- AdMob START -->
         <!-- AdMobActivity definition -->
         <activity android:name="com.google.ads.AdActivity"
