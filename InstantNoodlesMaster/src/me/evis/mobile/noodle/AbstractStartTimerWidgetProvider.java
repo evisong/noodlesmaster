@@ -34,14 +34,6 @@ public abstract class AbstractStartTimerWidgetProvider extends AppWidgetProvider
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
     
-//    protected int getTotalSecs(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-//        String label = appWidgetManager.getAppWidgetInfo(appWidgetId).label;
-//        if (context.getString(R.string.widget1_label).equals(label)) {
-//            return 3 * 60;
-//        } else {
-//            return 5 * 60;
-//        }
-//    }
     protected abstract String getTotalSecsLabel(Context context);
     protected abstract int getTotalSecs();
 }

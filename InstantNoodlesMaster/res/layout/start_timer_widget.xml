@@ -3,25 +3,17 @@
     android:id="@+id/startTimerWidget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/step_bg" >
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/noodles_master_logo" />
+    android:background="@drawable/appwidget_dark_bg_clickable"
+    android:gravity="center" >
 
     <TextView
         android:id="@+id/totalTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:shadowColor="#FF000000"
-        android:shadowRadius="2"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/widget_icon"
+        android:gravity="center"
         android:text="3:00"
-        android:textColor="#FF886611" />
+        android:textColor="#FFFFFFFF" />
 
 </RelativeLayout>

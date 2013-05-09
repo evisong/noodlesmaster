@@ -2,37 +2,56 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- normal -->
-    <item android:state_pressed="false" android:state_enabled="true"
-          android:state_focused="false">
+    <item android:state_enabled="true" android:state_focused="false" android:state_pressed="false">
         <layer-list>
-            <item>
-	            <shape xmlns:android="http://schemas.android.com/apk/res/android" 
-				    android:shape="oval">
-				    <gradient android:startColor="#FF0088FF" android:endColor="#FF1466AE"
-				            android:angle="270"/>
-				    <stroke android:width="1dp" android:color="#FF1466AE" />
-				</shape>
-			</item>
-			<item>
-			    <bitmap android:src="@drawable/av_pause" android:gravity="center" />
-			</item>
+            <item android:drawable="@drawable/timer_center_bg" />
+            <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                    <stroke android:width="1dp" android:color="#FFFCFCFC" />
+                    <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
+                </shape>
+            </item>
         </layer-list>
     </item>
-    
+
     <!-- pressed -->
-    <item android:state_pressed="true" android:state_enabled="true"
-          android:drawable="@drawable/av_pause" />
-    
+    <item android:state_enabled="true" android:state_pressed="true">
+        <layer-list>
+            <item android:drawable="@drawable/timer_center_bg" />
+            <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                    <stroke android:width="2dp" android:color="#FFf8f640" />
+                    <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
     <!-- selected -->
-    <item android:state_pressed="false" android:state_enabled="true"
-          android:state_focused="true" android:drawable="@drawable/timepicker_up_selected" />
-    
+    <item android:state_enabled="true" android:state_focused="true" android:state_pressed="false">
+        <layer-list>
+            <item android:drawable="@drawable/timer_center_bg" />
+            <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                    <stroke android:width="2dp" android:color="#FFf8f640" />
+                    <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
     <!-- disabled -->
-    <item android:state_pressed="false" android:state_enabled="false"
-          android:state_focused="false" android:drawable="@drawable/timepicker_up_disabled" />
-    
+    <item android:state_enabled="false" android:state_focused="false" android:state_pressed="false">
+        <layer-list>
+            <item android:drawable="@drawable/timer_center_bg" />
+        </layer-list>
+    </item>
+
     <!-- disabled focused -->
-    <item android:state_pressed="false" android:state_enabled="false"
-          android:state_focused="true" android:drawable="@drawable/timepicker_up_disabled_focused" />
+    <item android:state_enabled="false" android:state_focused="true" android:state_pressed="false">
+        <layer-list>
+            <item android:drawable="@drawable/timer_center_bg" />
+        </layer-list>
+    </item>
 
 </selector>

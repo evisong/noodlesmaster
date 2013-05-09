@@ -11,13 +11,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,7 +33,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
@@ -49,10 +45,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 public class NoodlesMaster extends Activity {
-	/**
-	 * Used for external intent starts up the timer.
-	 */
-	public static final String EXTRA_TOTAL_SECS = "extraTotalSecs";
+    private static final String TAG = "me.evis.mobile.noodle";
 	
 	private static final String[] projection = {
 		"noodles." + NoodlesContentProvider._ID,   // 0 
@@ -102,6 +95,8 @@ public class NoodlesMaster extends Activity {
 	public static final String URI_SEGMENT_START = "start";
 	public static final String START_TIMER_URI = URI_SCHEME + "://n.evis.me/" + URI_SEGMENT_START + "/{}";
 	
+	private static final int DEFAULT_TOTAL_SECS = 3 * 60;
+	
 	// Progress counter interval
 	private static final int COUNTER_INTERVAL_SECS = 1;
 	private static final int MESSAGE_WHAT_CODE = 0;
@@ -116,6 +111,10 @@ public class NoodlesMaster extends Activity {
     private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.v(TAG, "timerCompleteReceiver.onReceive");
+            }
+            
             PowerManager pm = (PowerManager) NoodlesMaster.this.getSystemService(Context.POWER_SERVICE);
             // TODO bug: screen won't turn on
             WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NoodlesTimerAlarmer");
@@ -149,25 +148,18 @@ public class NoodlesMaster extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "NoodlesMaster.onCreate");
+        }
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        initNoodles();
+        setTimerTotalSecs(DEFAULT_TOTAL_SECS);
         
+        getStopTimerButton().setEnabled(false);
         // Workaround view.setScaleX() is since API Level 11, use opensouce lib to provide initial value.
         ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f).setDuration(1).start();
-//        LinearLayout layout = (LinearLayout) findViewById(R.id.ButtonArea);
-//        p = new PieChart(this);
-//        LayoutParams lp = new LayoutParams(200, 200);
-//        p.setLayoutParams(lp);
-//        p.setBackgroundColor(0xffffffff);
-//        p.setOnSliceClickListener(new OnSliceClickListener() {
-//            @Override
-//            public void onSliceClicked(PieChart pieChart, int sliceNumber) {
-//                Toast.makeText(NoodlesMaster.this, "slice: " + sliceNumber, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        layout.addView(p);
         
         // StartTimer buttons behavior.
         getStartTimerButton01().setOnClickListener(new View.OnClickListener() {
@@ -238,12 +230,21 @@ public class NoodlesMaster extends Activity {
     
     @Override
     protected void onStart() {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "NoodlesMaster.onStart");
+        }
+        
         super.onStart();
+        Log.d(TAG, "register inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
     }
     
     @Override
     protected void onResume() {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "NoodlesMaster.onResume");
+        }
+        
         super.onResume();
         
         if (getIntent().getData() != null && 
@@ -259,7 +260,13 @@ public class NoodlesMaster extends Activity {
     
     @Override
     protected void onStop() {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "NoodlesMaster.onStop");
+        }
+        
         super.onStop();
+        
+        Log.d(TAG, "unregister inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         unregisterReceiver(timerCompleteReceiver);
     }
     
@@ -363,46 +370,6 @@ public class NoodlesMaster extends Activity {
             return super.onCreateDialog(id);
         }
     }
-    
-    
-    /**
-     * Query and initialize view.
-     */
-    protected void initNoodles() {
-        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
-            Log.d(getClass().getSimpleName(), "Noodles URI to query: " + getIntent().getData());
-        }
-        Uri data = ContentUris.withAppendedId(NoodlesContentProvider._ID_FIELD_CONTENT_URI, 1);
-        
-        Cursor cursor = managedQuery(data, projection, 
-                null, null, "noodles.name ASC");
-        
-        if (cursor.getCount() > 0 ) {
-            Noodles noodles = new Noodles();
-            
-            cursor.moveToFirst();
-            noodles.id = cursor.getLong(0);
-            noodles.name = cursor.getString(1);
-            noodles.soakageTime = cursor.getInt(4);
-            noodles.description = cursor.getString(5);
-            noodles.logo = cursor.getString(6);
-            noodles.manufacturerName = cursor.getString(7);
-            noodles.manufacturerLogo = cursor.getString(8);
-            noodles.step1Description = cursor.getString(9);
-            noodles.step1IconUrl = cursor.getString(10);
-            noodles.step2Description = cursor.getString(11);
-            noodles.step2IconUrl = cursor.getString(12);
-            noodles.step3Description = cursor.getString(13);
-            noodles.step3IconUrl = cursor.getString(14);
-            noodles.step4Description = cursor.getString(15);
-            noodles.step4IconUrl = cursor.getString(16);
-            
-            // Timer
-            setTimerTotalSecs(noodles.soakageTime);
-        } else {
-            Toast.makeText(this, R.string.noodles_not_found, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     // -----------------------------------------------------------------------
     // Timer logics
@@ -411,6 +378,8 @@ public class NoodlesMaster extends Activity {
     protected PendingIntent alarmSender;
     
 	protected void startTimer(final int secs) {
+	    Log.i(TAG, "start timer, total seconds: " + secs);
+	    
 	    playShowStopButtonAnimation();
         
 		// Disable to avoid multiple timers in one time.
