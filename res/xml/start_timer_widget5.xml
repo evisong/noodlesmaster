@@ -3,7 +3,7 @@
     android:minWidth="56dp" 
     android:minHeight="56dp"
     android:updatePeriodMillis="0"
-    android:previewImage="@drawable/step_bg"
+    android:previewImage="@drawable/noodles_master_logo"
     android:initialLayout="@layout/start_timer_widget"
     android:resizeMode="none">
 </appwidget-provider>
