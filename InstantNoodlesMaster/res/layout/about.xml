@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/about_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
 
         <TextView
             android:id="@+id/textView1"
@@ -35,7 +37,9 @@
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/adView"
+        android:layout_below="@+id/about_title" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,8 +178,27 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/about_official_website" />
+            
+            <ImageButton
+                android:id="@+id/visitGooglePlayBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/google_play_badge" />
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+    <com.google.ads.AdView android:id="@+id/adView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+		ads:adUnitId="a14d3e5dec9ea76"
+		ads:adSize="BANNER"
+		ads:loadAdOnCreate="true"
+		ads:testDevices="TEST_EMULATOR, motorola-me860-TA7440B9FQ" 
+		ads:background="#FFFFFF" 
+		ads:keywords="instant noodles 泡面 方便面 即食面 速食面"
+        ads:primaryTextColor="#0088FF"
+        ads:secondaryTextColor="#333333"/>
+</RelativeLayout>
