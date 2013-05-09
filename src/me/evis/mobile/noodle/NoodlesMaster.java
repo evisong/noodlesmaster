@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
@@ -106,14 +109,16 @@ public class NoodlesMaster extends Activity {
 	private Handler counterHandler;
 	// According to user input.
 	private int totalSecs;
+	/**
+	 * Is timer running.
+	 */
+	private boolean timerRunning = false;
 	
     // Receiver for NOODLES_TIMER_COMPLETE intent.
     private BroadcastReceiver timerCompleteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Log.isLoggable(TAG, Log.VERBOSE)) {
-                Log.v(TAG, "timerCompleteReceiver.onReceive");
-            }
+            Log.v(TAG, "timerCompleteReceiver.onReceive");
             
             PowerManager pm = (PowerManager) NoodlesMaster.this.getSystemService(Context.POWER_SERVICE);
             // TODO bug: screen won't turn on
@@ -148,9 +153,7 @@ public class NoodlesMaster extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "NoodlesMaster.onCreate");
-        }
+        Log.v(TAG, "NoodlesMaster.onCreate");
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -230,9 +233,7 @@ public class NoodlesMaster extends Activity {
     
     @Override
     protected void onStart() {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "NoodlesMaster.onStart");
-        }
+        Log.v(TAG, "NoodlesMaster.onStart");
         
         super.onStart();
         Log.d(TAG, "register inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
@@ -240,29 +241,31 @@ public class NoodlesMaster extends Activity {
     }
     
     @Override
-    protected void onResume() {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "NoodlesMaster.onResume");
-        }
+    protected void onNewIntent(Intent intent) {
+        Log.v(TAG, "NoodlesMaster.onNewIntent");
         
-        super.onResume();
-        
-        if (getIntent().getData() != null && 
-                URI_SCHEME.equals(getIntent().getData().getScheme()) &&
-                !getIntent().getData().getPathSegments().isEmpty()) {
-            if (URI_SEGMENT_START.equals(getIntent().getData().getPathSegments().get(0))) {
-                int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
-                setTimerTotalSecs(totalSecsParam);
-                startTimer(totalSecsParam);
-            }
-        }
+        super.onNewIntent(intent);
     }
     
     @Override
-    protected void onStop() {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "NoodlesMaster.onStop");
+    protected void onResume() {
+        Log.v(TAG, "NoodlesMaster.onResume");
+        
+        super.onResume();
+        
+        Uri uri = getIntent().getData();
+        if (uri != null && 
+                URI_SCHEME.equals(uri.getScheme()) &&
+                !uri.getPathSegments().isEmpty()) {
+            if (URI_SEGMENT_START.equals(uri.getPathSegments().get(0))) {
+                startTimerByShortcut();
+            }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.v(TAG, "NoodlesMaster.onStop");
         
         super.onStop();
         
@@ -295,7 +298,12 @@ public class NoodlesMaster extends Activity {
     protected Dialog onCreateDialog(int id) {
         switch (id) {
         case DIALOG_TIME_PICKER:
-            return new Dialog(this) {
+            return new Dialog(this, true, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    getAdjustTimerButton().setChecked(false);
+                }
+            }) {
                 @Override
                 protected void onCreate(Bundle savedInstanceState) {
                     getTimerProgress().invalidate();
@@ -370,7 +378,18 @@ public class NoodlesMaster extends Activity {
             return super.onCreateDialog(id);
         }
     }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // No using onBackPressed() (API Level 5) in order to support API Level 4
+        if (keyCode == KeyEvent.KEYCODE_BACK && timerRunning) {
+            moveTaskToBack(true);
+            return true; 
+        }
 
+        return super.onKeyDown(keyCode, event);
+    }
+    
     // -----------------------------------------------------------------------
     // Timer logics
     // -----------------------------------------------------------------------
@@ -380,6 +399,7 @@ public class NoodlesMaster extends Activity {
 	protected void startTimer(final int secs) {
 	    Log.i(TAG, "start timer, total seconds: " + secs);
 	    
+	    this.timerRunning = true;
 	    playShowStopButtonAnimation();
         
 		// Disable to avoid multiple timers in one time.
@@ -430,7 +450,20 @@ public class NoodlesMaster extends Activity {
 		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alarmMillisecs + 1000, alarmSender);
 	}
 	
+    protected void startTimerByShortcut() {
+        if (timerRunning) {
+            Toast.makeText(this, R.string.timer_already_running, Toast.LENGTH_SHORT).show();
+        } else {
+            int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
+            setTimerTotalSecs(totalSecsParam);
+            startTimer(totalSecsParam);
+        }
+    }
+	
     protected void stopTimer() {
+        Log.i(TAG, "stop timer");
+        
+        this.timerRunning = false;
         getTimerCenterLogo().setImageResource(R.drawable.step_enjoy_icon);
         playHideStopButtonAnimation();
         

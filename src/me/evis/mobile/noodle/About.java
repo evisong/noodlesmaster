@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class About extends Activity {
@@ -36,6 +37,16 @@ public class About extends Activity {
             public void onClick(View v) {
                 String url = OFFICIAL_WEBSITE; 
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); 
+            }
+        });
+        
+        ImageButton visitGooglePlayBtn = (ImageButton) findViewById(R.id.visitGooglePlayBtn);
+        visitGooglePlayBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=me.evis.mobile.noodle"));
+                startActivity(intent);
             }
         });
     }
