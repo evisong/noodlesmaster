@@ -177,30 +177,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
-                android:textOn="@string/start_3_00"
+                android:text="@string/start_3_00"
                 android:textOff="@string/start_3_00"
-                android:text="@string/start_3_00" />
+                android:textOn="@string/start_3_00" />
 
             <ToggleButton
                 android:id="@+id/StartTimerButton02"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
-                android:textOn="@string/start_3_30"
+                android:text="@string/start_3_30"
                 android:textOff="@string/start_3_30"
-                android:text="@string/start_3_30" />
+                android:textOn="@string/start_3_30" />
 
             <ToggleButton
                 android:id="@+id/StartTimerButton03"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
-                android:textOn="@string/start_4_00"
+                android:text="@string/start_4_00"
                 android:textOff="@string/start_4_00"
-                android:text="@string/start_4_00" />
+                android:textOn="@string/start_4_00" />
+
         </TableRow>
 
         <TableRow
@@ -214,16 +218,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
-                android:textOn="@string/start_4_30"
+                android:text="@string/start_4_30"
                 android:textOff="@string/start_4_30"
-                android:text="@string/start_4_30" />
+                android:textOn="@string/start_4_30" />
 
             <ToggleButton
                 android:id="@+id/StartTimerButton05"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
                 android:text="@string/start_5_00"
                 android:textOff="@string/start_5_00"
@@ -234,10 +240,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/btn_toggle_holo_light"
                 android:height="80dp"
-                android:textOn="@string/start_custom"
+                android:text="@string/start_custom"
                 android:textOff="@string/start_custom"
-                android:text="@string/start_custom" />
+                android:textOn="@string/start_custom" />
+
         </TableRow>
     </TableLayout>
     
