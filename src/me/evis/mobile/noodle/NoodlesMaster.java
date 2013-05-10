@@ -102,7 +102,7 @@ public class NoodlesMaster extends Activity {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
             
-            stopTimer();
+            stopTimer(true);
             
             wl.release();
         }
@@ -183,7 +183,7 @@ public class NoodlesMaster extends Activity {
 		getStopTimerButton().setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View v) {
-				stopTimer();
+				stopTimer(true);
 			}
 		});
 		
@@ -401,7 +401,7 @@ public class NoodlesMaster extends Activity {
 					Message newMsg = Message.obtain(msg);
 					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
 				} else {
-				    NoodlesMaster.this.timerRunning = false;
+				    stopTimer(false);
 				}
 			}
 		};
@@ -425,25 +425,31 @@ public class NoodlesMaster extends Activity {
         startTimer(totalSecsParam);
     }
 	
-    protected void stopTimer() {
+    protected void stopTimer(boolean stopAlarmAndHandler) {
         Log.i(TAG, "stop timer");
         
-        this.timerRunning = false;
-        getTimerCenterLogo().setImageResource(R.drawable.step_enjoy_icon);
-        playHideStopButtonAnimation();
+        if (stopAlarmAndHandler) {
+            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            am.cancel(alarmSender);
+            if (counterHandler != null) {
+                counterHandler.removeMessages(MESSAGE_WHAT_CODE);
+            }
+        }
         
-		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		am.cancel(alarmSender);
-		if (counterHandler != null) {
-		    counterHandler.removeMessages(MESSAGE_WHAT_CODE);
-		}
-		
-		setStartTimerButtonsEnabled(true);
-		getStopTimerButton().setEnabled(false);
-		// Workaround: button state change will cause PieProgressBar messed up.
-		getTimerProgress().invalidate();
-		
-        showAd();
+        if (this.timerRunning) {
+            this.timerRunning = false;
+            // Avoid from auto-restart a completed timer (originally started by appwidget) when resumed from sleep
+            setIntent(new Intent(NOODLES_TIMER_COMPLETE));
+            getTimerCenterLogo().setImageResource(R.drawable.step_enjoy_icon);
+            playHideStopButtonAnimation();
+    
+    		setStartTimerButtonsEnabled(true);
+    		getStopTimerButton().setEnabled(false);
+    		// Workaround: button state change will cause PieProgressBar messed up.
+    		getTimerProgress().invalidate();
+    		
+    		showAd();
+        }
 	}
 	
 	private void updateTimerCurrent(final int currentSec) {
