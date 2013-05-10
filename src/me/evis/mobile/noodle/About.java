@@ -15,6 +15,8 @@ import android.widget.TextView;
 public class About extends Activity {
     private static final String TAG = "me.evis.mobile.noodle.About";
     private static final String OFFICIAL_WEBSITE = "http://n.evis.me";
+    private static final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=me.evis.mobile.noodle";
+    // private static final String GOOGLE_PLAY = "market://details?id=me.evis.mobile.noodle";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,7 @@ public class About extends Activity {
         visitWebsiteBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = OFFICIAL_WEBSITE; 
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); 
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OFFICIAL_WEBSITE))); 
             }
         });
         
@@ -44,9 +45,7 @@ public class About extends Activity {
         visitGooglePlayBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=me.evis.mobile.noodle"));
-                startActivity(intent);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY))); 
             }
         });
     }
