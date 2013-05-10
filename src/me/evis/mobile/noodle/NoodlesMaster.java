@@ -210,6 +210,13 @@ public class NoodlesMaster extends Activity {
         Log.v(TAG, "NoodlesMaster.onNewIntent");
         
         super.onNewIntent(intent);
+        if (isStartTimerByShortcut(intent)) {
+            if (timerRunning) {
+                Toast.makeText(this, R.string.timer_already_running, Toast.LENGTH_LONG).show();
+            } else {
+                setIntent(intent);
+            }
+        }
     }
     
     @Override
@@ -218,13 +225,8 @@ public class NoodlesMaster extends Activity {
         
         super.onResume();
         
-        Uri uri = getIntent().getData();
-        if (uri != null && 
-                URI_SCHEME.equals(uri.getScheme()) &&
-                !uri.getPathSegments().isEmpty()) {
-            if (URI_SEGMENT_START.equals(uri.getPathSegments().get(0))) {
-                startTimerByShortcut();
-            }
+        if (isStartTimerByShortcut(getIntent()) && !timerRunning) {
+            startTimerByShortcut();
         }
     }
 
@@ -418,13 +420,9 @@ public class NoodlesMaster extends Activity {
 	}
 	
     protected void startTimerByShortcut() {
-        if (timerRunning) {
-            Toast.makeText(this, R.string.timer_already_running, Toast.LENGTH_SHORT).show();
-        } else {
-            int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
-            setTimerTotalSecs(totalSecsParam);
-            startTimer(totalSecsParam);
-        }
+        int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
+        setTimerTotalSecs(totalSecsParam);
+        startTimer(totalSecsParam);
     }
 	
     protected void stopTimer() {
@@ -480,6 +478,18 @@ public class NoodlesMaster extends Activity {
 	        }
 	    }
 	}
+	
+    private boolean isStartTimerByShortcut(Intent intent) {
+        Uri uri = intent.getData();
+        if (uri != null 
+                && URI_SCHEME.equals(uri.getScheme()) 
+                && !uri.getPathSegments().isEmpty()
+                && URI_SEGMENT_START.equals(uri.getPathSegments().get(0))) {
+            return true;
+        }
+
+        return false;
+    }
 	
 	/**
 	 * Ensure pieProgressBar is redrawn during the center animation.
