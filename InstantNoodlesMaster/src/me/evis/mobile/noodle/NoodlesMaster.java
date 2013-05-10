@@ -3,7 +3,6 @@ package me.evis.mobile.noodle;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.evis.mobile.noodle.provider.NoodlesContentProvider;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -49,42 +48,8 @@ import com.nineoldandroids.animation.ValueAnimator;
 
 public class NoodlesMaster extends Activity {
     private static final String TAG = "me.evis.mobile.noodle";
-	
-	private static final String[] projection = {
-		"noodles." + NoodlesContentProvider._ID,   // 0 
-		"noodles." + NoodlesContentProvider.NAME,             // 1
-		NoodlesContentProvider.NET_WEIGHT,     // 2
-		NoodlesContentProvider.NOODLES_WEIGHT, // 3
-		NoodlesContentProvider.SOAKAGE_TIME,   // 4
-		"noodles." + NoodlesContentProvider.DESCRIPTION,    // 5
-		"noodles." + NoodlesContentProvider.LOGO,           // 6
-		"manufacturer.name",                   // 7
-		"manufacturer.logo",                   // 8
-		"step1.description",                   // 9
-		"step1.icon",                          // 10
-		"step2.description",                   // 11
-		"step2.icon",                          // 12
-		"step3.description",                   // 13
-		"step3.icon",                          // 14
-		"step4.description",                   // 15
-		"step4.icon",                          // 16
-	};
-	
-	private static final String LOGO_PATH = "logos/";
-	private static final String STEP_ICON_PATH = "step_icons/";
-    
-    // Request code for browse
-    private static final int REQUEST_CODE_BROWSE_MANUFACTURERS = 2010100901;
-	
-    // Dialog id
-	private static final int DIALOG_TIME_PICKER = 1;
-	
-	// Menu item id
-	private static final int MENU_ITEM_BROWSE = Menu.FIRST;
-	private static final int MENU_ITEM_SCAN = Menu.FIRST + 1;
-	private static final int MENU_ITEM_SYNC = Menu.FIRST + 2;
-	private static final int MENU_ITEM_PREFERENCE = Menu.FIRST + 3;
-	
+
+    private static final int DIALOG_TIME_PICKER = 1;
 	
     // -----------------------------------------------------------------------
     // Timer related constants / variables
@@ -433,6 +398,8 @@ public class NoodlesMaster extends Activity {
 				if (_currentSecs < _totalSecs) {
 					Message newMsg = Message.obtain(msg);
 					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
+				} else {
+				    NoodlesMaster.this.timerRunning = false;
 				}
 			}
 		};
