@@ -41,6 +41,7 @@ import com.android.internal.widget.NumberPicker;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.ads.mediation.admob.AdMobAdapterExtras;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -123,6 +124,8 @@ public class NoodlesMaster extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        EasyTracker.getInstance().setContext(this);
+        
         setTimerTotalSecs(DEFAULT_TOTAL_SECS);
         
         getStopTimerButton().setEnabled(false);
@@ -136,6 +139,10 @@ public class NoodlesMaster extends Activity {
                 int secs = 3 * 60;
                 setTimerTotalSecs(secs);
 				startTimer(secs);
+				// Track the click
+				EasyTracker.getTracker().sendEvent(
+				        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+				        "noodlesMaster_StartTimerButton01", Long.valueOf(secs));
 			}
 		});
         getStartTimerButton02().setOnClickListener(new View.OnClickListener() {
@@ -144,6 +151,10 @@ public class NoodlesMaster extends Activity {
                 int secs = 3 * 60 + 30;
                 setTimerTotalSecs(secs);
                 startTimer(secs);
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "noodlesMaster_StartTimerButton02", Long.valueOf(secs));
             }
         });
         getStartTimerButton03().setOnClickListener(new View.OnClickListener() {
@@ -152,6 +163,10 @@ public class NoodlesMaster extends Activity {
                 int secs = 4 * 60;
                 setTimerTotalSecs(secs);
                 startTimer(secs);
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "noodlesMaster_StartTimerButton03", Long.valueOf(secs));
             }
         });
         getStartTimerButton04().setOnClickListener(new View.OnClickListener() {
@@ -160,6 +175,10 @@ public class NoodlesMaster extends Activity {
                 int secs = 4 * 60 + 30;
                 setTimerTotalSecs(secs);
                 startTimer(secs);
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "noodlesMaster_StartTimerButton04", Long.valueOf(secs));
             }
         });
         getStartTimerButton05().setOnClickListener(new View.OnClickListener() {
@@ -168,6 +187,10 @@ public class NoodlesMaster extends Activity {
                 int secs = 5 * 60;
                 setTimerTotalSecs(secs);
                 startTimer(secs);
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "noodlesMaster_StartTimerButton05", Long.valueOf(secs));
             }
         });
 		
@@ -184,6 +207,10 @@ public class NoodlesMaster extends Activity {
 		    @Override
 		    public void onClick(View v) {
 				stopTimer(true);
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "noodlesMaster_StopTimerButton", null);
 			}
 		});
 		
@@ -203,6 +230,8 @@ public class NoodlesMaster extends Activity {
         super.onStart();
         Log.d(TAG, "register inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
+        // start Google Analytics
+        EasyTracker.getInstance().activityStart(this);
     }
     
     @Override
@@ -238,6 +267,8 @@ public class NoodlesMaster extends Activity {
         
         Log.d(TAG, "unregister inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         unregisterReceiver(timerCompleteReceiver);
+        // stop Google Analytics
+        EasyTracker.getInstance().activityStop(this);
     }
     
     @Override
@@ -310,13 +341,18 @@ public class NoodlesMaster extends Activity {
                         }
                     });
                     
-                    Button okButton = (Button) findViewById(R.id.StartTimerButton);
+                    final Button okButton = (Button) findViewById(R.id.StartTimerButton);
                     okButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             calculateTotalSecs();
                             dismiss();
                             startTimer(getTimerTotalSecs());
+                            
+                            // Track the click
+                            EasyTracker.getTracker().sendEvent(
+                                    TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                                    "noodlesMaster_StartTimerButton", Long.valueOf(getTimerTotalSecs()));
                         }
                     });
                 }
@@ -426,6 +462,11 @@ public class NoodlesMaster extends Activity {
         int totalSecsParam = Integer.valueOf(getIntent().getData().getLastPathSegment());
         setTimerTotalSecs(totalSecsParam);
         startTimer(totalSecsParam);
+        
+        // Track the widget click
+        EasyTracker.getTracker().sendEvent(
+                TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_WIDGET, 
+                "appwidget_startTimerWidget", Long.valueOf(totalSecsParam));
     }
 	
     protected void stopTimer(boolean stopAlarmAndHandler) {
