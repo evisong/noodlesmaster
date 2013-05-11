@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest android:versionCode="5" android:versionName="2.0"
     package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
+    
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>
-    <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" android:theme="@android:style/Theme.Light">
+    
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- AdMob / Google Analytics SDK requires Internet permission -->
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	
+    <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" 
+        android:theme="@android:style/Theme.Light" android:allowBackup="true">
+        
         <activity android:label="@string/app_name" android:launchMode="singleTop"
             android:name=".NoodlesMaster" android:screenOrientation="portrait">
             <intent-filter>
@@ -10,10 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.me.evis.mobile.noodle.provider.noodles"/>
-            </intent-filter><intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -21,38 +26,9 @@
             </intent-filter>
         </activity>
         <activity android:label="@string/app_name" android:name=".About" />
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.manufacturercontentprovider" android:name="me.evis.mobile.noodle.provider.ManufacturerContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.brandcontentprovider" android:name="me.evis.mobile.noodle.provider.BrandContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.noodlescontentprovider" android:name="me.evis.mobile.noodle.provider.NoodlesContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.stepcontentprovider" android:name="me.evis.mobile.noodle.provider.StepContentProvider"/>
-        <provider
-            android:authorities="me.evis.mobile.noodle.provider.barcodecontentprovider" android:name="me.evis.mobile.noodle.provider.BarcodeContentProvider"/>
-        <activity android:name=".NoodlesList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.noodles"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".ManufacturerList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.manufacturer"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".BrandList">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.me.evis.mobile.noodle.provider.brand"/>
-            </intent-filter>
-        </activity>
+        <activity android:name=".Preference"/>
         <receiver android:name=".NoodlesTimerAlarmer"/>
+        
         <!-- AppWidgets START -->
         <receiver android:name=".StartTimerWidget1Provider" android:label="@string/widget1_receiver_label">
 		    <intent-filter>
@@ -90,18 +66,15 @@
 		               android:resource="@xml/start_timer_widget5" />
 		</receiver>
 		<!-- AppWidgets END -->
+		
         <!-- AdMob START -->
         <!-- AdMobActivity definition -->
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!-- AdMob END -->
-        <activity android:name=".Preference"/>
         
         <meta-data android:name="@string/app_dist_channel" 
             android:value="@string/app_dist_channel1" />
+        
     </application>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <!-- AdMob / Google Analytics SDK requires Internet permission -->
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
