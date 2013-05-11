@@ -96,6 +96,9 @@
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!-- AdMob END -->
         <activity android:name=".Preference"/>
+        
+        <meta-data android:name="@string/app_dist_channel" 
+            android:value="@string/app_dist_channel1" />
     </application>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- AdMob / Google Analytics SDK requires Internet permission -->

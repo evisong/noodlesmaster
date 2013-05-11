@@ -60,4 +60,11 @@
     <string name="about_paragraph2">The new version of NoodlesMaster focuses on the timer feature for instant noodles, aims to be your best mate when cooking instant noodles. \n\nA user may tap any button at the bottom of the main interface to kick off the timer, NoodlesMaster will notify user when timer completes. During timer runs, user may tap the stop button in the center of the top ring to cancel the timer. User may also add shortcut widgets onto home screen, which can start the timer by only one tap.</string>
     <string name="about_official_website">Official Website: http://n.evis.me</string>
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
+    <!-- App Dist Channels -->
+    <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
+    <string name="app_dist_channel1">googleplay</string>
+    <string name="app_dist_channel2">hiapk</string>
+    <string name="app_dist_channel3">anzhi</string>
+    <string name="app_dist_channel4">gfan</string>
+    <string name="app_dist_channel5">wandoujia</string>
 </resources>

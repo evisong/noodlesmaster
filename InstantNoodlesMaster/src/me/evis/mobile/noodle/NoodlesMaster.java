@@ -14,6 +14,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +25,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -50,6 +55,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 public class NoodlesMaster extends Activity {
     private static final String TAG = "me.evis.mobile.noodle";
 
+    private static final String PREF_APP_REGISTERED = "appRegisteredOnInternet";
     private static final int DIALOG_TIME_PICKER = 1;
 	
     // -----------------------------------------------------------------------
@@ -125,6 +131,7 @@ public class NoodlesMaster extends Activity {
         setContentView(R.layout.main);
         
         EasyTracker.getInstance().setContext(this);
+        registerApp();
         
         setTimerTotalSecs(DEFAULT_TOTAL_SECS);
         
@@ -222,7 +229,7 @@ public class NoodlesMaster extends Activity {
 			}
 		});
     }
-    
+
     @Override
     protected void onStart() {
         Log.v(TAG, "NoodlesMaster.onStart");
@@ -537,6 +544,38 @@ public class NoodlesMaster extends Activity {
         }
 
         return false;
+    }
+
+    private void registerApp() {
+        // Restore preferences
+        SharedPreferences settings = 
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean registered = settings.getBoolean(PREF_APP_REGISTERED, false);
+        
+        if (!registered) {
+            Log.i(TAG, "run app for the first time, register it on internet.");
+            ApplicationInfo info;
+            try {
+                info = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+                String channel = info.metaData.getString(getString(R.string.app_dist_channel));
+                if (channel == null) {
+                    channel = getString(R.string.app_dist_channel1);
+                }
+                
+                // Track the first run after installation.
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_APP, TrackerEvent.ACTION_REGISTER,
+                        channel, null);
+            } catch (NameNotFoundException e) {
+                // Log & do nothing.
+                Log.e(TAG, "cannot find applicationInfo with package name: " + getPackageName(), e);
+            } finally {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(PREF_APP_REGISTERED, true);
+                editor.commit();
+            }
+            
+        }
     }
 	
 	/**
