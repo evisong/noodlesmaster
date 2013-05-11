@@ -62,6 +62,7 @@
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
     <!-- App Dist Channels -->
     <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
+    <string name="app_dist_channel0">evisme</string>
     <string name="app_dist_channel1">googleplay</string>
     <string name="app_dist_channel2">hiapk</string>
     <string name="app_dist_channel3">anzhi</string>
