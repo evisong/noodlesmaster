@@ -402,6 +402,9 @@ public class NoodlesMaster extends Activity {
 					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
 				} else {
 				    stopTimer(false);
+
+				    // Show ads since first timer completes
+		            showAd();
 				}
 			}
 		};
@@ -440,15 +443,13 @@ public class NoodlesMaster extends Activity {
             this.timerRunning = false;
             // Avoid from auto-restart a completed timer (originally started by appwidget) when resumed from sleep
             setIntent(new Intent(NOODLES_TIMER_COMPLETE));
-            getTimerCenterLogo().setImageResource(R.drawable.step_enjoy_icon);
+            getTimerCenterLogo().setImageResource(R.drawable.timer_center_icon2);
             playHideStopButtonAnimation();
     
     		setStartTimerButtonsEnabled(true);
     		getStopTimerButton().setEnabled(false);
     		// Workaround: button state change will cause PieProgressBar messed up.
     		getTimerProgress().invalidate();
-    		
-    		showAd();
         }
 	}
 	
