@@ -98,7 +98,7 @@
         <activity android:name=".Preference"/>
     </application>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <!-- AdMob SDK requires Internet permission -->
+    <!-- AdMob / Google Analytics SDK requires Internet permission -->
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
