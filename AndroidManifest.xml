@@ -8,6 +8,7 @@
     <!-- AdMob / Google Analytics SDK requires Internet permission -->
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.VIBRATE" />
 	
     <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" 
         android:theme="@android:style/Theme.Light" android:allowBackup="true">
@@ -74,7 +75,7 @@
         <!-- AdMob END -->
         
         <meta-data android:name="@string/app_dist_channel" 
-            android:value="@string/app_dist_channel1" />
+            android:value="@string/app_dist_channel6" />
         
     </application>
 </manifest>

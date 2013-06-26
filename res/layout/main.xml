@@ -59,7 +59,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:src="@drawable/abs__ic_menu_moreoverflow_holo_light" />
+            android:src="@drawable/action_settings" />
 
     </RelativeLayout>
 

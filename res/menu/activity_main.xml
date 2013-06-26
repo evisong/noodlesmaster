@@ -30,6 +30,12 @@
         android:showAsAction="always"
         android:title="@string/menu_addWidget5"/> -->
     <item
+        android:id="@+id/menu_preference"
+        android:icon="@drawable/action_settings"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/menu_preference"/>
+    <item
         android:id="@+id/menu_about"
         android:icon="@drawable/action_help"
         android:orderInCategory="999"

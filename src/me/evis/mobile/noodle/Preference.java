@@ -13,8 +13,10 @@
 
 package me.evis.mobile.noodle;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 import me.evis.mobile.noodle.R;
 
@@ -35,5 +37,9 @@ public class Preference extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
+        
+        PreferenceScreen psAbout = (PreferenceScreen) getPreferenceScreen().findPreference("about");
+        Intent aboutIntent = new Intent(this, About.class);
+        psAbout.setIntent(aboutIntent);
     }
 }

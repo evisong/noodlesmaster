@@ -26,11 +26,14 @@
     <string name="menu_addWidget5">添加5:00小工具</string>
     <string name="menu_preference">設置</string>
     <string name="menu_about">關於</string>
-    <string name="pref_cat_sync">數據同步</string>
     <string name="pref_cat_notification">提醒</string>
     <string name="pref_ringtone_desc">修改提示鈴聲</string>
     <string name="pref_ringtone">提示鈴聲</string>
-    <string name="pref_last_update_date">最近一次同步時間</string>
+    <string name="pref_vibration_desc_on">振動提醒已啟用</string>
+    <string name="pref_vibration_desc_off">振動提醒已停用</string>
+    <string name="pref_vibration">振動提醒</string>
+    <string name="pref_cat_about">關於</string>
+    <string name="pref_about">關於『泡麵管家』v2.1</string>
     <string name="start_3_00">3:00\n三分鐘</string>
     <string name="start_3_30">3:30\n三分半</string>
     <string name="start_4_00">4:00\n四分鐘</string>

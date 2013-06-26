@@ -6,7 +6,7 @@
         <layer-list>
             <item android:drawable="@drawable/timer_center_bg" />
             <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                <shape android:shape="oval">
                     <stroke android:width="1dp" android:color="#FFFCFCFC" />
                     <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
                 </shape>
@@ -19,7 +19,7 @@
         <layer-list>
             <item android:drawable="@drawable/timer_center_bg" />
             <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                <shape android:shape="oval">
                     <stroke android:width="2dp" android:color="#FFf8f640" />
                     <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
                 </shape>
@@ -32,7 +32,7 @@
         <layer-list>
             <item android:drawable="@drawable/timer_center_bg" />
             <item android:bottom="15dp" android:left="15dp" android:right="15dp" android:top="15dp">
-                <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                <shape android:shape="oval">
                     <stroke android:width="2dp" android:color="#FFf8f640" />
                     <gradient android:angle="270" android:endColor="#FF91c0e8" android:startColor="#FFa7d3fa" />
                 </shape>
