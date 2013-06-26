@@ -171,12 +171,23 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/about_paragraph2" />
+            
+            <Button
+                android:id="@+id/visitWeiboBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:drawableLeft="@drawable/weibo_logo"
+                android:drawablePadding="4dp"
+                android:text="@string/about_official_weibo" />
 
             <Button
                 android:id="@+id/visitWebsiteBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:drawableLeft="@drawable/evis_logo"
+                android:drawablePadding="4dp"
                 android:text="@string/about_official_website" />
             
             <ImageButton

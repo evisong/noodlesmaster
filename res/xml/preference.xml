@@ -5,7 +5,9 @@
             android:key="ringtone"
             android:summary="@string/pref_ringtone_desc"
             android:title="@string/pref_ringtone" 
-            android:ringtoneType="notification" >
+            android:ringtoneType="notification" 
+            android:showDefault="true"
+            android:defaultValue="content://settings/system/notification_sound" >
         </RingtonePreference>
         <CheckBoxPreference 
             android:key="vibration"
@@ -19,8 +21,7 @@
     <PreferenceCategory android:title="@string/pref_cat_about">
         <PreferenceScreen 
             android:key="about"
-            android:title="@string/pref_about"
-            android:defaultValue="content://settings/system/notification_sound" >
+            android:title="@string/pref_about">
         </PreferenceScreen>
     </PreferenceCategory>
 

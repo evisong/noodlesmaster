@@ -27,13 +27,13 @@
     <string name="menu_preference">设置</string>
     <string name="menu_about">关于</string>
     <string name="pref_cat_notification">提醒</string>
-    <string name="pref_ringtone_desc">修改提示铃声</string>
+    <string name="pref_ringtone_desc">修改提醒铃声</string>
     <string name="pref_ringtone">提示铃声</string>
     <string name="pref_vibration_desc_on">振动提醒已开启</string>
     <string name="pref_vibration_desc_off">振动提醒已关闭</string>
     <string name="pref_vibration">振动提醒</string>
     <string name="pref_cat_about">关于</string>
-    <string name="pref_about">关于《泡面管家》v2.1</string>
+    <string name="pref_about">关于《泡面管家》</string>
     <string name="start_3_00">3:00\n三分钟</string>
     <string name="start_3_30">3:30\n三分半</string>
     <string name="start_4_00">4:00\n四分钟</string>
@@ -61,5 +61,6 @@
     <string name="about_step4_desc">开盖享受美味</string>
     <string name="about_paragraph2">新版中强化了泡面计时器的功能，力求成为最便捷的泡面计时器。\n\n用户可以点击主界面底部任一按钮开始计时，《泡面管家》会在到达指定时限时提示用户。上部圆形计时表盘在计时过程中，点击正中间的按钮会停止计时。用户也可以向手机主屏添加快捷启动计时的小部件。</string>
     <string name="about_official_website">官方网站 http://n.evis.me</string>
+    <string name="about_official_weibo">官方微博 weibo.com/noodlesmaster</string>
     <string name="timer_already_running">正在计时，需先终止当前计时再开始新计时</string>
 </resources>

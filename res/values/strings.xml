@@ -34,7 +34,7 @@
     <string name="pref_vibration_desc_off">Vibration is off</string>
     <string name="pref_vibration">Vibration</string>
     <string name="pref_cat_about">About</string>
-    <string name="pref_about">About NoodlesMaster v2.1</string>
+    <string name="pref_about">About NoodlesMaster</string>
     <string name="start_3_00">3:00\n3 Mins</string>
     <string name="start_3_30">3:30\n3.5 Mins</string>
     <string name="start_4_00">4:00\n4 Mins</string>
@@ -62,6 +62,7 @@
     <string name="about_step4_desc">Noodles is well cooked, enjoy!</string>
     <string name="about_paragraph2">The new version of NoodlesMaster focuses on the timer feature for instant noodles, aims to be your best mate when cooking instant noodles. \n\nA user may tap any button at the bottom of the main interface to kick off the timer, NoodlesMaster will notify user when timer completes. During timer runs, user may tap the stop button in the center of the top ring to cancel the timer. User may also add shortcut widgets onto home screen, which can start the timer by only one tap.</string>
     <string name="about_official_website">Official Website: http://n.evis.me</string>
+    <string name="about_official_weibo">Follow: weibo.com/noodlesmaster</string>
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
     <!-- App Dist Channels -->
     <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
