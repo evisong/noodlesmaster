@@ -184,7 +184,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:src="@drawable/google_play_badge" />
+                android:src="@drawable/google_play_badge"
+                android:visibility="gone" />
         </LinearLayout>
 
     </ScrollView>

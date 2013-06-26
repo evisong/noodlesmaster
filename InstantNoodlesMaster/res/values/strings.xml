@@ -28,10 +28,13 @@
     <string name="menu_preference">Settings</string>
     <string name="menu_about">About</string>
     <string name="pref_cat_notification">Notification</string>
-    <string name="pref_cat_sync">Synchronization</string>
     <string name="pref_ringtone_desc">Change the ringtone of the notification</string>
     <string name="pref_ringtone">Ringtone</string>
-    <string name="pref_last_update_date">Last update date</string>
+    <string name="pref_vibration_desc_on">Vibration is on</string>
+    <string name="pref_vibration_desc_off">Vibration is off</string>
+    <string name="pref_vibration">Vibration</string>
+    <string name="pref_cat_about">About</string>
+    <string name="pref_about">About NoodlesMaster v2.1</string>
     <string name="start_3_00">3:00\n3 Mins</string>
     <string name="start_3_30">3:30\n3.5 Mins</string>
     <string name="start_4_00">4:00\n4 Mins</string>
@@ -69,4 +72,6 @@
     <string name="app_dist_channel4">gfan</string>
     <string name="app_dist_channel5">wandoujia</string>
     <string name="app_dist_channel6">amazon</string>
+    <string name="app_dist_channel7">yandex</string>
+    <string name="app_dist_channel8">opera</string>
 </resources>

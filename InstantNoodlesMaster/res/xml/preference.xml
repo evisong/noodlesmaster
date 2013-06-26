@@ -4,16 +4,24 @@
         <RingtonePreference
             android:key="ringtone"
             android:summary="@string/pref_ringtone_desc"
-            android:title="@string/pref_ringtone" >
+            android:title="@string/pref_ringtone" 
+            android:ringtoneType="notification" >
         </RingtonePreference>
+        <CheckBoxPreference 
+            android:key="vibration"
+            android:summaryOn="@string/pref_vibration_desc_on"
+            android:summaryOff="@string/pref_vibration_desc_off"
+            android:title="@string/pref_vibration" 
+            android:defaultValue="false" >
+        </CheckBoxPreference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_cat_sync" >
-        <EditTextPreference
-            android:enabled="false"
-            android:key="lastupdate"
-            android:layout="?android:attr/preferenceLayoutChild"
-            android:title="@string/pref_last_update_date" >
-        </EditTextPreference>
+    
+    <PreferenceCategory android:title="@string/pref_cat_about">
+        <PreferenceScreen 
+            android:key="about"
+            android:title="@string/pref_about"
+            android:defaultValue="content://settings/system/notification_sound" >
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>

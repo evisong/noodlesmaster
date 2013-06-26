@@ -53,7 +53,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 public class NoodlesMaster extends Activity {
-    private static final String TAG = "me.evis.mobile.noodle";
+    private static final String TAG = "NoodlesMaster";
 
     private static final String PREF_APP_REGISTERED = "appRegisteredOnInternet";
     private static final int DIALOG_TIME_PICKER = 1;
@@ -225,7 +225,9 @@ public class NoodlesMaster extends Activity {
 		getMenuButton().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				openOptionsMenu();
+				//openOptionsMenu();
+			    Intent prefIntent = new Intent(v.getContext(), Preference.class);
+                startActivity(prefIntent);
 			}
 		});
     }
@@ -291,6 +293,11 @@ public class NoodlesMaster extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_preference:
+                Intent prefIntent = new Intent(this, Preference.class);
+                startActivity(prefIntent);
+                return true;
+                
             case R.id.menu_about:
                 Intent aboutIntent = new Intent(this, About.class);
                 startActivity(aboutIntent);
