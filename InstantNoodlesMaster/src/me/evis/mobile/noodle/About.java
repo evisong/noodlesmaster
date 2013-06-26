@@ -17,6 +17,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 public class About extends Activity {
     private static final String TAG = "me.evis.mobile.noodle.About";
     private static final String OFFICIAL_WEBSITE = "http://n.evis.me";
+    private static final String OFFICIAL_WEIBO = "http://weibo.com/noodlesmaster";
     private static final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=me.evis.mobile.noodle";
     // private static final String GOOGLE_PLAY = "market://details?id=me.evis.mobile.noodle";
     
@@ -36,6 +37,19 @@ public class About extends Activity {
         catch (NameNotFoundException e) {
             Log.v(TAG, e.getMessage());
         }
+        
+        Button visitWeiboBtn = (Button) findViewById(R.id.visitWeiboBtn);
+        visitWeiboBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Track the click
+                EasyTracker.getTracker().sendEvent(
+                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
+                        "about_visitWeiboBtn", null);
+                
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OFFICIAL_WEIBO))); 
+            }
+        });
         
         Button visitWebsiteBtn = (Button) findViewById(R.id.visitWebsiteBtn);
         visitWebsiteBtn.setOnClickListener(new OnClickListener() {
