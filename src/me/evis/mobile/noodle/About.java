@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 
 public class About extends Activity {
-    private static final String TAG = "me.evis.mobile.noodle.About";
+    private static final String TAG = "About";
     private static final String OFFICIAL_WEBSITE = "http://n.evis.me";
     private static final String OFFICIAL_WEIBO = "http://weibo.com/noodlesmaster";
     private static final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=me.evis.mobile.noodle";
