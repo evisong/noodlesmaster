@@ -75,7 +75,7 @@
         <!-- AdMob END -->
         
         <meta-data android:name="@string/app_dist_channel" 
-            android:value="@string/app_dist_channel6" />
+            android:value="@string/app_dist_channel0" />
         
     </application>
 </manifest>
