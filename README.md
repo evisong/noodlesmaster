@@ -3,10 +3,6 @@ noodlesmaster
 
 The NoodlesMaster project has been migrated from GoogleCode/SVN to GitHub.
 
-A mobile device software providing conveniences for instant noodles consumers.
-
-Powered by EVIS Studio
-
 ## Introduction ##
 
 Instant Noodles Master (i.e. NoodlesMaster) is an Android app for instant noodles funs. It is an One-Tap-Timer for instant noodles, with refreshing design, convenient to use.
@@ -32,15 +28,16 @@ Or download the APK at: http://n.evis.me
 
 ## Links ##
 
-Official Website: http://n.evis.me
-Official Weibo: http://weibo.com/noodlesmaster
+ * Official Website: http://n.evis.me
+ * Official Weibo: http://weibo.com/noodlesmaster
 
 Any bugs or new feature requests, please feel free to reach me at above official website, or submit to: 
 https://github.com/evisong/noodlesmaster/issues
 
 Keywords: instant noodles, fast noodles, cup noodles, 3 minutes noodles, instant ramen, timer, timing, timekeeping.
 
-## Road map ## 
+## Road Map ## 
+
 Please vote for your most interested:
  * Instant noodles product list / new product promotion
  * Instant noodles barcode recognition
@@ -50,6 +47,13 @@ Please vote for your most interested:
  * Integration with SNS
 
 ## Release Notes ##
-2.1: [泡面管家Android 2.1版发布 – Instant Noodles Master for Android 2.1 Released](http://evis.me/2013/06/instant-noodles-master-for-android-2-1-released/)
-2.0: [泡面管家Android 2.0版发布 – Instant Noodles Master for Android 2.0 Released](http://evis.me/2013/05/instant-noodles-master-for-android-2-0-released/)
-1.0/Beta: [Android手机应用程序《泡面管家》测试版发布 – Instant Noodles Master app for Android beta released](http://evis.me/2011/02/instant-noodles-master-app-for-android-beta-released/)
+
+ * 2.1: [泡面管家Android 2.1版发布 – Instant Noodles Master for Android 2.1 Released](http://evis.me/2013/06/instant-noodles-master-for-android-2-1-released/)
+ * 2.0: [泡面管家Android 2.0版发布 – Instant Noodles Master for Android 2.0 Released](http://evis.me/2013/05/instant-noodles-master-for-android-2-0-released/)
+ * 1.0/Beta: [Android手机应用程序《泡面管家》测试版发布 – Instant Noodles Master app for Android beta released](http://evis.me/2011/02/instant-noodles-master-app-for-android-beta-released/)
+
+## Credits ##
+
+Powered by [EVIS Studio](http://evis.me)
+
+![Evis Studio](http://evis.me/evisme/images/evis_logo_120x60.png)
