@@ -14,11 +14,11 @@ Features:
 
 The 2.0+ version of NoodlesMaster focuses on the timer feature for instant noodles, aims to be your best mate when cooking instant noodles.
 
-![screenshot 1](http://evis.me/wp-content/uploads/2013/05/1_device-2013-05-11-201816.png)![screenshot 2](http://evis.me/wp-content/uploads/2013/05/2_device-2013-05-11-202049-180x300.png)
+![screenshot 1](http://evis.me/wp-content/uploads/2013/05/1_device-2013-05-11-201816-180x300.png)![screenshot 2](http://evis.me/wp-content/uploads/2013/05/2_device-2013-05-11-202049-180x300.png)
 
 A user may tap any button at the bottom of the main interface to kick off the timer, NoodlesMaster will notify user when timer completes. During timer runs, user may tap the stop button in the center of the top ring to cancel the timer. User may also add shortcut widgets onto home screen, which can start the timer by only one tap.
 
-![screenshot 3](http://evis.me/wp-content/uploads/2013/05/4_device-2013-05-11-202345.png)![screenshot 4](http://evis.me/wp-content/uploads/2013/05/5_device-2013-05-11-204352-180x300.png)
+![screenshot 3](http://evis.me/wp-content/uploads/2013/05/4_device-2013-05-11-202345-180x300.png)![screenshot 4](http://evis.me/wp-content/uploads/2013/05/5_device-2013-05-11-204352-180x300.png)
 
 ## Installation ##
 
