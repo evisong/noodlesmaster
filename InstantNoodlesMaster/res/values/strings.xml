@@ -76,4 +76,5 @@
     <string name="app_dist_channel7">yandex</string>
     <string name="app_dist_channel8">opera</string>
     <string name="app_dist_channel9">360</string>
+    <string name="app_dist_channel10">baidu</string>
 </resources>
