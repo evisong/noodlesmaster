@@ -73,7 +73,7 @@ public class NoodlesMaster extends Activity {
 	private static final int DEFAULT_TOTAL_SECS = 3 * 60;
 	
 	// Progress counter interval
-	private static final int COUNTER_INTERVAL_SECS = 1;
+	private static final int COUNTER_INTERVAL_MILLISECS = 100;
 	private static final int MESSAGE_WHAT_CODE = 0;
 	
 	// Keep the track so that scheduled work can be 
@@ -424,7 +424,7 @@ public class NoodlesMaster extends Activity {
 		getStopTimerButton().setEnabled(true);
 		// Workaround: button state change will cause PieProgressBar messed up.
 		getTimerProgress().invalidate();
-		getTimerProgress().setMax(secs);
+		getTimerProgress().setMax(secs * 1000 / COUNTER_INTERVAL_MILLISECS);
 		
 		// Setup counter.
 		Intent intent = new Intent(this, NoodlesTimerAlarmer.class);
@@ -438,18 +438,19 @@ public class NoodlesMaster extends Activity {
 				Long[] times = (Long[]) msg.obj;
 				long _startMillisecs = times[0];
 				long _alarmMillisecs = times[1];
-				long _currentMillisecs = SystemClock.elapsedRealtime();
+				long _elapsedRealtime = SystemClock.elapsedRealtime();
 				
 				int _totalSecs = (int) (_alarmMillisecs - _startMillisecs) / 1000;
-				int _currentSecs = (int) (_currentMillisecs - _startMillisecs) / 1000;
+				long _currentMilliSecs = _elapsedRealtime - _startMillisecs;
+				int _currentSecs = (int) _currentMilliSecs / 1000;
 				
-				updateTimerCurrent(_currentSecs);
+				updateTimerCurrent(_currentMilliSecs);
 //				p.setSlices(new float[] {_currentSecs, _totalSecs - _currentSecs});
 //				p.anima();
 				
 				if (_currentSecs < _totalSecs) {
 					Message newMsg = Message.obtain(msg);
-					sendMessageDelayed(newMsg, COUNTER_INTERVAL_SECS * 1000);
+					sendMessageDelayed(newMsg, COUNTER_INTERVAL_MILLISECS);
 				} else {
 				    stopTimer(false);
 
@@ -508,12 +509,13 @@ public class NoodlesMaster extends Activity {
         }
 	}
 	
-	private void updateTimerCurrent(final int currentSec) {
+	private void updateTimerCurrent(final long currentMilliSec) {
+	    final int currentSec = (int) currentMilliSec / 1000;
 	    final int[] currentDhms = DateTimeUtil.calculateDhms(currentSec);
 	    ((TextView) findViewById(R.id.TimerCurrentHour)).setText(String.valueOf(currentDhms[1]));
 	    ((TextView) findViewById(R.id.TimerCurrentMinute)).setText(formatNumber(currentDhms[2]));
 	    ((TextView) findViewById(R.id.TimerCurrentSecond)).setText(formatNumber(currentDhms[3]));
-	    getTimerProgress().setProgress(currentSec);
+	    getTimerProgress().setProgress((int) currentMilliSec / COUNTER_INTERVAL_MILLISECS);
 	}
 	
 	private void setTimerTotalSecs(final int totalSecs) {
