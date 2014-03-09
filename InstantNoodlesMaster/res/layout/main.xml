@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/TimerCurrentMinute"
-            style="@style/TimerFont"
+            style="@style/TimerFontBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00" />
@@ -139,7 +139,7 @@
 
         <TextView
             android:id="@+id/TimerMinute"
-            style="@style/TimerFont"
+            style="@style/TimerFontBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00" />
