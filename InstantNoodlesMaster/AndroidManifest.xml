@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="7" android:versionName="2.2"
-    package="me.evis.mobile.noodle" xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
-    
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.evis.mobile.noodle"
+    android:versionCode="7"
+    android:versionName="2.2" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="14" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- AdMob / Google Analytics SDK requires Internet permission -->
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.VIBRATE" />
-	
-    <application android:icon="@drawable/noodles_master_logo" android:label="@string/app_name" 
-        android:theme="@android:style/Theme.Light" android:allowBackup="true">
-        
-        <activity android:label="@string/app_name" android:launchMode="singleTop"
-            android:name=".NoodlesMaster" android:screenOrientation="portrait">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Zxing START -->
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!-- TODO: remove below permissions and trim corresponding code -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <!-- TODO replace above two with next line after Android 4.2 -->
+    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+    <uses-feature android:name="android.hardware.screen.landscape" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <!-- This excludes Google TV, which is unfortunately included by virtue of not requiring a camera -->
+    <uses-feature android:name="android.hardware.touchscreen" />
+    <!-- TODO make this not required again after android.hardware.camera.any is available -->
+
+    <!-- Donut-specific flags which allow us to run on any dpi screens. -->
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <!-- Zxing END -->
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/noodles_master_logo"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light" >
+        <activity
+            android:name=".NoodlesMaster"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -26,56 +70,71 @@
                 <data android:scheme="me.evis.mobile.noodle" />
             </intent-filter>
         </activity>
-        <activity android:label="@string/app_name" android:name=".About" />
-        <activity android:name=".Preference"/>
-        <receiver android:name=".NoodlesTimerAlarmer"/>
-        
+        <activity android:name=".About" android:label="@string/app_name" />
+        <activity android:name=".Preference" />
+        <receiver android:name=".NoodlesTimerAlarmer" />
+
         <!-- AppWidgets START -->
-        <receiver android:name=".StartTimerWidget1Provider" android:label="@string/widget1_receiver_label">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		    </intent-filter>
-		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/start_timer_widget1" />
-		</receiver>
-        <receiver android:name=".StartTimerWidget2Provider" android:label="@string/widget2_receiver_label">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		    </intent-filter>
-		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/start_timer_widget2" />
-		</receiver>
-        <receiver android:name=".StartTimerWidget3Provider" android:label="@string/widget3_receiver_label">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		    </intent-filter>
-		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/start_timer_widget3" />
-		</receiver>
-        <receiver android:name=".StartTimerWidget4Provider" android:label="@string/widget4_receiver_label">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		    </intent-filter>
-		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/start_timer_widget4" />
-		</receiver>
-        <receiver android:name=".StartTimerWidget5Provider" android:label="@string/widget5_receiver_label">
-		    <intent-filter>
-		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		    </intent-filter>
-		    <meta-data android:name="android.appwidget.provider"
-		               android:resource="@xml/start_timer_widget5" />
-		</receiver>
-		<!-- AppWidgets END -->
-		
+        <receiver android:name=".StartTimerWidget1Provider" android:label="@string/widget1_receiver_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/start_timer_widget1" />
+        </receiver>
+        <receiver android:name=".StartTimerWidget2Provider" android:label="@string/widget2_receiver_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/start_timer_widget2" />
+        </receiver>
+        <receiver android:name=".StartTimerWidget3Provider" android:label="@string/widget3_receiver_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/start_timer_widget3" />
+        </receiver>
+        <receiver android:name=".StartTimerWidget4Provider" android:label="@string/widget4_receiver_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/start_timer_widget4" />
+        </receiver>
+        <receiver android:name=".StartTimerWidget5Provider" android:label="@string/widget5_receiver_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/start_timer_widget5" />
+        </receiver>
+        <!-- AppWidgets END -->
+
+
         <!-- AdMob START -->
         <!-- AdMobActivity definition -->
-        <activity android:name="com.google.ads.AdActivity"
-              android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name="com.google.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <!-- AdMob END -->
-        
-        <meta-data android:name="@string/app_dist_channel" 
+
+
+        <!-- Zxing START -->
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- Zxing END -->
+
+        <meta-data
+            android:name="@string/app_dist_channel"
             android:value="@string/app_dist_channel0" />
-        
     </application>
+
 </manifest>

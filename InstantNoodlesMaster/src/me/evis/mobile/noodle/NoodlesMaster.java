@@ -3,6 +3,8 @@ package me.evis.mobile.noodle;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.evis.mobile.noodle.scan.ScanIntentIntegrator;
+import me.evis.mobile.noodle.scan.ScanIntentResult;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -230,6 +232,15 @@ public class NoodlesMaster extends Activity {
                 startActivity(prefIntent);
 			}
 		});
+		
+	      // Scan button behavior.
+        getScanButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
+                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+            }
+        });
     }
 
     @Override
@@ -405,6 +416,16 @@ public class NoodlesMaster extends Activity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        ScanIntentResult scanResult = ScanIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            Log.d(TAG, "Scan result: " + scanResult.getContents());
+        }
     }
     
     // -----------------------------------------------------------------------
@@ -720,6 +741,9 @@ public class NoodlesMaster extends Activity {
     }
     private ImageButton getMenuButton() {
         return (ImageButton) findViewById(R.id.MenuButton);
+    }
+    private ImageButton getScanButton() {
+        return (ImageButton) findViewById(R.id.ScanButton);
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
