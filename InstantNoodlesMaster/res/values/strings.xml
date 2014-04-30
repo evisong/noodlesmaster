@@ -64,6 +64,13 @@
     <string name="about_official_website">Official Website: http://n.evis.me</string>
     <string name="about_official_weibo">Follow: weibo.com/noodlesmaster</string>
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
+    
+    <!-- App Configurations -->
+    <string name="amazon_associate_tag">evisme-test-23</string>
+    <string name="amazon_aws_access_key_id">AKIAJ4C56ZJALOHN4G3Q</string>
+    <string name="amazon_aws_secret_key">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</string>
+    <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
+    
     <!-- App Dist Channels -->
     <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
     <string name="app_dist_channel0">evisme</string>

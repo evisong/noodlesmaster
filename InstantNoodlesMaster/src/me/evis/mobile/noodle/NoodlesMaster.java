@@ -3,10 +3,12 @@ package me.evis.mobile.noodle;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.evis.mobile.noodle.product.QueryApaapiByEanTask;
+import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnFailureListener;
+import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnSuccessListener;
 import me.evis.mobile.noodle.scan.ScanIntentIntegrator;
 import me.evis.mobile.noodle.scan.ScanIntentResult;
 import me.evis.mobile.util.DateTimeUtil;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -28,6 +30,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -54,7 +58,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 
-public class NoodlesMaster extends Activity {
+public class NoodlesMaster extends ActionBarActivity {
     private static final String TAG = "NoodlesMaster";
 
     private static final String PREF_APP_REGISTERED = "appRegisteredOnInternet";
@@ -135,12 +139,14 @@ public class NoodlesMaster extends Activity {
         EasyTracker.getInstance().setContext(this);
         registerApp();
         
+        // Prepare actionbar
+        ActionBar actionBar = getSupportActionBar();
+        
         setTimerTotalSecs(DEFAULT_TOTAL_SECS);
         
         getStopTimerButton().setEnabled(false);
         // Workaround view.setScaleX() is since API Level 11, use opensouce lib to provide initial value.
         ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f).setDuration(1).start();
-        
         // StartTimer buttons behavior.
         getStartTimerButton01().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,8 +239,17 @@ public class NoodlesMaster extends Activity {
 			}
 		});
 		
-	      // Scan button behavior.
+	    // Scan button behavior.
         getScanButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
+                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+            }
+        });
+        
+        // Share button behavior.
+        getShareButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
@@ -293,17 +308,20 @@ public class NoodlesMaster extends Activity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_main, menu);
         
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_scan:
+                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
+                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+                return true;
+                
             case R.id.menu_preference:
                 Intent prefIntent = new Intent(this, Preference.class);
                 startActivity(prefIntent);
@@ -425,6 +443,21 @@ public class NoodlesMaster extends Activity {
         ScanIntentResult scanResult = ScanIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
             Log.d(TAG, "Scan result: " + scanResult.getContents());
+            new QueryApaapiByEanTask(this, 
+                    new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(String productName) {
+                            Log.d(TAG, productName);
+                            getSupportActionBar().setTitle(productName);
+                        }
+                    }, 
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(String failure) {
+                            getSupportActionBar().setTitle(failure);
+                        }
+                    }
+                ).execute(scanResult.getContents());
         }
     }
     
@@ -744,6 +777,9 @@ public class NoodlesMaster extends Activity {
     }
     private ImageButton getScanButton() {
         return (ImageButton) findViewById(R.id.ScanButton);
+    }
+    private ImageButton getShareButton() {
+        return (ImageButton) findViewById(R.id.ShareButton);
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);

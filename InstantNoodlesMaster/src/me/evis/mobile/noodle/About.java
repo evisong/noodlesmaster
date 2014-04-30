@@ -1,10 +1,11 @@
 package me.evis.mobile.noodle;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
 
-public class About extends Activity {
+public class About extends ActionBarActivity {
     private static final String TAG = "About";
     private static final String OFFICIAL_WEBSITE = "http://n.evis.me";
     private static final String OFFICIAL_WEIBO = "http://weibo.com/noodlesmaster";
@@ -28,6 +29,8 @@ public class About extends Activity {
         setContentView(R.layout.about);
         
         EasyTracker.getInstance().setContext(this);
+        
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         try {
             String appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;

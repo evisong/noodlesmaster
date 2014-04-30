@@ -53,8 +53,8 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/noodles_master_logo"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Light" >
-        <activity
+        android:theme="@style/Theme.AppCompat.Light" >
+        <activity 
             android:name=".NoodlesMaster"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -70,7 +70,12 @@
                 <data android:scheme="me.evis.mobile.noodle" />
             </intent-filter>
         </activity>
-        <activity android:name=".About" android:label="@string/app_name" />
+        <activity android:name=".About" android:label="@string/app_name">
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NoodlesMaster" />
+        </activity>
         <activity android:name=".Preference" />
         <receiver android:name=".NoodlesTimerAlarmer" />
 

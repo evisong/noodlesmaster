@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     <!-- <item
         android:id="@+id/menu_addWidget1"
         android:icon="@drawable/ic_menu_preferences"
@@ -30,15 +31,24 @@
         android:showAsAction="always"
         android:title="@string/menu_addWidget5"/> -->
     <item
-        android:id="@+id/menu_preference"
+        android:id="@+id/menu_scan"
         android:icon="@drawable/action_settings"
         android:orderInCategory="1"
         android:showAsAction="always"
+        yourapp:showAsAction="always"
+        android:title="@string/menu_scan"/>
+    <item
+        android:id="@+id/menu_preference"
+        android:icon="@drawable/action_settings"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        yourapp:showAsAction="never"
         android:title="@string/menu_preference"/>
     <item
         android:id="@+id/menu_about"
         android:icon="@drawable/action_help"
         android:orderInCategory="999"
         android:showAsAction="never"
+        yourapp:showAsAction="never"
         android:title="@string/menu_about"/>
 </menu>
