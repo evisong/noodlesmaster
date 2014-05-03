@@ -32,7 +32,7 @@
   <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference
         android:key="preferences_play_beep"
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:title="@string/preferences_play_beep_title"/>
     <CheckBoxPreference
         android:key="preferences_vibrate"
