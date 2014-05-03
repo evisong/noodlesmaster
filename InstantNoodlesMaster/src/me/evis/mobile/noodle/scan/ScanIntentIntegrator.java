@@ -302,17 +302,14 @@ public class ScanIntentIntegrator {
      *         If the user cancelled scanning, the fields will be null.
      */
     public static ScanIntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
-                int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
-                Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
-                String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
-                return new ScanIntentResult(contents, formatName, rawBytes, orientation, errorCorrectionLevel);
-            }
-            return new ScanIntentResult();
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            String contents = intent.getStringExtra("SCAN_RESULT");
+            String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
+            byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
+            int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
+            Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+            String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+            return new ScanIntentResult(contents, formatName, rawBytes, orientation, errorCorrectionLevel);
         }
         return null;
     }
