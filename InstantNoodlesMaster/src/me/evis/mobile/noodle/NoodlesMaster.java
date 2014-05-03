@@ -234,8 +234,7 @@ public class NoodlesMaster extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				//openOptionsMenu();
-			    Intent prefIntent = new Intent(v.getContext(), Preference.class);
-                startActivity(prefIntent);
+			    doStartPref();
 			}
 		});
 		
@@ -243,8 +242,7 @@ public class NoodlesMaster extends ActionBarActivity {
         getScanButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
-                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+                doScan();
             }
         });
         
@@ -318,13 +316,11 @@ public class NoodlesMaster extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_scan:
-                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
-                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+                doScan();
                 return true;
                 
             case R.id.menu_preference:
-                Intent prefIntent = new Intent(this, Preference.class);
-                startActivity(prefIntent);
+                doStartPref();
                 return true;
                 
             case R.id.menu_about:
@@ -442,19 +438,19 @@ public class NoodlesMaster extends ActionBarActivity {
         
         ScanIntentResult scanResult = ScanIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
-            Log.d(TAG, "Scan result: " + scanResult.getContents());
+            Log.d(TAG, "Scan result: " + scanResult.getContents() + "; type: " + scanResult.getFormatName());
             new QueryApaapiByEanTask(this, 
                     new OnSuccessListener() {
                         @Override
                         public void onSuccess(String productName) {
                             Log.d(TAG, productName);
-                            getSupportActionBar().setTitle(productName);
+                            getSupportActionBar().setSubtitle(productName);
                         }
                     }, 
                     new OnFailureListener() {
                         @Override
                         public void onFailure(String failure) {
-                            getSupportActionBar().setTitle(failure);
+                            Toast.makeText(NoodlesMaster.this, failure, Toast.LENGTH_SHORT).show();
                         }
                     }
                 ).execute(scanResult.getContents());
@@ -783,5 +779,20 @@ public class NoodlesMaster extends ActionBarActivity {
     }
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
+    }
+    
+    // -----------------------------------------------------------------------
+    // UI logics
+    // -----------------------------------------------------------------------
+
+    private void doScan() {
+        ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
+        integrator.addExtra("PROMPT_MESSAGE", NoodlesMaster.this.getString(R.string.scan_prompt_message));
+        integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+    }
+
+    private void doStartPref() {
+        Intent prefIntent = new Intent(NoodlesMaster.this, Preference.class);
+        startActivity(prefIntent);
     }
 }

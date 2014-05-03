@@ -64,6 +64,7 @@
     <string name="about_official_website">Official Website: http://n.evis.me</string>
     <string name="about_official_weibo">Follow: weibo.com/noodlesmaster</string>
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
+    <string name="scan_prompt_message">Please scan the barcode on product.</string>
     
     <!-- App Configurations -->
     <string name="amazon_associate_tag">evisme-test-23</string>

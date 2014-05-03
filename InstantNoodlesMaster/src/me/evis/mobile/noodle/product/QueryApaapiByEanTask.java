@@ -9,11 +9,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import me.evis.mobile.noodle.R;
+import me.evis.mobile.util.DeviceUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -25,7 +25,7 @@ import android.util.Log;
 
 import com.amazon.advertising.api.sample.SignedRequestsHelper;
 
-public class QueryApaapiByEanTask extends AsyncTask<String, Void, HttpResponse> {
+public class QueryApaapiByEanTask extends AsyncTask<String, Void, StringResult> {
     private static final String TAG = "QueryApaapiByEanTask";
     
     private Context context;
@@ -39,7 +39,11 @@ public class QueryApaapiByEanTask extends AsyncTask<String, Void, HttpResponse> 
     }
     
     @Override
-    protected HttpResponse doInBackground(String... params) {
+    protected StringResult doInBackground(String... params) {
+        if (!DeviceUtil.isOnline(context)) {
+            return new StringResult(false, "No network available");
+        }
+        
         if (context == null) {
             throw new IllegalStateException("Context in null");
         }
@@ -71,83 +75,75 @@ public class QueryApaapiByEanTask extends AsyncTask<String, Void, HttpResponse> 
         serviceParams.put("SearchIndex", "All");
         serviceParams.put("IdType", "EAN");
         serviceParams.put("ItemId", ean);
-        serviceParams.put("ResponseGroup", "Large");
+        serviceParams.put("ResponseGroup", "ItemAttributes,EditorialReview,Images");
 
         requestUrl = helper.sign(serviceParams);
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "Signed Request is \"" + requestUrl + "\"");
-        }
+        Log.d(TAG, "Signed Request is \"" + requestUrl + "\"");
         
-        HttpClient client = AndroidHttpClient.newInstance("Android", context);
+        AndroidHttpClient client = AndroidHttpClient.newInstance("Android", context);
         HttpGet request = new HttpGet(requestUrl);
         HttpResponse response = null;
+        StringResult result = null;
+        
         try {
             response = client.execute(request);
+            
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                result = new StringResult(false, "HTTP " + response.getStatusLine().getStatusCode() 
+                        + ": " + response.getStatusLine().getReasonPhrase());
+            } else {
+                Document doc = null;
+                InputStream is = response.getEntity().getContent();
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                doc = db.parse(is);
+                
+                NodeList errors = doc.getElementsByTagName("Error");
+                if (errors.getLength() > 0) {
+                    result = new StringResult(false, errors.item(0).getTextContent());
+                } else {               
+                    NodeList titleNodes = doc.getElementsByTagName("Title");
+                    if (titleNodes.getLength() > 0) {
+                        result = new StringResult(true, titleNodes.item(0).getTextContent());
+                    }
+                }
+            }
+            
         } catch (ClientProtocolException e) {
             Log.e(TAG, "Http protocol error", e);
+            result = new StringResult(false, "Error response");
+            
         } catch (IOException e) {
-            Log.e(TAG, "Error when requesting URL: \"" + requestUrl + "\"", e);
+            Log.e(TAG, "Error when requesting URL: \"" + requestUrl + "\" or parsing HTTP response", e);
+            result = new StringResult(false, "Error requesting or parsing HTTP response");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing HTTP response", e);
+            result = new StringResult(false, "Error parsing HTTP response");
+            
+        } finally {
+            // Close the connection
+            if (client != null && client.getConnectionManager() != null) {
+                client.close();
+                client = null;
+            }
         }
         
-        return response;
-//        title = fetchTitle(requestUrl); 
-//        if (title == null || title.equals("")) {
-//            return new StringResult(false, "Failed to get the product title");
-//        }
-//        return new StringResult(true, title);
+        return result;
     }
     
     @Override
-    protected void onPostExecute(HttpResponse response) {
-        super.onPostExecute(response);
+    protected void onPostExecute(StringResult result) {
+        super.onPostExecute(result);
         
-        if (response == null) {
-            failure("Error response");
-            return;
+        if (result.isSuccess() && onSuccessListener != null) {
+            onSuccessListener.onSuccess(result.getResult());
         }
         
-        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-            failure("HTTP " + response.getStatusLine().getStatusCode() 
-                    + ": " + response.getStatusLine().getReasonPhrase());
-            return;
-        }
-        
-        Document doc = null;
-        try {
-            InputStream is = response.getEntity().getContent();
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            doc = db.parse(is);
-        } catch (Exception e) {
-            Log.e(TAG, "Error parsing HTTP response", e);
-            failure("Error parsing HTTP response");
-            return;
-        }
-        
-        NodeList errors = doc.getElementsByTagName("Error");
-        if (errors.getLength() > 0) {
-            failure(errors.item(0).getTextContent());
-            return;
-        }
-        
-        NodeList titleNodes = doc.getElementsByTagName("Title");
-        if (titleNodes.getLength() > 0) {
-            success(titleNodes.item(0).getTextContent());
+        if (!result.isSuccess() && onFailureListener != null) {
+            onFailureListener.onFailure(result.getResult());
         }
     }
-    
-    private void success(String result) {
-        if (onSuccessListener != null) {
-            onSuccessListener.onSuccess(result);
-        }
-    }
-    
-    private void failure(String result) {
-        if (onFailureListener != null) {
-            onFailureListener.onFailure(result);
-        }
-    }
-
     
     public interface OnSuccessListener {
         public void onSuccess(String productName);
