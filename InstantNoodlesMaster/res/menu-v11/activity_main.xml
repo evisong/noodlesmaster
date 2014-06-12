@@ -38,25 +38,17 @@
         yourapp:showAsAction="always"
         android:title="@string/menu_scan"/>
     <item
-        android:id="@+id/menu_more"
-        android:icon="@drawable/abc_ic_menu_moreoverflow_normal_holo_light"
-        android:orderInCategory="3"
-        android:showAsAction="always"
-        yourapp:showAsAction="always"
-        android:title="@string/menu_more"><menu>
-	    <item
-	        android:id="@+id/menu_preference"
-	        android:icon="@drawable/action_settings"
-	        android:orderInCategory="5"
-	        android:showAsAction="always"
-	        yourapp:showAsAction="always"
-	        android:title="@string/menu_preference"/>
-	    <item
-	        android:id="@+id/menu_about"
-	        android:icon="@drawable/action_help"
-	        android:orderInCategory="999"
-	        android:showAsAction="always"
-	        yourapp:showAsAction="always"
-	        android:title="@string/menu_about"/>
-	</menu></item>
+        android:id="@+id/menu_preference"
+        android:icon="@drawable/action_settings"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        yourapp:showAsAction="never"
+        android:title="@string/menu_preference"/>
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@drawable/action_help"
+        android:orderInCategory="999"
+        android:showAsAction="never"
+        yourapp:showAsAction="never"
+        android:title="@string/menu_about"/>
 </menu>
