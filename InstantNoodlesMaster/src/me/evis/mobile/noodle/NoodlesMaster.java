@@ -8,6 +8,7 @@ import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnFailureListener;
 import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnSuccessListener;
 import me.evis.mobile.noodle.scan.ScanIntentIntegrator;
 import me.evis.mobile.noodle.scan.ScanIntentResult;
+import me.evis.mobile.noodle.share.WeiboShareProvider;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -22,6 +23,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,12 +60,28 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
+import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.share.BaseResponse;
+import com.sina.weibo.sdk.api.share.IWeiboDownloadListener;
+import com.sina.weibo.sdk.api.share.IWeiboHandler;
+import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
+import com.sina.weibo.sdk.api.share.WeiboShareSDK;
+import com.sina.weibo.sdk.constant.WBConstants;
+import com.sina.weibo.sdk.exception.WeiboShareException;
 
-public class NoodlesMaster extends ActionBarActivity {
+public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Response {
     private static final String TAG = "NoodlesMaster";
 
     private static final String PREF_APP_REGISTERED = "appRegisteredOnInternet";
     private static final int DIALOG_TIME_PICKER = 1;
+    
+    // -----------------------------------------------------------------------
+    // Weibo related constants / variables
+    // -----------------------------------------------------------------------
+
+    /** Weibo Share */
+    private IWeiboShareAPI mWeiboShareAPI;
 	
     // -----------------------------------------------------------------------
     // Timer related constants / variables
@@ -138,6 +157,8 @@ public class NoodlesMaster extends ActionBarActivity {
         
         EasyTracker.getInstance().setContext(this);
         registerApp();
+        
+        initWeibo();
         
         // Prepare actionbar
         ActionBar actionBar = getSupportActionBar();
@@ -250,8 +271,7 @@ public class NoodlesMaster extends ActionBarActivity {
         getShareButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
-                integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+                doShareWB();
             }
         });
     }
@@ -272,12 +292,36 @@ public class NoodlesMaster extends ActionBarActivity {
         Log.v(TAG, "NoodlesMaster.onNewIntent");
         
         super.onNewIntent(intent);
+        
+        if (WeiboShareProvider.isWeiboCallbackIntent(intent)) {
+            mWeiboShareAPI.handleWeiboResponse(intent, this);
+        }
+        
         if (isStartTimerByShortcut(intent)) {
             if (timerRunning) {
                 Toast.makeText(this, R.string.timer_already_running, Toast.LENGTH_LONG).show();
             } else {
                 setIntent(intent);
             }
+        }
+    }
+    
+    @Override
+    public void onResponse(BaseResponse baseResp) {
+        switch (baseResp.errCode) {
+        case WBConstants.ErrorCode.ERR_OK:
+            Toast.makeText(NoodlesMaster.this, R.string.weibosdk_toast_share_success, Toast.LENGTH_LONG).show();
+            // Hide Ad once shared
+            hideAd();
+            break;
+        case WBConstants.ErrorCode.ERR_CANCEL:
+            Toast.makeText(NoodlesMaster.this, R.string.weibosdk_toast_share_canceled, Toast.LENGTH_LONG).show();
+            break;
+        case WBConstants.ErrorCode.ERR_FAIL:
+            Toast.makeText(NoodlesMaster.this, 
+                    getString(R.string.weibosdk_toast_share_failed) + "Error Message: " + baseResp.errMsg, 
+                    Toast.LENGTH_LONG).show();
+            break;
         }
     }
     
@@ -723,6 +767,32 @@ public class NoodlesMaster extends ActionBarActivity {
             adView.loadAd(adRequest);
         }
     }
+    
+    private void hideAd() {
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        adView.stopLoading();
+        adView.setVisibility(View.GONE);
+    }
+    
+    private void initWeibo() {
+        // Create Weibo SDK instance 
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_APP_KEY);
+        boolean isInstalledWeibo = mWeiboShareAPI.isWeiboAppInstalled();
+        
+        // If Weibo is not installed, register a download callback.
+        if (!isInstalledWeibo) {
+            mWeiboShareAPI.registerWeiboDownloadListener(new IWeiboDownloadListener() {
+                @Override
+                public void onCancel() {
+                    Toast.makeText(NoodlesMaster.this, 
+                            R.string.weibosdk_cancel_download_weibo, 
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        
+        mWeiboShareAPI.registerApp();
+    }
 	
     // -----------------------------------------------------------------------
     // Widget getters
@@ -789,6 +859,26 @@ public class NoodlesMaster extends ActionBarActivity {
         ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
         integrator.addExtra("PROMPT_MESSAGE", NoodlesMaster.this.getString(R.string.scan_prompt_message));
         integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+    }
+    
+    private void doShareWB() {
+        TextObject textObject = new TextObject();
+        textObject.text = WeiboShareProvider.getShareText(this, 
+                (String) getSupportActionBar().getSubtitle(), totalSecs);
+
+        ImageObject imageObject = new ImageObject();
+        Bitmap imageBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.share_image);
+        imageObject.setImageObject(imageBitmap);
+        
+        try {
+            WeiboShareProvider.share(mWeiboShareAPI, textObject, imageObject);
+        } catch (WeiboShareException e) {
+            Log.e(TAG, "Erro sharing to Weibo", e);
+            Toast.makeText(NoodlesMaster.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IllegalStateException e) {
+            Log.w(TAG, "Weibo app not installed or is not official version", e);
+            Toast.makeText(this, R.string.weibosdk_not_support_api_hint, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void doStartPref() {

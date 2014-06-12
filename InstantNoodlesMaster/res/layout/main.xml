@@ -59,6 +59,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
+            android:visibility="gone"
             android:src="@drawable/action_settings" />
         
         <ImageButton
@@ -72,6 +73,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
+            android:visibility="gone"
             android:src="@drawable/action_settings" />
 
         <ImageButton
@@ -80,12 +82,12 @@
             android:layout_height="51dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/empty_btn_bg"
+            android:background="@drawable/share_btn_bg"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:src="@drawable/action_settings" />
+            android:src="@drawable/weibo_logo" />
     </RelativeLayout>
 
     <LinearLayout

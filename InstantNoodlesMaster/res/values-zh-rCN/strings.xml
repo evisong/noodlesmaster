@@ -18,12 +18,14 @@
     <string name="noodles_not_found">泡面信息没有找到</string>
     <string name="start">开始计时</string>
     <string name="stop">停止计时</string>
+	<string name="evis_studio">Evis Studio</string>
     <string name="menu_sync">同步数据</string>
     <string name="menu_addWidget1">添加3:00小部件</string>
     <string name="menu_addWidget2">添加3:30小部件</string>
     <string name="menu_addWidget3">添加4:00小部件</string>
     <string name="menu_addWidget4">添加4:30小部件</string>
     <string name="menu_addWidget5">添加5:00小部件</string>
+    <string name="menu_more">更多</string>
     <string name="menu_preference">设置</string>
     <string name="menu_about">关于</string>
     <string name="pref_cat_notification">提醒</string>
@@ -63,4 +65,23 @@
     <string name="about_official_website">官方网站 http://n.evis.me</string>
     <string name="about_official_weibo">官方微博 weibo.com/noodlesmaster</string>
     <string name="timer_already_running">正在计时，需先终止当前计时再开始新计时</string>
+    <string name="scan_prompt_message">请扫描产品上的条形码</string>
+    <string name="time_days">%1$s天</string>
+    <string name="time_hours">%1$s小时</string>
+    <string name="time_minutes">%1$s分钟</string>
+    <string name="time_seconds">%1$s秒</string>
+	
+    <!-- Share -->
+    <string name="weibosdk_cancel_download_weibo">取消下载微博App</string>
+    <string name="weibosdk_toast_share_success">分享成功</string>
+    <string name="weibosdk_toast_share_failed">分享失败</string>
+    <string name="weibosdk_toast_share_canceled">取消分享</string>
+    <string name="weibosdk_not_support_api_hint">微博App尚未安装或安装了非官方版本</string>
+    <string name="share_weibo_content">我刚刚使用#泡面管家#泡了一碗%1$s方便面，用时%2$s。面香四溢，垂涎三尺。《泡面管家》安卓App，专为泡面优化的一键计时器，泡面达人必备：http://n.evis.me</string>
+
+    <!-- App Configurations -->
+    <string name="amazon_associate_tag">evisme-test-23</string>
+    <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
+    <string name="amazon_aws_access_key_id">AKIAJ4C56ZJALOHN4G3Q</string>
+    <string name="amazon_aws_secret_key">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</string>
 </resources>

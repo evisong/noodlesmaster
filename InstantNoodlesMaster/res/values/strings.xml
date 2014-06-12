@@ -16,8 +16,8 @@
     <string name="yes">Yes</string>
     <string name="install_barcode_scanner_title">Install Barcode Scanner</string>
     <string name="noodles_not_found">Noodles not found</string>
-    <string name="stop">Stop</string>
     <string name="start">Start</string>
+    <string name="stop">Stop</string>
     <string name="evis_studio">Evis Studio</string>
     <string name="menu_sync">Sync Data</string>
     <string name="menu_addWidget1">Add 3:00 Widget</string>
@@ -25,6 +25,7 @@
     <string name="menu_addWidget3">Add 4:00 Widget</string>
     <string name="menu_addWidget4">Add 4:30 Widget</string>
     <string name="menu_addWidget5">Add 5:00 Widget</string>
+    <string name="menu_more">More</string>
     <string name="menu_preference">Settings</string>
     <string name="menu_about">About</string>
     <string name="pref_cat_notification">Notification</string>
@@ -65,12 +66,24 @@
     <string name="about_official_weibo">Follow: weibo.com/noodlesmaster</string>
     <string name="timer_already_running">Timer is already running, stop to start another.</string>
     <string name="scan_prompt_message">Please scan the barcode on product.</string>
+    <string name="time_days"> %1$s days</string>
+    <string name="time_hours"> %1$s hours</string>
+    <string name="time_minutes"> %1$s minutes</string>
+    <string name="time_seconds"> %1$s seconds</string>
+    
+    <!-- Share -->
+    <string name="weibosdk_cancel_download_weibo">Cancelled downloading Weibo.</string>
+    <string name="weibosdk_toast_share_success">Share success</string>
+    <string name="weibosdk_toast_share_failed">Share failed</string>
+    <string name="weibosdk_toast_share_canceled">Share cancelled</string>
+    <string name="weibosdk_not_support_api_hint">Weibo app not installed or is not official version</string>
+    <string name="share_weibo_content">Share content, %1$s, %2$s</string>
     
     <!-- App Configurations -->
-    <string name="amazon_associate_tag">evisme-test-23</string>
+    <string name="amazon_associate_tag">evisme-test-20</string>
+    <string name="amazon_aws_endpoint">webservices.amazon.com</string>
     <string name="amazon_aws_access_key_id">AKIAJ4C56ZJALOHN4G3Q</string>
     <string name="amazon_aws_secret_key">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</string>
-    <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
     
     <!-- App Dist Channels -->
     <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
