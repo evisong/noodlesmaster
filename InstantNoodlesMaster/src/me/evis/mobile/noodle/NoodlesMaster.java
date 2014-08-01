@@ -54,9 +54,9 @@ import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.mediation.admob.AdMobExtras;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -156,7 +156,6 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        EasyTracker.getInstance().setContext(this);
         registerApp();
         
         initWeibo();
@@ -177,9 +176,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 setTimerTotalSecs(secs);
 				startTimer(secs);
 				// Track the click
-				EasyTracker.getTracker().sendEvent(
-				        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-				        "noodlesMaster_StartTimerButton01", Long.valueOf(secs));
+				EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+				        .createEvent(TrackerEvent.CATEGORY_UI, 
+				                     TrackerEvent.ACTION_BUTTON, 
+				                     "noodlesMaster_StartTimerButton01", 
+				                     Long.valueOf(secs))
+				        .build());
 			}
 		});
         getStartTimerButton02().setOnClickListener(new View.OnClickListener() {
@@ -189,9 +191,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 setTimerTotalSecs(secs);
                 startTimer(secs);
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "noodlesMaster_StartTimerButton02", Long.valueOf(secs));
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "noodlesMaster_StartTimerButton02", 
+                                     Long.valueOf(secs))
+                        .build());
             }
         });
         getStartTimerButton03().setOnClickListener(new View.OnClickListener() {
@@ -201,9 +206,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 setTimerTotalSecs(secs);
                 startTimer(secs);
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "noodlesMaster_StartTimerButton03", Long.valueOf(secs));
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "noodlesMaster_StartTimerButton03", 
+                                     Long.valueOf(secs))
+                        .build());
             }
         });
         getStartTimerButton04().setOnClickListener(new View.OnClickListener() {
@@ -213,9 +221,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 setTimerTotalSecs(secs);
                 startTimer(secs);
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "noodlesMaster_StartTimerButton04", Long.valueOf(secs));
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "noodlesMaster_StartTimerButton04", 
+                                     Long.valueOf(secs))
+                        .build());
             }
         });
         getStartTimerButton05().setOnClickListener(new View.OnClickListener() {
@@ -225,9 +236,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 setTimerTotalSecs(secs);
                 startTimer(secs);
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "noodlesMaster_StartTimerButton05", Long.valueOf(secs));
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "noodlesMaster_StartTimerButton05", 
+                                     Long.valueOf(secs))
+                        .build());
             }
         });
 		
@@ -245,9 +259,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
 		    public void onClick(View v) {
 				stopTimer(true);
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "noodlesMaster_StopTimerButton", null);
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "noodlesMaster_StopTimerButton", 
+                                     null)
+                        .build());
 			}
 		});
 		
@@ -285,7 +302,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         Log.d(TAG, "register inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         registerReceiver(timerCompleteReceiver, new IntentFilter(NOODLES_TIMER_COMPLETE));
         // start Google Analytics
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
     
     @Override
@@ -354,7 +371,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         Log.d(TAG, "unregister inner Receiver for me.evis.intent.action.NOODLES_TIMER_COMPLETE");
         unregisterReceiver(timerCompleteReceiver);
         // stop Google Analytics
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this); 
     }
     
     @Override
@@ -449,9 +466,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                             startTimer(getTimerTotalSecs());
                             
                             // Track the click
-                            EasyTracker.getTracker().sendEvent(
-                                    TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                                    "noodlesMaster_StartTimerButton", Long.valueOf(getTimerTotalSecs()));
+                            EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                                    .createEvent(TrackerEvent.CATEGORY_UI, 
+                                                 TrackerEvent.ACTION_BUTTON, 
+                                                 "noodlesMaster_StartTimerButton", 
+                                                 Long.valueOf(getTimerTotalSecs()))
+                                    .build());
                         }
                     });
                 }
@@ -499,18 +519,40 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         ScanIntentResult scanResult = ScanIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
             Log.d(TAG, "Scan result: " + scanResult.getContents() + "; type: " + scanResult.getFormatName());
+            
+            EasyTracker.getInstance(this).send(MapBuilder
+                    .createEvent(TrackerEvent.CATEGORY_SCAN, 
+                                 TrackerEvent.ACTION_SCAN_RESULT, 
+                                 scanResult.getContents(), 
+                                 null)
+                    .build());
+            
             new QueryApaapiByEanTask(this, 
                     new OnSuccessListener() {
                         @Override
                         public void onSuccess(String productName) {
                             Log.d(TAG, productName);
                             getSupportActionBar().setSubtitle(productName);
+                            
+                            EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                                    .createEvent(TrackerEvent.CATEGORY_SCAN, 
+                                                 TrackerEvent.ACTION_PRODUCT_RESULT, 
+                                                 productName, 
+                                                 null)
+                                    .build());
                         }
                     }, 
                     new OnFailureListener() {
                         @Override
                         public void onFailure(String failure) {
                             Toast.makeText(NoodlesMaster.this, failure, Toast.LENGTH_SHORT).show();
+                            
+                            EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                                    .createEvent(TrackerEvent.CATEGORY_SCAN, 
+                                                 TrackerEvent.ACTION_PRODUCT_FAILURE, 
+                                                 failure, 
+                                                 null)
+                                    .build());
                         }
                     }
                 ).execute(scanResult.getContents());
@@ -589,9 +631,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         startTimer(totalSecsParam);
         
         // Track the widget click
-        EasyTracker.getTracker().sendEvent(
-                TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_WIDGET, 
-                "appwidget_startTimerWidget", Long.valueOf(totalSecsParam));
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent(TrackerEvent.CATEGORY_UI, 
+                             TrackerEvent.ACTION_WIDGET, 
+                             "appwidget_startTimerWidget",
+                             Long.valueOf(totalSecsParam))
+                .build());
     }
 	
     protected void stopTimer(boolean stopAlarmAndHandler) {
@@ -682,9 +727,12 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                 }
                 
                 // Track the first run after installation.
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_APP, TrackerEvent.ACTION_REGISTER,
-                        channel, null);
+                EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_APP, 
+                                     TrackerEvent.ACTION_REGISTER,
+                                     channel, 
+                                     null)
+                        .build());
             } catch (NameNotFoundException e) {
                 // Log & do nothing.
                 Log.e(TAG, "cannot find applicationInfo with package name: " + getPackageName(), e);
@@ -854,6 +902,13 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         ScanIntentIntegrator integrator = new ScanIntentIntegrator(NoodlesMaster.this);
         integrator.addExtra("PROMPT_MESSAGE", NoodlesMaster.this.getString(R.string.scan_prompt_message));
         integrator.initiateScan(ScanIntentIntegrator.PRODUCT_CODE_TYPES);
+        
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent(TrackerEvent.CATEGORY_SCAN, 
+                             TrackerEvent.ACTION_INIT_SCAN, 
+                             null, 
+                             null)
+                .build());
     }
     
     private void doShareWB() {
@@ -880,6 +935,13 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         
         try {
             WeiboShareProvider.share(mWeiboShareAPI, textObject, imageObject);
+            
+            EasyTracker.getInstance(this).send(MapBuilder
+                    .createEvent(TrackerEvent.CATEGORY_SHARE, 
+                                 TrackerEvent.ACTION_SHARE_WB, 
+                                 null, 
+                                 Long.valueOf(totalSecs))
+                    .build());
         } catch (WeiboShareException e) {
             Log.e(TAG, "Erro sharing to Weibo", e);
             Toast.makeText(NoodlesMaster.this, e.getMessage(), Toast.LENGTH_LONG).show();

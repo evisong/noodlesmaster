@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -29,8 +30,6 @@ public class About extends ActionBarActivity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
-        
-        EasyTracker.getInstance().setContext(this);
         
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
@@ -50,9 +49,12 @@ public class About extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "about_visitWeiboBtn", null);
+                EasyTracker.getInstance(About.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI,
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "about_visitWeiboBtn",
+                                     null)
+                        .build());
                 
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OFFICIAL_WEIBO))); 
             }
@@ -63,9 +65,12 @@ public class About extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "about_visitWebsiteBtn", null);
+                EasyTracker.getInstance(About.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "about_visitWebsiteBtn", 
+                                     null)
+                        .build());
                 
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(OFFICIAL_WEBSITE))); 
             }
@@ -76,9 +81,12 @@ public class About extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Track the click
-                EasyTracker.getTracker().sendEvent(
-                        TrackerEvent.CATEGORY_UI, TrackerEvent.ACTION_BUTTON, 
-                        "about_visitGooglePlayBtn", null);
+                EasyTracker.getInstance(About.this).send(MapBuilder
+                        .createEvent(TrackerEvent.CATEGORY_UI, 
+                                     TrackerEvent.ACTION_BUTTON, 
+                                     "about_visitGooglePlayBtn",
+                                     null)
+                        .build());
                 
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY))); 
             }
@@ -89,14 +97,14 @@ public class About extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         // start Google Analytics
-        EasyTracker.getInstance().activityStart(this);
+        EasyTracker.getInstance(this).activityStart(this);
     }
     
     @Override
     protected void onStop() {
         super.onStop();
         // stop Google Analytics
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getInstance(this).activityStop(this);
     }
     
     @Override

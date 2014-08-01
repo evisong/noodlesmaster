@@ -9,4 +9,7 @@
 
     <!-- Enable automatic exception tracking -->
     <bool name="ga_reportUncaughtExceptions">true</bool>
+    
+    <!-- The verbosity of the SDK logger -->
+    <string name="ga_logLevel">warning</string>
 </resources>

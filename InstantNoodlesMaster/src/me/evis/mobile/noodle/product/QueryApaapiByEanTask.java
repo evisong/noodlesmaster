@@ -89,8 +89,10 @@ public class QueryApaapiByEanTask extends AsyncTask<String, Void, StringResult> 
             response = client.execute(request);
             
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                result = new StringResult(false, "HTTP " + response.getStatusLine().getStatusCode() 
-                        + ": " + response.getStatusLine().getReasonPhrase());
+                String resultStr = "HTTP " + response.getStatusLine().getStatusCode() 
+                        + ": " + response.getStatusLine().getReasonPhrase();
+                Log.d(TAG, resultStr);
+                result = new StringResult(false, resultStr);
             } else {
                 Document doc = null;
                 InputStream is = response.getEntity().getContent();
@@ -100,6 +102,7 @@ public class QueryApaapiByEanTask extends AsyncTask<String, Void, StringResult> 
                 
                 NodeList errors = doc.getElementsByTagName("Error");
                 if (errors.getLength() > 0) {
+                    Log.d(TAG, errors.item(0).getTextContent());
                     result = new StringResult(false, errors.item(0).getTextContent());
                 } else {               
                     NodeList titleNodes = doc.getElementsByTagName("Title");
