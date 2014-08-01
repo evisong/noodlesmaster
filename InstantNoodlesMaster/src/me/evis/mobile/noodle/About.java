@@ -1,10 +1,10 @@
 package me.evis.mobile.noodle;
 
+import me.evis.mobile.util.AdsUtil;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class About extends ActionBarActivity {
     private static final String TAG = "About";
@@ -40,6 +42,8 @@ public class About extends ActionBarActivity {
         catch (NameNotFoundException e) {
             Log.v(TAG, e.getMessage());
         }
+        
+        showAd();
         
         Button visitWeiboBtn = (Button) findViewById(R.id.visitWeiboBtn);
         visitWeiboBtn.setOnClickListener(new OnClickListener() {
@@ -93,5 +97,42 @@ public class About extends ActionBarActivity {
         super.onStop();
         // stop Google Analytics
         EasyTracker.getInstance().activityStop(this);
+    }
+    
+    @Override
+    public void onPause() {
+        Log.v(TAG, "About.onPause");
+        getAdView().pause();
+        super.onPause();
+    }
+    
+    @Override
+    protected void onResume() {
+        Log.v(TAG, "About.onResume");
+        getAdView().resume();
+        super.onResume();
+    }
+    
+    @Override
+    protected void onDestroy() {
+        Log.v(TAG, "About.onDestroy");
+        getAdView().destroy();
+        super.onDestroy();
+    }
+    
+    
+    private AdRequest adRequest;
+    
+    private void showAd() {
+        if (adRequest == null) {
+            adRequest = AdsUtil.createAdRequest();
+        }
+        
+        // Look up the AdView and load a request.
+        getAdView().loadAd(adRequest);
+    }
+    
+    private AdView getAdView() {
+        return (AdView) this.findViewById(R.id.adView);
     }
 }

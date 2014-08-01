@@ -9,6 +9,7 @@ import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnSuccessListener;
 import me.evis.mobile.noodle.scan.ScanIntentIntegrator;
 import me.evis.mobile.noodle.scan.ScanIntentResult;
 import me.evis.mobile.noodle.share.WeiboShareProvider;
+import me.evis.mobile.util.AdsUtil;
 import me.evis.mobile.util.DateTimeUtil;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -52,10 +53,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.internal.widget.NumberPicker;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
-import com.google.ads.mediation.admob.AdMobAdapterExtras;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.mediation.admob.AdMobExtras;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -326,9 +327,17 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     }
     
     @Override
+    public void onPause() {
+        Log.v(TAG, "NoodlesMaster.onPause");
+        getAdView().pause();
+        super.onPause();
+    }
+    
+    @Override
     protected void onResume() {
         Log.v(TAG, "NoodlesMaster.onResume");
         
+        getAdView().resume();
         super.onResume();
         
         if (isStartTimerByShortcut(getIntent()) && !timerRunning) {
@@ -346,6 +355,13 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         unregisterReceiver(timerCompleteReceiver);
         // stop Google Analytics
         EasyTracker.getInstance().activityStop(this);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        Log.v(TAG, "NoodlesMaster.onDestroy");
+        getAdView().destroy();
+        super.onDestroy();
     }
     
     @Override
@@ -749,48 +765,24 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     
     private void showAd() {
         if (adRequest == null) {
-            adRequest = new AdRequest();
-            AdMobAdapterExtras extras = new AdMobAdapterExtras()
-                .addExtra("color_bg", "FFFFFF")
-                .addExtra("color_bg_top", "FFFFFF")
-                .addExtra("color_border", "DDDDDD")
-                .addExtra("color_link", "000080")
-                .addExtra("color_text", "0088FF")
-                .addExtra("color_url", "333333");
-    
-            adRequest.setNetworkExtras(extras);
+            adRequest = AdsUtil.createAdRequest();
         }
         
-        // Look up the AdView as a resource and load a request.
-        AdView adView = (AdView) this.findViewById(R.id.adView);
-        if (!adView.isReady() && !adView.isRefreshing()) {
-            adView.loadAd(adRequest);
-        }
+        // Look up the AdView and load a request.
+        AdView adView = getAdView();
+        adView.setVisibility(View.VISIBLE);
+        adView.loadAd(adRequest);
     }
     
     private void hideAd() {
-        AdView adView = (AdView) this.findViewById(R.id.adView);
-        adView.stopLoading();
+        AdView adView = getAdView();
+        adView.pause();
         adView.setVisibility(View.GONE);
     }
     
     private void initWeibo() {
         // Create Weibo SDK instance 
         mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_APP_KEY);
-        boolean isInstalledWeibo = mWeiboShareAPI.isWeiboAppInstalled();
-        
-        // If Weibo is not installed, register a download callback.
-        if (!isInstalledWeibo) {
-            mWeiboShareAPI.registerWeiboDownloadListener(new IWeiboDownloadListener() {
-                @Override
-                public void onCancel() {
-                    Toast.makeText(NoodlesMaster.this, 
-                            R.string.weibosdk_cancel_download_weibo, 
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        
         mWeiboShareAPI.registerApp();
     }
 	
@@ -850,6 +842,9 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     private ProgressBar getTimerProgress() {
         return (ProgressBar) this.findViewById(R.id.TimerProgress);
     }
+    private AdView getAdView() {
+        return (AdView) this.findViewById(R.id.adView);
+    }
     
     // -----------------------------------------------------------------------
     // UI logics
@@ -862,6 +857,19 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     }
     
     private void doShareWB() {
+        // If Weibo is not installed, register a download callback.
+        if (!mWeiboShareAPI.isWeiboAppInstalled()) {
+            mWeiboShareAPI.registerWeiboDownloadListener(new IWeiboDownloadListener() {
+                @Override
+                public void onCancel() {
+                    Toast.makeText(NoodlesMaster.this, 
+                            R.string.weibosdk_cancel_download_weibo, 
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
+        
         TextObject textObject = new TextObject();
         textObject.text = WeiboShareProvider.getShareText(this, 
                 (String) getSupportActionBar().getSubtitle(), totalSecs);

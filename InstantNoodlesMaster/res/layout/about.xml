@@ -201,16 +201,12 @@
 
     </ScrollView>
 
-    <com.google.ads.AdView android:id="@+id/adView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+	<com.google.android.gms.ads.AdView
+	    xmlns:ads="http://schemas.android.com/apk/res-auto"
+	    android:id="@+id/adView"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-		ads:adUnitId="a14d3e5dec9ea76"
-		ads:adSize="BANNER"
-		ads:loadAdOnCreate="true"
-		ads:testDevices="TEST_EMULATOR, motorola-me860-TA7440B9FQ" 
-		ads:background="#FFFFFF" 
-		ads:keywords="instant noodles 泡面 方便面 即食面 速食面"
-        ads:primaryTextColor="#0088FF"
-        ads:secondaryTextColor="#333333"/>
+	    ads:adUnitId="ca-app-pub-8075445194094669/3615512442"
+	    ads:adSize="BANNER"/>
 </RelativeLayout>
