@@ -2,10 +2,12 @@ package me.evis.mobile.noodle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import me.evis.mobile.noodle.product.QueryApaapiByEanTask;
-import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnFailureListener;
-import me.evis.mobile.noodle.product.QueryApaapiByEanTask.OnSuccessListener;
+import me.evis.mobile.noodle.product.Product;
+import me.evis.mobile.noodle.product.QueryProductByEanTask;
+import me.evis.mobile.noodle.product.QueryProductByEanTask.OnFailureListener;
+import me.evis.mobile.noodle.product.QueryProductByEanTask.OnSuccessListener;
 import me.evis.mobile.noodle.scan.ScanIntentIntegrator;
 import me.evis.mobile.noodle.scan.ScanIntentResult;
 import me.evis.mobile.noodle.share.WeiboShareProvider;
@@ -527,17 +529,17 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                                  null)
                     .build());
             
-            new QueryApaapiByEanTask(this, 
+            new QueryProductByEanTask(this, 
                     new OnSuccessListener() {
                         @Override
-                        public void onSuccess(String productName) {
-                            Log.d(TAG, productName);
-                            getSupportActionBar().setSubtitle(productName);
+                        public void onSuccess(Product product) {
+                            Log.d(TAG, "Query success: " + product.getName());
+                            getSupportActionBar().setSubtitle(product.getName());
                             
                             EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
                                     .createEvent(TrackerEvent.CATEGORY_SCAN, 
                                                  TrackerEvent.ACTION_PRODUCT_RESULT, 
-                                                 productName, 
+                                                 Locale.getDefault().toString() + "|AMZN|" + product.getProductId() + "|" + product.getName(), 
                                                  null)
                                     .build());
                         }

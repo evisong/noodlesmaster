@@ -5,6 +5,11 @@ public class ObjectResult<T> {
     private String message;
     private T result;
 
+    public ObjectResult(boolean isSuccess, String message) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+    }
+    
     public ObjectResult(boolean isSuccess, String message, T result) {
         this.isSuccess = isSuccess;
         this.message = message;

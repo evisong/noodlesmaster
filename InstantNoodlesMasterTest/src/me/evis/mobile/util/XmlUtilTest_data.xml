@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ItemLookupResponse xmlns="http://webservices.amazon.com/AWSECommerceService/2011-08-01" >
+
+    <OperationRequest>
+
+        <HTTPHeaders>
+
+            <Header
+                Name="UserAgent"
+                Value="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0" />
+        </HTTPHeaders>
+
+        <RequestId>
+4f6bd132-550d-4af6-9693-1d42094027cf
+        </RequestId>
+
+        <Arguments>
+
+            <Argument
+                Name="Operation"
+                Value="ItemLookup" />
+
+            <Argument
+                Name="Service"
+                Value="AWSECommerceService" />
+
+            <Argument
+                Name="Signature"
+                Value="A3Hthz/to36Gve+l9J9wKDnaA+HXxwpbSUXlrlyVuPc=" />
+
+            <Argument
+                Name="AssociateTag"
+                Value="evisme-test-23" />
+
+            <Argument
+                Name="Version"
+                Value="2011-08-01" />
+
+            <Argument
+                Name="ItemId"
+                Value="9787564130848" />
+
+            <Argument
+                Name="IdType"
+                Value="EAN" />
+
+            <Argument
+                Name="AWSAccessKeyId"
+                Value="AKIAJ4C56ZJALOHN4G3Q" />
+
+            <Argument
+                Name="Timestamp"
+                Value="2014-08-07T04:58:55Z" />
+
+            <Argument
+                Name="ResponseGroup"
+                Value="ItemAttributes,EditorialReview,Images" />
+
+            <Argument
+                Name="SearchIndex"
+                Value="All" />
+        </Arguments>
+
+        <RequestProcessingTime>
+0.1614350000000000
+        </RequestProcessingTime>
+    </OperationRequest>
+
+    <Items>
+
+        <Request>
+
+            <IsValid>
+True
+            </IsValid>
+
+            <ItemLookupRequest>
+
+                <IdType>
+EAN
+                </IdType>
+
+                <ItemId>
+9787564130848
+                </ItemId>
+
+                <ResponseGroup>
+ItemAttributes
+                </ResponseGroup>
+
+                <ResponseGroup>
+EditorialReview
+                </ResponseGroup>
+
+                <ResponseGroup>
+Images
+                </ResponseGroup>
+
+                <SearchIndex>
+All
+                </SearchIndex>
+
+                <VariationPage>
+All
+                </VariationPage>
+            </ItemLookupRequest>
+        </Request>
+
+        <Item>
+
+            <ASIN>
+B007A8DRGE
+            </ASIN>
+
+            <DetailPageURL>
+http://www.amazon.cn/Perl%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8-%E6%96%BD%E7%93%A6%E8%8C%A8/dp/B007A8DRGE?SubscriptionId=AKIAJ4C56ZJALOHN4G3Q&amp;tag=evisme-test-23&amp;linkCode=xm2&amp;camp=2025&amp;creative=165953&amp;creativeASIN=B007A8DRGE
+            </DetailPageURL>
+
+            <SmallImage>
+
+                <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL75_.jpg
+                </URL>
+
+                <Height Units="pixels" >
+75
+                </Height>
+
+                <Width Units="pixels" >
+56
+                </Width>
+            </SmallImage>
+
+            <MediumImage>
+
+                <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL160_.jpg
+                </URL>
+
+                <Height Units="pixels" >
+160
+                </Height>
+
+                <Width Units="pixels" >
+118
+                </Width>
+            </MediumImage>
+
+            <LargeImage>
+
+                <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL.jpg
+                </URL>
+
+                <Height Units="pixels" >
+500
+                </Height>
+
+                <Width Units="pixels" >
+370
+                </Width>
+            </LargeImage>
+
+            <ImageSets>
+
+                <ImageSet Category="primary" >
+
+                    <SwatchImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL30_.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+30
+                        </Height>
+
+                        <Width Units="pixels" >
+22
+                        </Width>
+                    </SwatchImage>
+
+                    <SmallImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL75_.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+75
+                        </Height>
+
+                        <Width Units="pixels" >
+56
+                        </Width>
+                    </SmallImage>
+
+                    <ThumbnailImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL75_.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+75
+                        </Height>
+
+                        <Width Units="pixels" >
+56
+                        </Width>
+                    </ThumbnailImage>
+
+                    <TinyImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL110_.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+110
+                        </Height>
+
+                        <Width Units="pixels" >
+81
+                        </Width>
+                    </TinyImage>
+
+                    <MediumImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL._SL160_.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+160
+                        </Height>
+
+                        <Width Units="pixels" >
+118
+                        </Width>
+                    </MediumImage>
+
+                    <LargeImage>
+
+                        <URL>
+http://ec4.images-amazon.com/images/I/51OX0kckKjL.jpg
+                        </URL>
+
+                        <Height Units="pixels" >
+500
+                        </Height>
+
+                        <Width Units="pixels" >
+370
+                        </Width>
+                    </LargeImage>
+                </ImageSet>
+            </ImageSets>
+
+            <ItemAttributes>
+
+                <Author>
+施瓦茨
+                </Author>
+
+                <Author>
+福瓦
+                </Author>
+
+                <Author>
+菲尼克斯
+                </Author>
+
+                <Binding>
+平装
+                </Binding>
+
+                <Brand>
+南京东南大学出版社
+                </Brand>
+
+                <Creator Role="作者" >
+施瓦茨
+                </Creator>
+
+                <Creator Role="作者" >
+福瓦
+                </Creator>
+
+                <Creator Role="作者" >
+菲尼克斯
+                </Creator>
+
+                <EAN>
+9787564130848
+                </EAN>
+
+                <Edition>
+第1版
+                </Edition>
+
+                <ISBN>
+7564130849
+                </ISBN>
+
+                <Label>
+东南大学出版社
+                </Label>
+
+                <Languages>
+
+                    <Language>
+
+                        <Name>
+chinese
+                        </Name>
+
+                        <Type>
+published
+                        </Type>
+                    </Language>
+
+                    <Language>
+
+                        <Name>
+english
+                        </Name>
+
+                        <Type>
+published
+                        </Type>
+                    </Language>
+                </Languages>
+
+                <ListPrice>
+
+                    <Amount>
+6900
+                    </Amount>
+
+                    <CurrencyCode>
+CNY
+                    </CurrencyCode>
+
+                    <FormattedPrice>
+￥ 69.00
+                    </FormattedPrice>
+                </ListPrice>
+
+                <Manufacturer>
+东南大学出版社
+                </Manufacturer>
+
+                <NumberOfPages>
+363
+                </NumberOfPages>
+
+                <PackageDimensions>
+
+                    <Height Units="inches" >
+0.71
+                    </Height>
+
+                    <Length Units="inches" >
+9.13
+                    </Length>
+
+                    <Weight Units="pounds" >
+1.32
+                    </Weight>
+
+                    <Width Units="inches" >
+6.93
+                    </Width>
+                </PackageDimensions>
+
+                <ProductGroup>
+Book
+                </ProductGroup>
+
+                <ProductTypeName>
+ABIS_BOOK
+                </ProductTypeName>
+
+                <PublicationDate>
+2011-12-01
+                </PublicationDate>
+
+                <Publisher>
+东南大学出版社
+                </Publisher>
+
+                <Studio>
+东南大学出版社
+                </Studio>
+
+                <Title>
+Perl语言入门(影印版)(第6版)
+                </Title>
+            </ItemAttributes>
+
+            <EditorialReviews>
+
+                <EditorialReview>
+
+                    <Source>
+内容简介
+                    </Source>
+
+                    <Content>
+《Perl语言入门(影印版)(第6版)(英文)》主要讲述了，如果刚开始学习Perl这门语言，那么《Perl语言入门(影印版)(第6版)(英文)》就是你所需要的——不管你是一名程序员，还是系统管理员，抑或是网络黑客。《Perl语言入门(影印版)(第6版)(英文)》被整整两代Perl用户呢称为“小骆驼书”，根据作者从1991年开始的教学经验积累汇聚而成，多年来十分畅销。此次第六版涵盖了最新的Perl5.14版本的变化。 &lt;br&gt;Perl能在绝大多数平台上完成几乎所有任务，不管是简单的修修补补，还是大型完备的网络应用。《Perl语言入门(影印版)(第6版)(英文)》从最基础的开始教起，然后逐渐深入，让你慢慢能够自行编写多至128行的程序——如今90％的Perl程序差不多都是这般大小。《Perl语言入门(影印版)(第6版)(英文)》每章都包含若干习题，帮助你巩固消化刚学到的知识。也许其他书籍只是想着灌输Perl编程的条条框框，但《Perl语言入门(影印版)(第6版)(英文)》不同，我们希望把你培养成一名真正的Perl程序员。
+                    </Content>
+
+                    <IsLinkSuppressed>
+0
+                    </IsLinkSuppressed>
+                </EditorialReview>
+            </EditorialReviews>
+        </Item>
+    </Items>
+
+</ItemLookupResponse>

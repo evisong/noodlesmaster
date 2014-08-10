@@ -1,4 +1,4 @@
-package me.evis.mobile.noodle.test;
+package me.evis.mobile.util;
 
 import junit.framework.TestCase;
 import me.evis.mobile.util.DataUtil;

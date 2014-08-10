@@ -18,7 +18,7 @@ public class Product {
      */
     private String manufacturer;
     /**
-     * Amazon EditorialReviews.EditorialReview.Content
+     * Amazon Item.EditorialReviews(0).EditorialReview.Content
      */
     private String description;
     /**
