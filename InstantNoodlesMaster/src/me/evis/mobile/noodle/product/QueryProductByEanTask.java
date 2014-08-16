@@ -44,7 +44,7 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
     @Override
     protected ObjectResult<Product> doInBackground(String... params) {
         if (!DeviceUtil.isOnline(context)) {
-            return new ObjectResult<Product>(false, "No network available");
+            return new ObjectResult<Product>(false, context.getString(R.string.error_no_network));
         }
         
         if (context == null) {

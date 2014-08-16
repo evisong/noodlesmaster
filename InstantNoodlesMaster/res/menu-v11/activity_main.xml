@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
-    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+    xmlns:support="http://schemas.android.com/apk/res-auto" >
     <!-- <item
         android:id="@+id/menu_addWidget1"
         android:icon="@drawable/ic_menu_preferences"
@@ -35,20 +35,27 @@
         android:icon="@drawable/action_scan"
         android:orderInCategory="1"
         android:showAsAction="always"
-        yourapp:showAsAction="always"
+        support:showAsAction="always"
         android:title="@string/menu_scan"/>
+    <item
+        android:id="@+id/menu_buy"
+        android:icon="@drawable/action_buy"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        support:showAsAction="never"
+        android:title="@string/menu_buy"/>
     <item
         android:id="@+id/menu_preference"
         android:icon="@drawable/action_settings"
-        android:orderInCategory="5"
+        android:orderInCategory="10"
         android:showAsAction="never"
-        yourapp:showAsAction="never"
+        support:showAsAction="never"
         android:title="@string/menu_preference"/>
     <item
         android:id="@+id/menu_about"
         android:icon="@drawable/action_help"
         android:orderInCategory="999"
         android:showAsAction="never"
-        yourapp:showAsAction="never"
+        support:showAsAction="never"
         android:title="@string/menu_about"/>
 </menu>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="220dp"
+    android:padding="4dp"
+    android:descendantFocusability="blocksDescendants" >
+
+    <TextView
+        android:id="@+id/product_spinner_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/product_spinner_item_buy"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:text="Product Name" />
+    
+   <TextView
+        android:id="@+id/product_spinner_item_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/product_spinner_item_name"
+        android:layout_toLeftOf="@+id/product_spinner_item_buy"
+        android:paddingTop="3dp"
+        android:paddingRight="3dp"
+        android:paddingBottom="3dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:textColor="#FFAAAAAA"
+        android:text="Product Brand" />
+
+    <ImageButton
+        android:id="@+id/product_spinner_item_buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/product_spinner_item_delete"
+        android:background="@drawable/empty_btn_bg"
+        android:src="@drawable/action_buy" />
+    
+    <ImageButton
+        android:id="@+id/product_spinner_item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/empty_btn_bg"
+        android:src="@drawable/product_dropdown_delete" />
+
+</RelativeLayout>

@@ -2,6 +2,10 @@ package me.evis.mobile.noodle.product;
 
 public class Product {
     /**
+     * ID for local DB.
+     */
+    private long id;
+    /**
      * Amazon Item.ASIN
      */
     private String productId;
@@ -30,6 +34,12 @@ public class Product {
      */
     private String buyUrl;
     
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
     public String getProductId() {
         return productId;
     }

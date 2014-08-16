@@ -4,7 +4,8 @@
     <!-- normal -->
     <item android:state_enabled="true" android:state_focused="false" android:state_pressed="false">
         <shape android:shape="rectangle">
-            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" />
+            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" 
+                android:topRightRadius="0dp" android:bottomRightRadius="0dp" />
             <solid android:color="#FFBADFFF" />
         </shape>
     </item>
@@ -12,7 +13,8 @@
     <!-- pressed -->
     <item android:state_enabled="true" android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" />
+            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" 
+                android:topRightRadius="0dp" android:bottomRightRadius="0dp" />
             <solid android:color="#FF0088FF" />
         </shape>
     </item>
@@ -20,7 +22,8 @@
     <!-- selected -->
     <item android:state_enabled="true" android:state_focused="true" android:state_pressed="false">
         <shape android:shape="rectangle">
-            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" />
+            <corners android:topLeftRadius="30dp" android:bottomLeftRadius="30dp" 
+                android:topRightRadius="0dp" android:bottomRightRadius="0dp" />
             <solid android:color="#FF4EACFF" />
         </shape>
     </item>

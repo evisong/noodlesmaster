@@ -1,5 +1,10 @@
 package me.evis.mobile.util;
 
+import me.evis.mobile.noodle.db.ProductDao;
+import me.evis.mobile.noodle.product.Product;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.ads.AdRequest;
@@ -27,5 +32,18 @@ public class AdsUtil {
                 .addTestDevice("7N2MWW144M050194")
                 .addNetworkExtras(extras).build();
         return adRequest;
+    }
+    
+    public static void buyProduct(Context context, long id) {
+        Product product = ProductDao.getById(context, id);
+        buyProduct(context, product);
+    }
+    
+    public static void buyProduct(Context context, Product product) {
+        if (product != null) {
+            String buyUrl = product.getBuyUrl();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(buyUrl));
+            context.startActivity(intent);
+        }
     }
 }

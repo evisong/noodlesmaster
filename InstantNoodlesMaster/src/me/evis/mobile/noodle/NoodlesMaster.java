@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import me.evis.mobile.noodle.db.ProductDao;
 import me.evis.mobile.noodle.product.Product;
+import me.evis.mobile.noodle.product.ProductListAdapter;
 import me.evis.mobile.noodle.product.QueryProductByEanTask;
 import me.evis.mobile.noodle.product.QueryProductByEanTask.OnFailureListener;
 import me.evis.mobile.noodle.product.QueryProductByEanTask.OnSuccessListener;
@@ -36,6 +38,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -104,6 +107,9 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
 	private static final int COUNTER_INTERVAL_MILLISECS = 100;
 	private static final int MESSAGE_WHAT_CODE = 0;
 	
+	private ProductListAdapter productListAdapter;
+	private Menu optionsMenu;
+	
 	// Keep the track so that scheduled work can be 
 	// stopped by user.
 	private Handler counterHandler;
@@ -163,8 +169,14 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         initWeibo();
         
         // Prepare actionbar
+        List<Product> products = ProductDao.listLatest10(this);
+        productListAdapter = new ProductListAdapter(this, products);
         ActionBar actionBar = getSupportActionBar();
-        
+        if (!products.isEmpty()) {
+            actionBar.setTitle("");
+        }
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        actionBar.setListNavigationCallbacks(productListAdapter, productListAdapter);
         setTimerTotalSecs(DEFAULT_TOTAL_SECS);
         
         getStopTimerButton().setEnabled(false);
@@ -349,6 +361,9 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     public void onPause() {
         Log.v(TAG, "NoodlesMaster.onPause");
         getAdView().pause();
+        // TODO need also stop remote service call
+        stopLoading();
+        
         super.onPause();
     }
     
@@ -387,6 +402,8 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_main, menu);
+        // store the reference for later access
+        this.optionsMenu = menu;
         
         return super.onCreateOptionsMenu(menu);
     }
@@ -396,6 +413,11 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         switch (item.getItemId()) {
             case R.id.menu_scan:
                 doScan();
+                return true;
+                
+            case R.id.menu_buy:
+                Product product = ProductDao.getLatest(this);
+                AdsUtil.buyProduct(this, product);
                 return true;
                 
             case R.id.menu_preference:
@@ -529,12 +551,18 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                                  null)
                     .build());
             
+            startLoading();
             new QueryProductByEanTask(this, 
                     new OnSuccessListener() {
                         @Override
                         public void onSuccess(Product product) {
                             Log.d(TAG, "Query success: " + product.getName());
-                            getSupportActionBar().setSubtitle(product.getName());
+                            
+                            stopLoading();
+                            ProductDao.insertOrUpdate(NoodlesMaster.this, product);
+                            productListAdapter.setProducts(ProductDao.listLatest10(NoodlesMaster.this));
+                            productListAdapter.notifyDataSetChanged();
+                            NoodlesMaster.this.getSupportActionBar().setSelectedNavigationItem(0);
                             
                             EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
                                     .createEvent(TrackerEvent.CATEGORY_SCAN, 
@@ -547,6 +575,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                     new OnFailureListener() {
                         @Override
                         public void onFailure(String failure) {
+                            stopLoading();
                             Toast.makeText(NoodlesMaster.this, failure, Toast.LENGTH_SHORT).show();
                             
                             EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
@@ -795,7 +824,21 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         animatorSet.addListener(timerProgressRefresher);
         animatorSet.start();
     }
-       
+    
+    private void startLoading() {
+        MenuItem scan = optionsMenu.findItem(R.id.menu_scan);
+        if (scan != null && MenuItemCompat.getActionView(scan) == null) {
+            MenuItemCompat.setActionView(scan, R.layout.actionbar_indeterminate_progress);
+        }
+    }
+    
+    private void stopLoading() {
+        MenuItem scan = optionsMenu.findItem(R.id.menu_scan);
+        if (scan != null && MenuItemCompat.getActionView(scan) != null) {
+            MenuItemCompat.setActionView(scan, null);
+        }
+    }
+    
     private void playHideStopButtonAnimation() {
         AnimatorSet animatorSet = new AnimatorSet();
         ObjectAnimator ani1 = ObjectAnimator.ofFloat(getStopTimerButton(), "scaleX", 1f, 0f);
@@ -833,7 +876,19 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     private void initWeibo() {
         // Create Weibo SDK instance 
         mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, Constants.WEIBO_APP_KEY);
-        mWeiboShareAPI.registerApp();
+        
+        // If Weibo is not installed, register a download callback.
+        if (!mWeiboShareAPI.isWeiboAppInstalled()) {
+            mWeiboShareAPI.registerWeiboDownloadListener(new IWeiboDownloadListener() {
+                @Override
+                public void onCancel() {
+                    Toast.makeText(NoodlesMaster.this, 
+                            R.string.weibosdk_cancel_download_weibo, 
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
     }
 	
     // -----------------------------------------------------------------------
@@ -914,22 +969,10 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     }
     
     private void doShareWB() {
-        // If Weibo is not installed, register a download callback.
-        if (!mWeiboShareAPI.isWeiboAppInstalled()) {
-            mWeiboShareAPI.registerWeiboDownloadListener(new IWeiboDownloadListener() {
-                @Override
-                public void onCancel() {
-                    Toast.makeText(NoodlesMaster.this, 
-                            R.string.weibosdk_cancel_download_weibo, 
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-            return;
-        }
-        
         TextObject textObject = new TextObject();
-        textObject.text = WeiboShareProvider.getShareText(this, 
-                (String) getSupportActionBar().getSubtitle(), totalSecs);
+        Product lastSelectedProduct = ProductDao.getLatest(this);
+        String productName = (lastSelectedProduct == null) ? null : lastSelectedProduct.getName();
+        textObject.text = WeiboShareProvider.getShareText(this, productName, totalSecs);
 
         ImageObject imageObject = new ImageObject();
         Bitmap imageBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.share_image);
@@ -941,12 +984,19 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
             EasyTracker.getInstance(this).send(MapBuilder
                     .createEvent(TrackerEvent.CATEGORY_SHARE, 
                                  TrackerEvent.ACTION_SHARE_WB, 
-                                 null, 
+                                 "Success", 
                                  Long.valueOf(totalSecs))
                     .build());
         } catch (WeiboShareException e) {
             Log.e(TAG, "Erro sharing to Weibo", e);
             Toast.makeText(NoodlesMaster.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            
+            EasyTracker.getInstance(this).send(MapBuilder
+                    .createEvent(TrackerEvent.CATEGORY_SHARE, 
+                                 TrackerEvent.ACTION_SHARE_WB, 
+                                 "Failure", 
+                                 null)
+                    .build());
         } catch (IllegalStateException e) {
             Log.w(TAG, "Weibo app not installed or is not official version", e);
             Toast.makeText(this, R.string.weibosdk_not_support_api_hint, Toast.LENGTH_SHORT).show();

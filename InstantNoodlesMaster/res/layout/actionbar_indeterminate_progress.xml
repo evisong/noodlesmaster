@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingRight="12dp" >
+
+    <ProgressBar
+        android:layout_width="44dp"
+        android:layout_height="32dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="12dp"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/refresh_rotator"
+        android:paddingRight="12dp" />
+</FrameLayout>
