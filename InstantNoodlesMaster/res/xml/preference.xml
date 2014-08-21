@@ -14,7 +14,7 @@
             android:summaryOn="@string/pref_vibration_desc_on"
             android:summaryOff="@string/pref_vibration_desc_off"
             android:title="@string/pref_vibration" 
-            android:defaultValue="false" >
+            android:defaultValue="true" >
         </CheckBoxPreference>
     </PreferenceCategory>
     

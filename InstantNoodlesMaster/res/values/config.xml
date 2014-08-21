@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <!-- App Configurations -->
+    <string name="amazon_associate_tag">evisme-test-20</string>
+    <string name="amazon_aws_endpoint">webservices.amazon.com</string>
+    <string name="amazon_aws_access_key_id"></string>
+    <string name="amazon_aws_secret_key"></string>
+    
+    <!-- App Dist Channels -->
+    <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
+    <string name="app_dist_channel0">evisme</string>
+    <string name="app_dist_channel1">googleplay</string>
+    <string name="app_dist_channel2">hiapk</string>
+    <string name="app_dist_channel3">anzhi</string>
+    <string name="app_dist_channel4">gfan</string>
+    <string name="app_dist_channel5">wandoujia</string>
+    <string name="app_dist_channel6">amazon</string>
+    <string name="app_dist_channel7">yandex</string>
+    <string name="app_dist_channel8">opera</string>
+    <string name="app_dist_channel9">360</string>
+    <string name="app_dist_channel10">baidu</string>
+    <string name="app_dist_channel11">myapp</string>
+</resources>

@@ -72,6 +72,9 @@
     <string name="time_minutes"> %1$s minutes</string>
     <string name="time_seconds"> %1$s seconds</string>
     <string name="error_no_network">No network available</string>
+    <string name="error_barcode_not_found">No product is found using this barcode， please try another</string>
+    <string name="error_service_error">Online service error, please retry later</string>
+    <string name="error_need_upgrade">This app version not supported by online service, please upgrade the app</string>
     
     <!-- Share -->
     <string name="weibosdk_cancel_download_weibo">Cancelled downloading Weibo.</string>
@@ -80,24 +83,4 @@
     <string name="weibosdk_toast_share_canceled">Share cancelled</string>
     <string name="weibosdk_not_support_api_hint">Weibo app not installed or is not official version</string>
     <string name="share_weibo_content">Share content, %1$s, %2$s</string>
-    
-    <!-- App Configurations -->
-    <string name="amazon_associate_tag">evisme-test-20</string>
-    <string name="amazon_aws_endpoint">webservices.amazon.com</string>
-    <string name="amazon_aws_access_key_id">AKIAJ4C56ZJALOHN4G3Q</string>
-    <string name="amazon_aws_secret_key">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</string>
-    
-    <!-- App Dist Channels -->
-    <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
-    <string name="app_dist_channel0">evisme</string>
-    <string name="app_dist_channel1">googleplay</string>
-    <string name="app_dist_channel2">hiapk</string>
-    <string name="app_dist_channel3">anzhi</string>
-    <string name="app_dist_channel4">gfan</string>
-    <string name="app_dist_channel5">wandoujia</string>
-    <string name="app_dist_channel6">amazon</string>
-    <string name="app_dist_channel7">yandex</string>
-    <string name="app_dist_channel8">opera</string>
-    <string name="app_dist_channel9">360</string>
-    <string name="app_dist_channel10">baidu</string>
 </resources>

@@ -72,6 +72,9 @@
     <string name="time_minutes">%1$s分钟</string>
     <string name="time_seconds">%1$s秒</string>
     <string name="error_no_network">网络不可用</string>
+    <string name="error_barcode_not_found">未查询到该条形码对应的商品，请扫描其他商品</string>
+    <string name="error_service_error">在线服务出错，请重试</string>
+    <string name="error_need_upgrade">在线服务已不再支持该版本的《泡面管家》，请升级</string>
 	
     <!-- Share -->
     <string name="weibosdk_cancel_download_weibo">取消下载微博App</string>
@@ -80,10 +83,4 @@
     <string name="weibosdk_toast_share_canceled">取消分享</string>
     <string name="weibosdk_not_support_api_hint">微博App尚未安装或安装了非官方版本</string>
     <string name="share_weibo_content">我刚刚使用#泡面管家#泡了一碗%1$s方便面，用时%2$s。面香四溢，垂涎三尺。《泡面管家》安卓App，专为泡面优化的一键计时器，泡面达人必备：http://n.evis.me</string>
-
-    <!-- App Configurations -->
-    <string name="amazon_associate_tag">evisme-test-23</string>
-    <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
-    <string name="amazon_aws_access_key_id">AKIAJ4C56ZJALOHN4G3Q</string>
-    <string name="amazon_aws_secret_key">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</string>
 </resources>

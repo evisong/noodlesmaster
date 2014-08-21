@@ -576,7 +576,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                         @Override
                         public void onFailure(String failure) {
                             stopLoading();
-                            Toast.makeText(NoodlesMaster.this, failure, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NoodlesMaster.this, failure, Toast.LENGTH_LONG).show();
                             
                             EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
                                     .createEvent(TrackerEvent.CATEGORY_SCAN, 

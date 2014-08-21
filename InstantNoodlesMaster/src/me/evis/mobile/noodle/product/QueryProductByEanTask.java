@@ -78,7 +78,9 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
         serviceParams.put("SearchIndex", "All");
         serviceParams.put("IdType", "EAN");
         serviceParams.put("ItemId", ean);
-        serviceParams.put("ResponseGroup", "ItemAttributes,EditorialReview,Images");
+        // Temporarily removed product description to shrink the response size
+        //serviceParams.put("ResponseGroup", "ItemAttributes,EditorialReview,Images");
+        serviceParams.put("ResponseGroup", "ItemAttributes");
 
         requestUrl = helper.sign(serviceParams);
         Log.d(TAG, "Signed Request is \"" + requestUrl + "\"");
@@ -95,7 +97,19 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
                 String resultStr = "HTTP " + response.getStatusLine().getStatusCode() 
                         + ": " + response.getStatusLine().getReasonPhrase();
                 Log.d(TAG, resultStr);
+                
+                // Handle specific errors
+                switch (response.getStatusLine().getStatusCode()) {
+                case HttpStatus.SC_SERVICE_UNAVAILABLE:
+                    resultStr = context.getString(R.string.error_service_error);
+                    break;
+
+                default:
+                    break;
+                }
+                
                 result = new ObjectResult<Product>(false, resultStr);
+                
             } else {
                 Document doc = null;
                 InputStream is = response.getEntity().getContent();
@@ -104,17 +118,31 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
                 doc = db.parse(is);
                 
                 NodeList errors = doc.getElementsByTagName("Error");
+                XPathFactory factory = XPathFactory.newInstance();
+                XPath xpath = factory.newXPath();
+                
                 if (errors.getLength() > 0) {
                     String resultStr = "Service Error: " + errors.item(0).getTextContent();
                     Log.d(TAG, resultStr);
+                    
+                    // Handle specific errors
+                    String code = XmlUtil.getXPathItemText(doc, xpath, "//Error/Code/text()");
+                    if ("AWS.InvalidParameterValue".equals(code)) {
+                        resultStr = context.getString(R.string.error_barcode_not_found);
+                    } else if ("AWS.InternalError".equals(code)) {
+                        resultStr = context.getString(R.string.error_service_error);
+                    } else if ("AWS.InvalidAccount".equals(code)) {
+                        resultStr = context.getString(R.string.error_need_upgrade);
+                    } else if ("RequestThrottled".equals(code)) {
+                        resultStr = context.getString(R.string.error_service_error);
+                    }
+                    
                     result = new ObjectResult<Product>(false, resultStr);
+                    
                 } else {
                     NodeList itemNodes = doc.getElementsByTagName("Item");
                     if (itemNodes.getLength() > 0) {
                         Product product = new Product();
-                        
-                        XPathFactory factory = XPathFactory.newInstance();
-                        XPath xpath = factory.newXPath();
                         
                         product.setProductId(XmlUtil.getXPathItemText(doc, xpath, "//Item/ASIN/text()"));
                         product.setName(XmlUtil.getXPathItemText(doc, xpath, "//Item/ItemAttributes/Title/text()"));
@@ -126,7 +154,8 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
                             brandOrAuthor = XmlUtil.getXPathItemText(doc, xpath, "//Item/ItemAttributes/Brand/text()");
                         }
                         product.setBrand(brandOrAuthor);
-                        product.setDescription(XmlUtil.getXPathItemText(doc, xpath, "//Item/EditorialReviews/EditorialReview/Content/text()"));
+                        // Temporarily removed product description to shrink the response size
+                        //product.setDescription(XmlUtil.getXPathItemText(doc, xpath, "//Item/EditorialReviews/EditorialReview/Content/text()"));
                         result = new ObjectResult<Product>(true, null, product);
                     } else {
                         Log.d(TAG, "Items are empty");

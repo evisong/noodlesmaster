@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <!-- App Configurations -->
+    <string name="amazon_associate_tag">evisme-test-23</string>
+    <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
+    <string name="amazon_aws_access_key_id"></string>
+    <string name="amazon_aws_secret_key"></string>
+</resources>
