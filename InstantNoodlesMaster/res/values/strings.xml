@@ -82,5 +82,5 @@
     <string name="weibosdk_toast_share_failed">Share failed</string>
     <string name="weibosdk_toast_share_canceled">Share cancelled</string>
     <string name="weibosdk_not_support_api_hint">Weibo app not installed or is not official version</string>
-    <string name="share_weibo_content">Share content, %1$s, %2$s</string>
+    <string name="share_weibo_content">I've just cooked a noodle %1$s using Instant Noodles Master, time used: %2$s. Find the one-tap timer Android app for Instant Noodles at http://n.evis.me</string>
 </resources>

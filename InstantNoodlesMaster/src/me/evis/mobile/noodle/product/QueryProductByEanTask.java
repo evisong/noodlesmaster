@@ -103,6 +103,10 @@ public class QueryProductByEanTask extends AsyncTask<String, Void, ObjectResult<
                 case HttpStatus.SC_SERVICE_UNAVAILABLE:
                     resultStr = context.getString(R.string.error_service_error);
                     break;
+                    
+                case HttpStatus.SC_FORBIDDEN:
+                    resultStr = context.getString(R.string.error_need_upgrade);
+                    break;
 
                 default:
                     break;

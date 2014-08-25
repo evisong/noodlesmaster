@@ -16,6 +16,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+/**
+ * The position == products.size() implies the additional item "Select None".
+ */
 public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavigationListener {
     private Context context;
     private List<Product> products = new ArrayList<Product>();
@@ -33,7 +36,7 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
 
     @Override
     public int getCount() {
-        return products.size();
+        return products.size() + 1;
     }
 
     @Override
@@ -56,10 +59,14 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.product_spinner_item, parent, false);
-        final Product product = products.get(position);
+        TextView text = (TextView) view.findViewById(R.id.product_spinner_item_name);
         
-        ((TextView) view.findViewById(
-                R.id.product_spinner_item_name)).setText(product.getName());
+        if (position < products.size()) {
+            final Product product = products.get(position);
+            text.setText(product.getName());
+        } else {
+            text.setText(R.string.app_name);
+        }
         
         return view;
     } 
@@ -94,8 +101,8 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
                 }
             });
         } else {
-            view = new TextView(context);
-            ((TextView) view).setText("Clean");
+            view = LayoutInflater.from(context).inflate(
+                    R.layout.product_spinner_dropdown_item_select_none, parent, false);
         }
         
         return view;

@@ -172,9 +172,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         List<Product> products = ProductDao.listLatest10(this);
         productListAdapter = new ProductListAdapter(this, products);
         ActionBar actionBar = getSupportActionBar();
-        if (!products.isEmpty()) {
-            actionBar.setTitle("");
-        }
+        actionBar.setTitle(null);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(productListAdapter, productListAdapter);
         setTimerTotalSecs(DEFAULT_TOTAL_SECS);
@@ -970,7 +968,8 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     
     private void doShareWB() {
         TextObject textObject = new TextObject();
-        Product lastSelectedProduct = ProductDao.getLatest(this);
+        int selectedProductIndex = getSupportActionBar().getSelectedNavigationIndex();
+        Product lastSelectedProduct = (Product) productListAdapter.getItem(selectedProductIndex);
         String productName = (lastSelectedProduct == null) ? null : lastSelectedProduct.getName();
         textObject.text = WeiboShareProvider.getShareText(this, productName, totalSecs);
 
