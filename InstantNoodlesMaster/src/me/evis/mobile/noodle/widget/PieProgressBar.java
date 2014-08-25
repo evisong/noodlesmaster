@@ -16,8 +16,8 @@ import android.widget.ProgressBar;
  */
 public class PieProgressBar extends ProgressBar {
     private static int[] colors = new int[] {
-            Color.argb(0xff, 0x00, 0x88, 0xff),
-            Color.argb(0xff, 0xee, 0xee, 0xee)
+            Color.argb(0xff, 0xff, 0x87, 0x32),
+            Color.argb(0xff, 0xf7, 0xb8, 0x8b)
         };
     private Paint[] paints;
     private float[] sliceEndAngles;
@@ -75,13 +75,14 @@ public class PieProgressBar extends ProgressBar {
         tempBounds.set(centerX - length / 2, centerY - length / 2, centerX + length / 2, centerY + length / 2);
 //        canvas.clipRect(tempBounds);
         
-        tempBounds.inset(3, 3);
+        tempBounds.inset(4, 4);
         bounds.set(tempBounds);
         RectF borderBounds = new RectF();
-        tempBounds.inset(5, 5);
+        int outBorderWidth = Math.min(getMeasuredWidth(), getMeasuredHeight()) / 8;
+        tempBounds.inset(outBorderWidth, outBorderWidth);
         borderBounds.set(tempBounds);
         RectF innerBounds = new RectF();
-        int borderWidth = Math.min(getMeasuredWidth(), getMeasuredHeight()) / 4;
+        int borderWidth = Math.min(getMeasuredWidth(), getMeasuredHeight()) / 6;
         tempBounds.inset(borderWidth, borderWidth);
         innerBounds.set(tempBounds);
         
