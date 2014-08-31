@@ -41,8 +41,8 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
 
     @Override
     public Object getItem(int position) {
-        if (position >= 0 && position < products.size()) {
-            return products.get(position);
+        if (position >= 1 && position <= products.size()) {
+            return products.get(position - 1);
         } else {
             return null;
         }
@@ -50,8 +50,8 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
 
     @Override
     public long getItemId(int position) {
-        if (position >= 0 && position < products.size()) {
-            return products.get(position).getId();
+        if (position >= 1 && position <= products.size()) {
+            return products.get(position - 1).getId();
         } else {
             return -1;
         }
@@ -61,8 +61,8 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
         View view = LayoutInflater.from(context).inflate(R.layout.product_spinner_item, parent, false);
         TextView text = (TextView) view.findViewById(R.id.product_spinner_item_name);
         
-        if (position < products.size()) {
-            final Product product = products.get(position);
+        if (position >= 1 && position <= products.size()) {
+            final Product product = products.get(position - 1);
             text.setText(product.getName());
         } else {
             text.setText(R.string.app_name);
@@ -74,8 +74,8 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
     @Override
     public View getDropDownView(final int position, View convertView, ViewGroup parent) {
         View view = null;
-        if (position >= 0 && position < products.size()) {
-            final Product product = products.get(position);
+        if (position >= 1 && position <= products.size()) {
+            final Product product = products.get(position - 1);
             view = LayoutInflater.from(context).inflate(R.layout.product_spinner_dropdown_item, parent, false);
             
             ((TextView) view.findViewById(
@@ -95,7 +95,7 @@ public class ProductListAdapter extends BaseAdapter implements ActionBar.OnNavig
                 public void onClick(View v) {
                     boolean deleted = ProductDao.deleteByProductId(v.getContext(), product.getProductId());
                     if (deleted) {
-                        products.remove(position);
+                        products.remove(position - 1);
                     }
                     ProductListAdapter.this.notifyDataSetChanged();
                 }

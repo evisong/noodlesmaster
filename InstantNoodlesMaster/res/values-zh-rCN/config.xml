@@ -5,4 +5,5 @@
     <string name="amazon_aws_endpoint">webservices.amazon.cn</string>
     <string name="amazon_aws_access_key_id"></string>
     <string name="amazon_aws_secret_key"></string>
+    <string name="amazon_default_url">http://www.amazon.cn/s/?_encoding=UTF8&amp;camp=536&amp;creative=3132&amp;field-keywords=%E6%96%B9%E4%BE%BF%E9%9D%A2&amp;linkCode=ur2&amp;sprefix=%E6%96%B9%E4%BE%BF%E9%9D%A2%2Caps%2C124&amp;tag=noodlesmaster-android-app-23&amp;url=search-alias%3Dgrocery</string>
 </resources>

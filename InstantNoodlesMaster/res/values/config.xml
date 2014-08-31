@@ -5,6 +5,7 @@
     <string name="amazon_aws_endpoint">webservices.amazon.com</string>
     <string name="amazon_aws_access_key_id"></string>
     <string name="amazon_aws_secret_key"></string>
+    <string name="amazon_default_url">http://www.amazon.com/s/?_encoding=UTF8&amp;camp=1789&amp;creative=390957&amp;field-keywords=instant%20noodles&amp;linkCode=ur2&amp;sprefix=Instant%20Noodles%2Caps%2C549&amp;tag=noodlesmaster-android-app-20&amp;url=search-alias%3Dgrocery&amp;linkId=I4NLSGAFGJOXFUYL</string>
     
     <!-- App Dist Channels -->
     <string name="app_dist_channel">me.evis.mobile.noodle.channel</string>
@@ -20,4 +21,5 @@
     <string name="app_dist_channel9">360</string>
     <string name="app_dist_channel10">baidu</string>
     <string name="app_dist_channel11">myapp</string>
+    <string name="app_dist_channel12">weibo</string>
 </resources>

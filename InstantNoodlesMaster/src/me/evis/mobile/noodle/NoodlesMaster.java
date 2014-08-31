@@ -560,7 +560,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
                             ProductDao.insertOrUpdate(NoodlesMaster.this, product);
                             productListAdapter.setProducts(ProductDao.listLatest10(NoodlesMaster.this));
                             productListAdapter.notifyDataSetChanged();
-                            NoodlesMaster.this.getSupportActionBar().setSelectedNavigationItem(0);
+                            NoodlesMaster.this.getSupportActionBar().setSelectedNavigationItem(1);
                             
                             EasyTracker.getInstance(NoodlesMaster.this).send(MapBuilder
                                     .createEvent(TrackerEvent.CATEGORY_SCAN, 
@@ -824,6 +824,11 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     }
     
     private void startLoading() {
+        if (optionsMenu == null) {
+            // A edge case: invoke before creating menu
+            return;
+        }
+        
         MenuItem scan = optionsMenu.findItem(R.id.menu_scan);
         if (scan != null && MenuItemCompat.getActionView(scan) == null) {
             MenuItemCompat.setActionView(scan, R.layout.actionbar_indeterminate_progress);
@@ -831,6 +836,11 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
     }
     
     private void stopLoading() {
+        if (optionsMenu == null) {
+            // A edge case: invoke before creating menu
+            return;
+        }
+        
         MenuItem scan = optionsMenu.findItem(R.id.menu_scan);
         if (scan != null && MenuItemCompat.getActionView(scan) != null) {
             MenuItemCompat.setActionView(scan, null);
@@ -974,7 +984,7 @@ public class NoodlesMaster extends ActionBarActivity implements IWeiboHandler.Re
         textObject.text = WeiboShareProvider.getShareText(this, productName, totalSecs);
 
         ImageObject imageObject = new ImageObject();
-        Bitmap imageBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.share_image);
+        Bitmap imageBitmap = BitmapFactory.decodeResource(this.getResources(), R.raw.share_image);
         imageObject.setImageObject(imageBitmap);
         
         try {

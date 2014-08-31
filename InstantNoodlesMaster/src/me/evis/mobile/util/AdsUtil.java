@@ -1,5 +1,6 @@
 package me.evis.mobile.util;
 
+import me.evis.mobile.noodle.R;
 import me.evis.mobile.noodle.db.ProductDao;
 import me.evis.mobile.noodle.product.Product;
 import android.content.Context;
@@ -40,10 +41,13 @@ public class AdsUtil {
     }
     
     public static void buyProduct(Context context, Product product) {
+        String buyUrl = null;
         if (product != null) {
-            String buyUrl = product.getBuyUrl();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(buyUrl));
-            context.startActivity(intent);
+            buyUrl = product.getBuyUrl();
+        } else {
+            buyUrl = context.getString(R.string.amazon_default_url);
         }
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(buyUrl));
+        context.startActivity(intent);
     }
 }
